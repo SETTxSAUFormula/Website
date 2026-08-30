@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 
-const routes = ['', '/takim', '/araclar', '/yarismalar', '/haberler', '/medya', '/sponsorlar', '/iletisim', '/gizlilik', '/en'];
+const routes = ['', '/hakkimizda', '/formula-student', '/araclar', '/takimlar', '/haberler', '/medya', '/sponsorlar', '/iletisim', '/gizlilik', '/en'];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date('2026-08-30');

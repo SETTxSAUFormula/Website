@@ -211,7 +211,7 @@ export default function Home() {
                 sahada öğreniyoruz.
               </p>
             </div>
-            <Link href="/takim" className="mt-9 inline-flex items-center gap-3 border-b border-racing-green pb-2 text-xs font-black uppercase tracking-[0.16em] text-white">
+            <Link href="/hakkimizda" className="mt-9 inline-flex items-center gap-3 border-b border-racing-green pb-2 text-xs font-black uppercase tracking-[0.16em] text-white">
               Hikâyemizi keşfet <ArrowRight className="size-4" aria-hidden="true" />
             </Link>
           </div>
@@ -257,7 +257,7 @@ export default function Home() {
               <p className="mt-16 text-[11px] font-black uppercase tracking-[0.22em]">Formula Student</p>
               <h2 className="mt-3 font-heading text-6xl font-black uppercase leading-[0.85]">Pistte kanıtla.</h2>
             </div>
-            <Link href="/yarismalar" className="mt-12 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em]">
+            <Link href="/formula-student" className="mt-12 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em]">
               Yarışmaları tanı <ChevronRight className="size-4" aria-hidden="true" />
             </Link>
           </div>

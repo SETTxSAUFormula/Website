@@ -6,10 +6,11 @@ const columns = [
   {
     title: 'Takım',
     links: [
-      ['Hakkımızda', '/takim'],
-      ['Ekibimiz', '/takim#ekip'],
+      ['Hakkımızda', '/hakkimizda'],
+      ['Vizyon ve Misyon', '/hakkimizda#vizyon-misyon'],
+      ['Takımlar', '/takimlar'],
       ['Araçlarımız', '/araclar'],
-      ['Yarışmalar', '/yarismalar'],
+      ['Formula Student', '/formula-student'],
     ],
   },
   {
