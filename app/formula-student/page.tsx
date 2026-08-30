@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { BriefcaseBusiness, Calculator, Cog, Gauge, Infinity as InfinityIcon, Route, ShieldCheck, Zap } from 'lucide-react';
 
-import { PageHero } from '@/components/page-hero';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 
@@ -86,51 +85,59 @@ const dynamicEvents = [
 ];
 
 const galleryImages = [
-  { src: '/media/fs-team-romania.webp', alt: 'SAUFormula takımı ADA-02 ile yarış garajının önünde', className: 'md:col-span-8' },
-  { src: '/media/fs-acceleration.webp', alt: 'ADA-02 yarış öncesinde start hazırlığında', className: 'md:col-span-4' },
-  { src: '/media/fs-pit.webp', alt: 'SAUFormula ekibi ADA-02 üzerinde pit çalışması yaparken', className: 'md:col-span-4' },
-  { src: '/media/fs-romania-grid-wide.webp', alt: 'Formula Student Romania pist alanında yarış araçları', className: 'md:col-span-8' },
-  { src: '/media/fs-ada02-front.webp', alt: 'ADA-02 Formula Student yarış aracı önden görünüm', className: 'md:col-span-6' },
-  { src: '/media/fs-ada02-rear.webp', alt: 'ADA-02 yarış aracının arka görünümü', className: 'md:col-span-6' },
+  {
+    src: '/media/fs-romania-grid-wide.webp',
+    alt: 'Formula Student Romania pist alanında üniversite takımlarının yarış araçları',
+    title: 'Yarış alanı',
+    text: 'Farklı ülkelerden öğrenci takımları aynı pistte buluşur; her araç, bir sezon boyunca verilen binlerce mühendislik kararını temsil eder.',
+  },
+  {
+    src: '/media/fs-team-romania.webp',
+    alt: 'SAUFormula takımı ADA-02 ile yarış garajının önünde',
+    title: 'Takım çalışması',
+    text: 'Teknik kontrollerden piste çıkışa kadar her adım; sürücü, mühendislik ekipleri ve operasyon sorumlularının eş zamanlı çalışmasını gerektirir.',
+  },
+  {
+    src: '/media/fs-pit.webp',
+    alt: 'SAUFormula ekibi ADA-02 üzerinde pit çalışması yaparken',
+    title: 'Hazırlık ve doğrulama',
+    text: 'Paddock alanı yalnızca bakım noktası değildir; ölçümlerin kontrol edildiği, sorunların çözüldüğü ve aracın bir sonraki etaba hazırlandığı çalışma alanıdır.',
+  },
 ];
 
 export default function FormulaStudentPage() {
   return (
     <main>
       <SiteHeader />
-      <PageHero
-        eyebrow="Tasarım · Üretim · Doğrulama · Yarış"
-        title="Formula Student"
-        description="Üniversite öğrencilerinin tek kişilik bir yarış otomobilini araştırdığı, tasarladığı, ürettiği, test ettiği ve uzman jüriler karşısında savunduğu uluslararası mühendislik yarışmasıdır."
-      />
-
-      <section className="px-5 py-20 lg:px-10 lg:py-28">
+      <section className="relative overflow-hidden bg-ink px-5 pb-20 pt-36 text-white lg:px-10 lg:pb-28 lg:pt-44">
+        <div className="tech-grid absolute inset-0 opacity-20" />
         <div className="mx-auto max-w-[1500px]">
-          <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
+          <div className="relative grid gap-10 border-b border-white/15 pb-12 lg:grid-cols-[0.78fr_1.22fr] lg:items-end">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-racing-green">Formula Student nedir?</p>
-              <h2 className="mt-5 font-heading text-5xl font-black uppercase leading-[0.92] sm:text-7xl">Bir otomobilden daha büyük bir proje.</h2>
+              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-racing-green">Tasarım · Üretim · Doğrulama · Yarış</p>
+              <h1 className="mt-5 font-heading text-[clamp(4rem,8vw,8.5rem)] font-black uppercase leading-[0.86] tracking-[0.01em]">Formula Student Nedir?</h1>
             </div>
             <div className="grid gap-7 text-base leading-8 text-white/60 sm:grid-cols-2">
               <p>
-                Takımlar bir sezon boyunca gerçek bir ürün geliştirme döngüsünü yönetir: hedef belirler, tasarlar, analiz eder, üretir, test eder ve yarış alanında sonuçlarını savunur. Profesyoneller yol gösterebilir; ancak temel mühendislik kararları öğrenciler tarafından alınır.
+                Formula Student, üniversite öğrencilerinin tek kişilik bir yarış otomobilini sıfırdan araştırdığı, tasarladığı, ürettiği ve test ettiği uluslararası bir mühendislik yarışmasıdır. Takımlar yalnızca hızlı bir araç ortaya koymaz; geliştirdikleri ürünün teknik gerekçelerini, üretim planını, maliyetini ve iş modelini uzman jüriler karşısında savunur.
               </p>
               <p>
-                Şampiyonu yalnızca pist süresi belirlemez. Tasarım kalitesi, üretim ve maliyet bilgisi, iş planı, hız, çeviklik, dayanıklılık ve enerji verimliliği tek bir puan tablosunda birleşir.
+                Bir sezon boyunca gerçek bir ürün geliştirme döngüsü yönetilir: hedefler belirlenir, analizler yapılır, parçalar üretilir, sistemler doğrulanır ve sonuçlar pistte ölçülür. Tasarım kalitesi, maliyet bilgisi, iş planı, hız, çeviklik, dayanıklılık ve enerji verimliliği aynı puan tablosunda birleşir.
               </p>
             </div>
           </div>
 
-          <figure className="mt-14 overflow-hidden border border-white/10 bg-[#071b14]">
-            <div className="relative min-h-[430px] lg:min-h-[680px]">
+          <figure className="relative mt-12 overflow-hidden border border-white/10 bg-[#071b14]">
+            <div className="relative aspect-[16/9] min-h-[360px] max-h-[760px]">
               <Image
-                src="/media/fs-romania-grid.webp"
+                src="/media/fs-romania-grid-wide.webp"
                 alt="Formula Student Romania yarış alanında farklı üniversitelerin araçları"
                 fill
                 sizes="100vw"
-                className="object-cover"
+                className="object-cover object-[50%_58%]"
                 priority
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/65 via-transparent to-transparent" />
             </div>
             <figcaption className="flex flex-col gap-2 border-t border-white/10 px-6 py-5 text-xs text-white/45 sm:flex-row sm:items-center sm:justify-between">
               <span>Formula Student Romania yarış alanı</span>
@@ -264,10 +271,23 @@ export default function FormulaStudentPage() {
               Etap açıklamalarından bağımsız bu galeri, ADA-02’nin yarış alanındaki hazırlıklarını, takım çalışmasını ve Formula Student atmosferini gösteriyor.
             </p>
           </div>
-          <div className="mt-12 grid gap-4 md:grid-cols-12">
+          <div className="mt-12 grid gap-px overflow-hidden border border-white/15 bg-white/15 lg:grid-cols-3">
             {galleryImages.map((image, index) => (
-              <figure key={image.src} className={`relative min-h-[360px] overflow-hidden border border-white/10 ${image.className} ${index < 2 ? 'lg:min-h-[560px]' : 'lg:min-h-[440px]'}`}>
-                <Image src={image.src} alt={image.alt} fill sizes="(min-width: 768px) 66vw, 100vw" className="object-cover transition-transform duration-500 hover:scale-[1.02]" />
+              <figure key={image.src} className="bg-[#071b14]">
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    fill
+                    sizes="(min-width: 1024px) 33vw, 100vw"
+                    className={`object-cover transition-transform duration-500 hover:scale-[1.02] ${index === 0 ? 'object-[50%_64%]' : ''}`}
+                  />
+                </div>
+                <figcaption className="min-h-60 border-t border-white/10 p-7">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-racing-green">0{index + 1} · Formula Student Romania</p>
+                  <h3 className="mt-4 font-heading text-3xl font-bold uppercase">{image.title}</h3>
+                  <p className="mt-4 text-sm leading-7 text-white/50">{image.text}</p>
+                </figcaption>
               </figure>
             ))}
           </div>

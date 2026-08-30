@@ -11,11 +11,10 @@ export const metadata: Metadata = {
 };
 
 const workAreas = [
-  ['Mekanik', 'Şasi, süspansiyon, güç aktarımı, fren ve araç dinamiği sistemlerinin tasarım ve doğrulaması.'],
-  ['Elektronik', 'Araç üzerindeki elektrik mimarisi, sensörler, veri toplama ve kontrol sistemleri.'],
-  ['Kompozit', 'Hafif, dayanıklı ve üretilebilir kompozit parçaların tasarımı ve üretimi.'],
-  ['Yazılım', 'Araç verisinin işlenmesi, mühendislik araçları, gömülü sistemler ve takımın dijital altyapısı.'],
-  ['Organizasyon', 'Proje planlama, iletişim, sponsorluk, finans, etkinlik ve takım sürdürülebilirliği.'],
+  ['Motor', 'Motor, emme–egzoz, soğutma, yakıt ve güç aktarımı sistemlerinin performans, güvenilirlik ve araç paketlemesiyle birlikte geliştirilmesi.'],
+  ['Aerodinamik', 'Ön ve arka kanatlar, taban ve gövde akışının hesaplamalı analiz, üretim ve pist verileriyle geliştirilmesi.'],
+  ['Kompozit', 'Karbon fiber ve diğer kompozit parçaların hafiflik, dayanım, kalıp tasarımı ve tekrarlanabilir üretim hedefleriyle hazırlanması.'],
+  ['Elektrik & Elektronik', 'Araç elektrik mimarisi, kablolama, sensörler, veri toplama ve kontrol sistemlerinin tasarımı ile doğrulanması.'],
 ];
 
 export default function TeamsPage() {
@@ -57,7 +56,7 @@ export default function TeamsPage() {
         <div className="mx-auto max-w-[1500px]">
           <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-racing-green">Çalışma alanları</p>
           <h2 className="mt-5 max-w-4xl font-heading text-5xl font-black uppercase leading-[0.92] sm:text-7xl">Farklı disiplinler, tek araç.</h2>
-          <div className="mt-14 grid border-l border-t border-white/15 sm:grid-cols-2 xl:grid-cols-5">
+          <div className="mt-14 grid border-l border-t border-white/15 sm:grid-cols-2 xl:grid-cols-4">
             {workAreas.map(([title, text], index) => (
               <article key={title} className="min-h-80 border-b border-r border-white/15 p-7">
                 <p className="font-heading text-3xl font-black text-racing-green">0{index + 1}</p>

@@ -123,12 +123,12 @@ export default function Home() {
 
           <div className="relative min-h-[560px] overflow-hidden border-l border-white/10 lg:min-h-0">
             <Image
-              src="/media/ada-02-car.jpg"
-              alt="SAUFormula ADA-02, 54 numaralı Formula Student yarış aracı"
+              src="/media/fs-ada02-front.webp"
+              alt="SAUFormula ADA-02, 54 numaralı Formula Student yarış aracı önden görünüm"
               fill
               priority
               sizes="(min-width: 1024px) 49vw, 100vw"
-              className="object-cover object-[50%_62%] grayscale-[18%] contrast-[1.04]"
+              className="object-cover object-[50%_58%] contrast-[1.04]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-ink/30" />
             <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-ink/80 to-transparent" />
@@ -150,29 +150,38 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-y border-racing-green/25 bg-[#071b14] px-5 py-16 lg:px-10 lg:py-24">
-        <div className="mx-auto grid max-w-[1500px] gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
-          <div>
-            <div className="flex items-center gap-6">
-              <Image src="/brand/sett-logo.png" alt="SETT logosu" width={500} height={600} className="h-28 w-auto object-contain" />
-              <span className="font-heading text-4xl font-medium text-white/30">×</span>
-              <Image src="/brand/sauformula-logo-light.png" alt="SAUFormula logosu" width={2400} height={1510} className="h-24 w-auto object-contain" />
-            </div>
-            <div className="mt-9 border-t border-white/10 pt-7">
-              <div className="w-fit max-w-full bg-[#ced8d2] px-5 py-3">
-                <Image src="/brand/sakarya-universitesi-logo.png" alt="Sakarya Üniversitesi logosu" width={600} height={600} className="h-12 w-auto max-w-full object-contain object-left" />
+      <section className="border-y border-racing-green/25 bg-[#071b14] px-5 py-20 lg:px-10 lg:py-28">
+        <div className="mx-auto max-w-[1500px]">
+          <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
+            <div className="border border-white/12 bg-[#0a241b] p-8 sm:p-10">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-racing-green">Ortak mühendislik kültürü</p>
+              <div className="mt-10 flex items-center justify-center gap-5 sm:gap-8">
+                <Image src="/brand/sett-logo.png" alt="SETT logosu" width={500} height={600} className="h-28 w-auto object-contain sm:h-36" />
+                <span className="font-heading text-4xl font-medium text-racing-green">×</span>
+                <Image src="/brand/sauformula-logo-light.png" alt="SAUFormula logosu" width={2400} height={1510} className="h-24 w-auto object-contain sm:h-32" />
+              </div>
+              <div className="mt-10 border-t border-white/12 pt-8">
+                <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.18em] text-white/35">Sakarya Üniversitesi çatısı altında</p>
+                <div className="rounded-sm bg-white px-5 py-4">
+                  <Image src="/brand/sakarya-universitesi-wordmark.webp" alt="Sakarya Üniversitesi" width={1200} height={309} className="h-auto w-full object-contain" />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="lg:border-l lg:border-white/15 lg:pl-12">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-racing-green">2025 · Güçlerin birleşmesi</p>
-            <h2 className="mt-5 font-heading text-5xl font-extrabold uppercase leading-[0.96] tracking-[0.01em] sm:text-7xl">Daha güçlü, daha yenilikçi, daha kararlı.</h2>
-            <p className="mt-7 max-w-3xl text-base leading-8 text-white/60">
-              Sakarya Üniversitesi Formula Student Takımı SAUFormula ile Sakarya Enerji Teknolojileri
-              Takımı SETT güçlerini birleştirerek ortak bir ekip oluşturdu. Mekanikten elektroniğe,
-              kompozitten yazılıma uzanan bu yapı; yarış aracı tasarlayıp üretmek, mühendislikte ve
-              pistte en iyisini ortaya koymak ve üniversitemizi uluslararası arenada temsil etmek için çalışıyor.
-            </p>
+            <div className="lg:pt-4 lg:pl-8">
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-racing-green">2007’den 2025’e · Güçlerin birleşmesi</p>
+              <h2 className="mt-5 max-w-5xl font-heading text-5xl font-extrabold uppercase leading-[0.96] tracking-[0.01em] sm:text-7xl">İki birikim, tek yarış hedefi.</h2>
+              <div className="mt-8 grid gap-6 border-t border-white/12 pt-8 text-base leading-8 text-white/60 md:grid-cols-2">
+                <p>
+                  SETT’in 2007’de hidrojen enerjili araçlarla başlayan enerji teknolojileri birikimi, yıllar boyunca tasarım, üretim ve yarış deneyimiyle büyüdü.
+                </p>
+                <p>
+                  2025’te SAUFormula ile birleşen bu deneyim, bugün Formula Student için geliştirilen ADA-02’de; motor, aerodinamik, kompozit ve elektronik ekiplerinin ortak çalışmasına dönüşüyor.
+                </p>
+              </div>
+              <Link href="/hakkimizda" className="mt-9 inline-flex items-center gap-3 border-b border-racing-green pb-2 text-xs font-black uppercase tracking-[0.16em] text-white">
+                Birleşme hikâyesi <ArrowRight className="size-4" aria-hidden="true" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -181,7 +190,7 @@ export default function Home() {
         <div className="mx-auto grid max-w-[1500px] gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <div className="relative min-h-[420px] overflow-hidden bg-ink lg:min-h-[620px]">
             <Image
-              src="/media/team-2026.jpg"
+              src="/media/fs-team-romania.webp"
               alt="SAUFormula takım üyeleri pist alanında"
               fill
               sizes="(min-width: 1024px) 46vw, 100vw"
