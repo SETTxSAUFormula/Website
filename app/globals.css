@@ -1,0 +1,105 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-racing-green: var(--racing-green);
+  --color-ink: var(--ink);
+  --font-sans: var(--font-manrope);
+  --font-heading: var(--font-barlow-condensed);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+}
+
+:root {
+  --background: #f4f5f1;
+  --foreground: #06100c;
+  --card: #ffffff;
+  --card-foreground: #06100c;
+  --popover: #ffffff;
+  --popover-foreground: #06100c;
+  --primary: #00e27b;
+  --primary-foreground: #03110d;
+  --secondary: #e8ece7;
+  --secondary-foreground: #06100c;
+  --muted: #e8ece7;
+  --muted-foreground: #5d6862;
+  --accent: #00e27b;
+  --accent-foreground: #03110d;
+  --destructive: #d13b39;
+  --border: #d7ddd9;
+  --input: #d7ddd9;
+  --ring: #00b963;
+  --racing-green: #00e27b;
+  --ink: #03110d;
+  --radius: 0.25rem;
+}
+
+* {
+  border-color: var(--border);
+  outline-color: color-mix(in srgb, var(--ring) 50%, transparent);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-manrope), Arial, Helvetica, sans-serif;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: var(--racing-green);
+  color: var(--ink);
+}
+
+.tech-grid {
+  background-image:
+    linear-gradient(rgb(255 255 255 / 4%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 4%) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(to right, black, transparent 82%);
+}
+
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(255 255 255 / 72%);
+}
+
+@media (max-width: 640px) {
+  .tech-grid {
+    background-size: 44px 44px;
+  }
+}
+

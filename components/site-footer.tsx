@@ -1,0 +1,83 @@
+import Image from 'next/image';
+import Link from 'next/link';
+
+const columns = [
+  {
+    title: 'Takım',
+    links: [
+      ['Hakkımızda', '/takim'],
+      ['Ekibimiz', '/takim#ekip'],
+      ['Araçlarımız', '/araclar'],
+      ['Yarışmalar', '/yarismalar'],
+    ],
+  },
+  {
+    title: 'Keşfet',
+    links: [
+      ['Haberler', '/haberler'],
+      ['Medya', '/medya'],
+      ['Sponsorlar', '/sponsorlar'],
+      ['İletişim', '/iletisim'],
+    ],
+  },
+];
+
+export function SiteFooter() {
+  return (
+    <footer id="iletisim" className="bg-ink px-5 pb-6 pt-16 text-white lg:px-10 lg:pt-24">
+      <div className="mx-auto max-w-[1500px]">
+        <div className="grid gap-14 border-b border-white/15 pb-16 lg:grid-cols-[1.25fr_0.75fr_0.75fr]">
+          <div>
+            <Image
+              src="/brand/sauformula-logo-light.png"
+              alt="SAUFormula"
+              width={2400}
+              height={1510}
+              className="h-24 w-auto max-w-none object-contain"
+            />
+            <p className="mt-6 max-w-xl text-lg leading-8 text-white/55">
+              Sakarya Üniversitesi öğrencilerinin tasarladığı, ürettiği ve yarışlara hazırladığı
+              Formula Student araçlarının mühendislik hikâyesi.
+            </p>
+            <p className="mt-8 font-heading text-3xl font-bold uppercase text-racing-green">
+              Race Beyond the Limits
+            </p>
+          </div>
+
+          {columns.map((column) => (
+            <div key={column.title}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-racing-green">{column.title}</p>
+              <ul className="mt-6 space-y-3">
+                {column.links.map(([label, href]) => (
+                  <li key={label}>
+                    <Link href={href} className="text-sm text-white/60 transition-colors hover:text-white">
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex flex-col gap-6 py-8 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-sm font-semibold">Sakarya Üniversitesi · Serdivan, Sakarya</p>
+            <p className="mt-2 text-sm text-white/45">Kurumsal e-posta ve sosyal medya bağlantıları yayın öncesi doğrulanacaktır.</p>
+          </div>
+          <Link href="/iletisim" className="text-xs font-bold uppercase tracking-[0.16em] text-racing-green hover:text-white">
+            İletişim bilgileri
+          </Link>
+        </div>
+
+        <div className="flex flex-col gap-3 border-t border-white/10 pt-6 text-[11px] text-white/35 sm:flex-row sm:items-center sm:justify-between">
+          <p>© {new Date().getFullYear()} SAUFormula. Tüm hakları saklıdır.</p>
+          <div className="flex gap-5">
+            <Link href="/gizlilik">Gizlilik Politikası</Link>
+            <Link href="/iletisim">İletişim</Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
