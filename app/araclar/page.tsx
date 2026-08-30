@@ -18,7 +18,7 @@ export default function VehiclesPage() {
         eyebrow="Araçlarımız / 2026"
         title="ADA-02"
         description="Tasarım, üretim ve test kararlarımızın pistteki karşılığı: 54 numaralı Formula Student aracımız."
-        aside={<p className="mt-6 font-heading text-4xl font-bold uppercase text-racing-green">Race Beyond the Limits</p>}
+        aside={<p className="mt-6 font-heading text-3xl font-bold uppercase tracking-[0.04em] text-racing-green">54 · 2026 sezonu</p>}
       />
 
       <section className="bg-ink px-5 pb-20 text-white lg:px-10 lg:pb-28">
@@ -47,7 +47,7 @@ export default function VehiclesPage() {
           <h2 className="font-heading text-5xl font-black uppercase leading-[0.88] sm:text-7xl">Kararların toplamı.</h2>
           <div className="grid gap-px bg-border sm:grid-cols-2">
             {['Şasi ve mekanik', 'Elektrik ve elektronik', 'Araç dinamiği', 'Üretim ve doğrulama'].map((title) => (
-              <article key={title} className="bg-white p-8">
+              <article key={title} className="bg-[#071b14] p-8">
                 <h3 className="font-heading text-3xl font-bold uppercase">{title}</h3>
                 <p className="mt-4 text-sm leading-7 text-muted-foreground">
                   Bu alana, takım tarafından doğrulanmış ADA-02 teknik verileri ve geliştirme notları eklenecektir.

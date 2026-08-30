@@ -23,7 +23,7 @@ export function PageHero({
             <span className="text-white/65">{title}</span>
           </nav>
           <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-racing-green">{eyebrow}</p>
-          <h1 className="mt-5 max-w-5xl font-heading text-[clamp(4rem,9vw,8rem)] font-black uppercase leading-[0.82] tracking-[-0.045em]">
+          <h1 className="mt-5 max-w-5xl font-heading text-[clamp(3.8rem,8vw,7.4rem)] font-extrabold uppercase leading-[0.95] tracking-[0.01em]">
             {title}
           </h1>
         </div>

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Barlow_Condensed, Manrope } from 'next/font/google';
+import { Barlow, Manrope } from 'next/font/google';
 import './globals.css';
 
 const manrope = Manrope({
@@ -7,8 +7,8 @@ const manrope = Manrope({
   subsets: ['latin', 'latin-ext'],
 });
 
-const barlowCondensed = Barlow_Condensed({
-  variable: '--font-barlow-condensed',
+const barlow = Barlow({
+  variable: '--font-barlow',
   subsets: ['latin', 'latin-ext'],
   weight: ['500', '600', '700', '800', '900'],
 });
@@ -51,7 +51,7 @@ const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'SAUFormula',
-  alternateName: 'SETT × SAUFormula',
+  alternateName: 'Sakarya Üniversitesi Formula Student Takımı',
   url: 'https://sauformula.org',
   logo: 'https://sauformula.org/brand/sauformula-logo-light.png',
   parentOrganization: {
@@ -63,7 +63,7 @@ const organizationSchema = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="tr">
-      <body className={`${manrope.variable} ${barlowCondensed.variable} antialiased`}>
+      <body className={`${manrope.variable} ${barlow.variable} antialiased`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}

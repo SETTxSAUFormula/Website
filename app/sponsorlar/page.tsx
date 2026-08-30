@@ -40,7 +40,7 @@ export default function SponsorsPage() {
           <h2 className="mt-4 font-heading text-5xl font-black uppercase sm:text-7xl">Pistin görünmeyen gücü.</h2>
           <div className="mt-12 grid grid-cols-2 border-l border-t border-border md:grid-cols-4">
             {sponsors.map((sponsor) => (
-              <div key={sponsor.name} className="flex min-h-40 items-center justify-center border-b border-r border-border bg-white p-7">
+              <div key={sponsor.name} className="flex min-h-40 items-center justify-center border-b border-r border-border bg-[#ced8d2] p-7">
                 <Image src={sponsor.src} alt={`${sponsor.name} logosu`} width={300} height={140} className="max-h-20 w-auto max-w-[82%] object-contain" />
               </div>
             ))}
@@ -51,22 +51,22 @@ export default function SponsorsPage() {
         </div>
       </section>
 
-      <section id="sponsor-ol" className="bg-racing-green px-5 py-20 text-ink lg:px-10 lg:py-28">
+      <section id="sponsor-ol" className="border-t border-racing-green/30 bg-[#082119] px-5 py-20 text-white lg:px-10 lg:py-28">
         <div className="mx-auto max-w-[1500px]">
           <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr]">
             <div>
-              <p className="text-[11px] font-black uppercase tracking-[0.22em]">İş birliği</p>
+              <p className="text-[11px] font-black uppercase tracking-[0.2em] text-racing-green">İş birliği</p>
               <h2 className="mt-4 font-heading text-6xl font-black uppercase leading-[0.84] sm:text-8xl">Aynı hedefte buluşalım.</h2>
-              <p className="mt-7 max-w-xl text-base leading-8 text-ink/65">
+              <p className="mt-7 max-w-xl text-base leading-8 text-white/60">
                 Sponsorluk iletişim formunu şimdilik devre dışı bırakıyoruz. Doğrulanmış kurumsal e-posta adresi ve güncel sponsorluk dosyası yayın öncesi bu alana eklenecek.
               </p>
             </div>
             <div className="grid gap-px bg-ink/20 sm:grid-cols-3">
               {collaboration.map(([Icon, title, text]) => (
-                <article key={String(title)} className="bg-[#d9ffe9] p-7">
+                <article key={String(title)} className="bg-[#0b281e] p-7">
                   <Icon className="size-8" aria-hidden="true" />
                   <h3 className="mt-16 font-heading text-3xl font-bold uppercase">{String(title)}</h3>
-                  <p className="mt-4 text-sm leading-7 text-ink/60">{String(text)}</p>
+                  <p className="mt-4 text-sm leading-7 text-white/55">{String(text)}</p>
                 </article>
               ))}
             </div>

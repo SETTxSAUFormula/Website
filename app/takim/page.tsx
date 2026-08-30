@@ -7,7 +7,7 @@ import { SiteHeader } from '@/components/site-header';
 
 export const metadata: Metadata = {
   title: 'Takım',
-  description: 'SETT × SAUFormula takımının hikâyesi, çalışma kültürü ve mühendislik yaklaşımı.',
+  description: 'SAUFormula takımının hikâyesi, SETT ile güç birliği ve mühendislik yaklaşımı.',
 };
 
 const areas = [
@@ -22,7 +22,7 @@ export default function TeamPage() {
     <main>
       <SiteHeader />
       <PageHero
-        eyebrow="SETT × SAUFormula"
+        eyebrow="Sakarya Üniversitesi"
         title="Takım"
         description="Öğrencilerin karar aldığı, sorumluluk üstlendiği ve birlikte ürettiği disiplinler arası bir mühendislik takımıyız."
       />
@@ -38,13 +38,13 @@ export default function TeamPage() {
             <div className="mt-8 space-y-5 text-base leading-8 text-muted-foreground">
               <p>
                 2007’de Türkiye’nin ilk hidrojen enerjili aracıyla yola çıkan Sakarya Üniversitesi
-                Enerji Teknolojileri Topluluğu, bugün disiplinler arası mühendislik çalışmalarını
-                SETT × SAUFormula çatısı altında sürdürüyor.
+                Enerji Teknolojileri Topluluğu, yıllar içinde disiplinler arası bir mühendislik kültürü oluşturdu.
               </p>
               <p>
-                Amacımız yalnızca yarışmak değil; sürdürülebilir bir mühendislik kültürü oluşturmak,
-                genç mühendislerin gerçek proje deneyimi kazanmasını sağlamak ve Türkiye’yi Formula
-                Student organizasyonlarında güçlü biçimde temsil etmek.
+                2025 yılında Sakarya Üniversitesi Formula Student Takımı SAUFormula ile Sakarya Enerji
+                Teknolojileri Takımı SETT güçlerini birleştirerek daha güçlü, yenilikçi ve kararlı bir ekip
+                oluşturdu. Ortak hedefimiz; mühendislikte, tasarımda ve yarış pistlerinde en iyisini ortaya
+                koymak, üniversitemizi uluslararası arenada temsil etmek.
               </p>
             </div>
           </div>

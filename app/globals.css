@@ -26,7 +26,7 @@
   --color-racing-green: var(--racing-green);
   --color-ink: var(--ink);
   --font-sans: var(--font-manrope);
-  --font-heading: var(--font-barlow-condensed);
+  --font-heading: var(--font-barlow);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -35,23 +35,23 @@
 }
 
 :root {
-  --background: #f4f5f1;
-  --foreground: #06100c;
-  --card: #ffffff;
-  --card-foreground: #06100c;
-  --popover: #ffffff;
-  --popover-foreground: #06100c;
+  --background: #03110d;
+  --foreground: #eef5f1;
+  --card: #081d16;
+  --card-foreground: #eef5f1;
+  --popover: #081d16;
+  --popover-foreground: #eef5f1;
   --primary: #00e27b;
   --primary-foreground: #03110d;
-  --secondary: #e8ece7;
-  --secondary-foreground: #06100c;
-  --muted: #e8ece7;
-  --muted-foreground: #5d6862;
+  --secondary: #0c2a20;
+  --secondary-foreground: #eef5f1;
+  --muted: #0b241b;
+  --muted-foreground: #9caea4;
   --accent: #00e27b;
   --accent-foreground: #03110d;
   --destructive: #d13b39;
-  --border: #d7ddd9;
-  --input: #d7ddd9;
+  --border: #214237;
+  --input: #214237;
   --ring: #00b963;
   --racing-green: #00e27b;
   --ink: #03110d;
@@ -74,6 +74,12 @@ body {
   font-family: var(--font-manrope), Arial, Helvetica, sans-serif;
 }
 
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
 button,
 a {
   -webkit-tap-highlight-color: transparent;
@@ -86,8 +92,8 @@ a {
 
 .tech-grid {
   background-image:
-    linear-gradient(rgb(255 255 255 / 4%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(255 255 255 / 4%) 1px, transparent 1px);
+    linear-gradient(rgb(0 226 123 / 5%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(0 226 123 / 5%) 1px, transparent 1px);
   background-size: 72px 72px;
   mask-image: linear-gradient(to right, black, transparent 82%);
 }
@@ -102,4 +108,3 @@ a {
     background-size: 44px 44px;
   }
 }
-

@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { BriefcaseBusiness, Camera } from 'lucide-react';
 
 const columns = [
   {
@@ -39,9 +40,17 @@ export function SiteFooter() {
               Sakarya Üniversitesi öğrencilerinin tasarladığı, ürettiği ve yarışlara hazırladığı
               Formula Student araçlarının mühendislik hikâyesi.
             </p>
-            <p className="mt-8 font-heading text-3xl font-bold uppercase text-racing-green">
-              Race Beyond the Limits
-            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="https://www.instagram.com/sau.formula/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border border-white/15 px-4 py-3 text-xs font-semibold text-white/70 transition-colors hover:border-racing-green hover:text-racing-green">
+                <Camera className="size-4" aria-hidden="true" /> SAUFormula
+              </Link>
+              <Link href="https://www.instagram.com/sauenerjiteknolojileri/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border border-white/15 px-4 py-3 text-xs font-semibold text-white/70 transition-colors hover:border-racing-green hover:text-racing-green">
+                <Camera className="size-4" aria-hidden="true" /> SETT
+              </Link>
+              <Link href="https://www.linkedin.com/company/enerjiteknolojileri/posts/?feedView=all" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border border-white/15 px-4 py-3 text-xs font-semibold text-white/70 transition-colors hover:border-racing-green hover:text-racing-green">
+                <BriefcaseBusiness className="size-4" aria-hidden="true" /> LinkedIn
+              </Link>
+            </div>
           </div>
 
           {columns.map((column) => (
@@ -63,7 +72,7 @@ export function SiteFooter() {
         <div className="flex flex-col gap-6 py-8 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-sm font-semibold">Sakarya Üniversitesi · Serdivan, Sakarya</p>
-            <p className="mt-2 text-sm text-white/45">Kurumsal e-posta ve sosyal medya bağlantıları yayın öncesi doğrulanacaktır.</p>
+            <p className="mt-2 text-sm text-white/45">Kurumsal e-posta adresi yayın öncesi doğrulanacaktır.</p>
           </div>
           <Link href="/iletisim" className="text-xs font-bold uppercase tracking-[0.16em] text-racing-green hover:text-white">
             İletişim bilgileri

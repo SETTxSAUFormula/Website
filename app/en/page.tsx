@@ -24,7 +24,7 @@ export default function EnglishHomePage() {
         <div className="mx-auto grid max-w-[1500px] gap-14 lg:grid-cols-[1fr_0.8fr] lg:items-center">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-racing-green">Sakarya University Formula Student Team</p>
-            <h1 className="mt-7 font-heading text-[clamp(5rem,11vw,11rem)] font-black uppercase leading-[0.75] tracking-[-0.05em]">
+            <h1 className="mt-7 font-heading text-[clamp(4.5rem,10vw,9rem)] font-extrabold uppercase leading-[0.9] tracking-[0.01em]">
               Race beyond<br /><span className="text-racing-green">the limits.</span>
             </h1>
             <p className="mt-10 max-w-2xl text-lg leading-8 text-white/55">

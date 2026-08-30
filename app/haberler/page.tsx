@@ -17,7 +17,7 @@ export default function NewsPage() {
       <SiteHeader />
       <PageHero eyebrow="Atölyeden piste" title="Haberler" description="Tasarım kararlarından üretim kilometre taşlarına, testlerden yarış günlerine kadar takımın günlüğü." />
       <section className="px-5 py-24 lg:px-10 lg:py-32">
-        <div className="mx-auto grid max-w-[1500px] gap-10 border border-border bg-white p-8 lg:grid-cols-[1fr_auto] lg:items-end lg:p-14">
+        <div className="mx-auto grid max-w-[1500px] gap-10 border border-border bg-[#071b14] p-8 lg:grid-cols-[1fr_auto] lg:items-end lg:p-14">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#008d4e]">İlk yayın hazırlanıyor</p>
             <h2 className="mt-4 max-w-3xl font-heading text-5xl font-black uppercase leading-[0.88] sm:text-7xl">Hikâyeyi kaynağından anlatacağız.</h2>

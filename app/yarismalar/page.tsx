@@ -25,7 +25,7 @@ export default function CompetitionsPage() {
         <div className="mx-auto max-w-[1500px]">
           <div className="grid border-l border-t border-border md:grid-cols-2">
             {events.map(([title, text], index) => (
-              <article key={title} className="min-h-72 border-b border-r border-border bg-white p-8 lg:p-12">
+              <article key={title} className="min-h-72 border-b border-r border-border bg-[#071b14] p-8 lg:p-12">
                 <p className="font-heading text-3xl font-black text-[#008d4e]">0{index + 1}</p>
                 <h2 className="mt-14 font-heading text-4xl font-bold uppercase">{title}</h2>
                 <p className="mt-4 max-w-xl text-sm leading-7 text-muted-foreground">{text}</p>

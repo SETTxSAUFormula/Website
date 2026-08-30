@@ -20,15 +20,8 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
 
   return (
     <header className={overlay ? 'absolute inset-x-0 top-0 z-40 text-white' : 'relative z-40 bg-ink text-white'}>
-      <div className="border-b border-white/10 bg-black/20 px-5 py-2 backdrop-blur-sm lg:px-10">
-        <div className="mx-auto flex max-w-[1500px] items-center justify-between text-[10px] font-semibold uppercase tracking-[0.22em] text-white/60">
-          <p>Sakarya Üniversitesi Formula Student Takımı</p>
-          <p className="hidden sm:block">SETT × SAUFormula</p>
-        </div>
-      </div>
-
-      <div className="border-b border-white/10 bg-[#03110d]/85 px-5 backdrop-blur-xl lg:px-10">
-        <div className="mx-auto flex h-20 max-w-[1500px] items-center justify-between gap-8">
+      <div className="border-b border-white/10 bg-[#03110d]/92 px-5 backdrop-blur-xl lg:px-10">
+        <div className="mx-auto flex h-24 max-w-[1500px] items-center justify-between gap-8">
           <Link href="/" aria-label="SAUFormula ana sayfa" className="shrink-0">
             <Image
               src="/brand/sauformula-logo-light.png"
@@ -45,7 +38,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
               <Link
                 key={item.label}
                 href={item.href}
-                className="text-sm font-medium text-white/75 transition-colors hover:text-racing-green focus-visible:text-racing-green"
+                className="text-sm font-medium tracking-[0.01em] text-white/75 transition-colors hover:text-racing-green focus-visible:text-racing-green"
               >
                 {item.label}
               </Link>
@@ -61,7 +54,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
             </Link>
             <Link
               href="/sponsorlar#sponsor-ol"
-              className="hidden h-11 items-center gap-2 bg-racing-green px-5 text-xs font-bold uppercase tracking-[0.14em] text-ink transition-colors hover:bg-white sm:inline-flex"
+              className="hidden h-11 items-center gap-2 bg-racing-green px-5 text-xs font-bold uppercase tracking-[0.14em] text-ink transition-colors hover:bg-[#bff9d9] sm:inline-flex"
             >
               Sponsor Ol
               <ArrowUpRight aria-hidden="true" className="size-4" />

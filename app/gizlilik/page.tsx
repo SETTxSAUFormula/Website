@@ -15,7 +15,7 @@ export default function PrivacyPage() {
       <SiteHeader />
       <PageHero eyebrow="Yasal" title="Gizlilik" description="Bu sayfa, sauformula.org için yayın öncesi hazırlanmış gizlilik politikası iskeletidir." />
       <article className="px-5 py-20 lg:px-10 lg:py-28">
-        <div className="mx-auto max-w-4xl space-y-10 bg-white p-8 sm:p-12">
+        <div className="mx-auto max-w-4xl space-y-10 border border-border bg-[#071b14] p-8 sm:p-12">
           <section>
             <h2 className="font-heading text-3xl font-bold uppercase">Veri işleme yaklaşımı</h2>
             <p className="mt-4 leading-8 text-muted-foreground">
