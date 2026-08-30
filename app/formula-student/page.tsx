@@ -109,32 +109,32 @@ export default function FormulaStudentPage() {
   return (
     <main>
       <SiteHeader />
-      <section className="relative overflow-hidden bg-ink px-5 pb-20 pt-36 text-white lg:px-10 lg:pb-28 lg:pt-44">
+      <section className="relative overflow-hidden bg-ink px-5 pb-16 pt-32 text-white lg:px-10 lg:pb-20 lg:pt-36">
         <div className="tech-grid absolute inset-0 opacity-20" />
         <div className="mx-auto max-w-[1500px]">
-          <div className="relative grid gap-10 border-b border-white/15 pb-12 lg:grid-cols-[0.78fr_1.22fr] lg:items-end">
+          <div className="relative grid gap-8 border-b border-white/15 pb-9 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-racing-green">Tasarım · Üretim · Doğrulama · Yarış</p>
-              <h1 className="mt-5 font-heading text-[clamp(4rem,8vw,8.5rem)] font-black uppercase leading-[0.86] tracking-[0.01em]">Formula Student Nedir?</h1>
+              <h1 className="mt-4 font-heading text-[clamp(3.8rem,7vw,6.8rem)] font-black uppercase leading-[0.88] tracking-[0.01em]">Formula Student Nedir?</h1>
             </div>
             <div className="grid gap-7 text-base leading-8 text-white/60 sm:grid-cols-2">
               <p>
-                Formula Student, üniversite öğrencilerinin tek kişilik bir yarış otomobilini sıfırdan araştırdığı, tasarladığı, ürettiği ve test ettiği uluslararası bir mühendislik yarışmasıdır. Takımlar yalnızca hızlı bir araç ortaya koymaz; geliştirdikleri ürünün teknik gerekçelerini, üretim planını, maliyetini ve iş modelini uzman jüriler karşısında savunur.
+                Formula Student, üniversite öğrencilerinin tek kişilik bir yarış otomobilini sıfırdan araştırdığı, tasarladığı, ürettiği ve test ettiği uluslararası bir mühendislik yarışmasıdır.
               </p>
               <p>
-                Bir sezon boyunca gerçek bir ürün geliştirme döngüsü yönetilir: hedefler belirlenir, analizler yapılır, parçalar üretilir, sistemler doğrulanır ve sonuçlar pistte ölçülür. Tasarım kalitesi, maliyet bilgisi, iş planı, hız, çeviklik, dayanıklılık ve enerji verimliliği aynı puan tablosunda birleşir.
+                Takımlar teknik kararlarını, üretim planını, maliyetini ve iş modelini jüri karşısında savunur; hız, çeviklik, dayanıklılık ve enerji verimliliğini pistte kanıtlar.
               </p>
             </div>
           </div>
 
-          <figure className="relative mt-12 overflow-hidden border border-white/10 bg-[#071b14]">
-            <div className="relative aspect-[16/9] min-h-[360px] max-h-[760px]">
+          <figure className="relative mt-8 overflow-hidden border border-white/10 bg-[#071b14]">
+            <div className="relative aspect-[16/7] min-h-[300px]">
               <Image
                 src="/media/fs-romania-grid-wide.webp"
                 alt="Formula Student Romania yarış alanında farklı üniversitelerin araçları"
                 fill
                 sizes="100vw"
-                className="object-cover object-[50%_58%]"
+                className="object-cover object-[50%_82%]"
                 priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/65 via-transparent to-transparent" />
@@ -164,12 +164,12 @@ export default function FormulaStudentPage() {
         </div>
       </section>
 
-      <section className="border-y border-white/10 bg-[#071b14] px-5 py-20 lg:px-10 lg:py-28">
+      <section className="border-y border-white/10 bg-[#071b14] px-5 py-16 lg:px-10 lg:py-20">
         <div className="mx-auto max-w-[1500px]">
           <div className="flex flex-col gap-6 border-b border-white/15 pb-10 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-racing-green">01 · Pist öncesi değerlendirme</p>
-              <h2 className="mt-5 font-heading text-6xl font-black uppercase leading-none sm:text-8xl">Statik Etaplar</h2>
+              <h2 className="mt-4 font-heading text-5xl font-black uppercase leading-none sm:text-6xl">Statik Etaplar</h2>
             </div>
             <div className="lg:text-right">
               <p className="font-heading text-6xl font-black text-racing-green">325</p>
@@ -177,7 +177,7 @@ export default function FormulaStudentPage() {
             </div>
           </div>
 
-          <div className="mt-12 grid gap-x-10 gap-y-14 lg:grid-cols-3">
+          <div className="mt-9 grid gap-x-10 gap-y-10 lg:grid-cols-3">
             {staticEvents.map((event) => {
               const Icon = event.icon;
 
@@ -187,7 +187,7 @@ export default function FormulaStudentPage() {
                     <Icon className="size-14 stroke-[1.4] text-racing-green" aria-hidden="true" />
                     <span className="bg-racing-green px-4 py-2 font-heading text-2xl font-black text-ink">{event.points} Puan</span>
                   </div>
-                  <p className="mt-12 text-[10px] font-bold uppercase tracking-[0.18em] text-racing-green">{event.english}</p>
+                  <p className="mt-7 text-[10px] font-bold uppercase tracking-[0.18em] text-racing-green">{event.english}</p>
                   <h3 className="mt-3 font-heading text-3xl font-bold uppercase leading-tight">{event.title}</h3>
                   <p className="mt-6 text-sm leading-7 text-white/60">{event.text}</p>
                   <div className="mt-7 border-l-2 border-racing-green/60 pl-4">
@@ -201,12 +201,12 @@ export default function FormulaStudentPage() {
         </div>
       </section>
 
-      <section className="px-5 py-20 lg:px-10 lg:py-28">
+      <section className="px-5 py-16 lg:px-10 lg:py-20">
         <div className="mx-auto max-w-[1500px]">
           <div className="flex flex-col gap-6 border-b border-white/15 pb-10 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-racing-green">02 · Pist üzerindeki değerlendirme</p>
-              <h2 className="mt-5 font-heading text-6xl font-black uppercase leading-none sm:text-8xl">Dinamik Etaplar</h2>
+              <h2 className="mt-4 font-heading text-5xl font-black uppercase leading-none sm:text-6xl">Dinamik Etaplar</h2>
             </div>
             <div className="lg:text-right">
               <p className="font-heading text-6xl font-black text-racing-green">525</p>
@@ -214,7 +214,7 @@ export default function FormulaStudentPage() {
             </div>
           </div>
 
-          <div className="mt-12 grid gap-x-10 gap-y-14 md:grid-cols-6">
+          <div className="mt-9 grid gap-x-10 gap-y-10 md:grid-cols-6">
             {dynamicEvents.map((event, index) => {
               const Icon = event.icon;
 
@@ -227,7 +227,7 @@ export default function FormulaStudentPage() {
                     <Icon className="size-14 stroke-[1.4] text-racing-green" aria-hidden="true" />
                     <span className="bg-racing-green px-4 py-2 font-heading text-2xl font-black text-ink">{event.points} Puan</span>
                   </div>
-                  <p className="mt-12 text-[10px] font-bold uppercase tracking-[0.18em] text-racing-green">{event.english}</p>
+                  <p className="mt-7 text-[10px] font-bold uppercase tracking-[0.18em] text-racing-green">{event.english}</p>
                   <h3 className="mt-3 font-heading text-3xl font-bold uppercase">{event.title}</h3>
                   <p className="mt-6 text-sm leading-7 text-white/60">{event.text}</p>
                 </article>
@@ -237,7 +237,7 @@ export default function FormulaStudentPage() {
         </div>
       </section>
 
-      <section className="border-y border-white/10 bg-[#071b14] px-5 py-20 lg:px-10 lg:py-28">
+      <section className="border-y border-white/10 bg-[#071b14] px-5 py-16 lg:px-10 lg:py-20">
         <div className="mx-auto grid max-w-[1500px] gap-12 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-racing-green">03 · Opsiyonel sürücüsüz etaplar</p>
@@ -262,7 +262,7 @@ export default function FormulaStudentPage() {
         </div>
       </section>
 
-      <section className="px-5 py-20 lg:px-10 lg:py-28">
+      <section className="px-5 py-16 lg:px-10 lg:py-20">
         <div className="mx-auto max-w-[1500px]">
           <div className="max-w-4xl">
             <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-racing-green">Yarış haftasından</p>

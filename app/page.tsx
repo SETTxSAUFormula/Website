@@ -150,26 +150,20 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-y border-racing-green/25 bg-[#071b14] px-5 py-20 lg:px-10 lg:py-28">
+      <section className="border-y border-racing-green/25 bg-[#071b14] px-5 py-16 lg:px-10 lg:py-20">
         <div className="mx-auto max-w-[1500px]">
           <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
-            <div className="border border-white/12 bg-[#0a241b] p-8 sm:p-10">
+            <div className="border border-white/12 bg-[#0a241b] p-7 sm:p-9">
               <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-racing-green">Ortak mühendislik kültürü</p>
-              <div className="mt-10 flex items-center justify-center gap-5 sm:gap-8">
-                <Image src="/brand/sett-logo.png" alt="SETT logosu" width={500} height={600} className="h-28 w-auto object-contain sm:h-36" />
+              <div className="mt-8 flex items-center justify-center gap-5 sm:gap-8">
+                <Image src="/brand/sett-logo.png" alt="SETT logosu" width={500} height={600} className="h-24 w-auto object-contain sm:h-28" />
                 <span className="font-heading text-4xl font-medium text-racing-green">×</span>
-                <Image src="/brand/sauformula-logo-light.png" alt="SAUFormula logosu" width={2400} height={1510} className="h-24 w-auto object-contain sm:h-32" />
-              </div>
-              <div className="mt-10 border-t border-white/12 pt-8">
-                <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.18em] text-white/35">Sakarya Üniversitesi çatısı altında</p>
-                <div className="rounded-sm bg-white px-5 py-4">
-                  <Image src="/brand/sakarya-universitesi-wordmark.webp" alt="Sakarya Üniversitesi" width={1200} height={309} className="h-auto w-full object-contain" />
-                </div>
+                <Image src="/brand/sauformula-logo-light.png" alt="SAUFormula logosu" width={2400} height={1510} className="h-20 w-auto object-contain sm:h-24" />
               </div>
             </div>
             <div className="lg:pt-4 lg:pl-8">
               <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-racing-green">2007’den 2025’e · Güçlerin birleşmesi</p>
-              <h2 className="mt-5 max-w-5xl font-heading text-5xl font-extrabold uppercase leading-[0.96] tracking-[0.01em] sm:text-7xl">İki birikim, tek yarış hedefi.</h2>
+              <h2 className="mt-4 max-w-5xl font-heading text-4xl font-extrabold uppercase leading-[0.96] tracking-[0.01em] sm:text-5xl">İki birikim, tek yarış hedefi.</h2>
               <div className="mt-8 grid gap-6 border-t border-white/12 pt-8 text-base leading-8 text-white/60 md:grid-cols-2">
                 <p>
                   SETT’in 2007’de hidrojen enerjili araçlarla başlayan enerji teknolojileri birikimi, yıllar boyunca tasarım, üretim ve yarış deneyimiyle büyüdü.

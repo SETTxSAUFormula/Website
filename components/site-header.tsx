@@ -8,10 +8,10 @@ import { useState } from 'react';
 
 const navigation = [
   { label: 'Anasayfa', href: '/' },
-  { label: 'Hakkımızda', href: '/hakkimizda' },
+  { label: 'Biz Kimiz?', href: '/hakkimizda' },
   { label: 'Formula Student', href: '/formula-student' },
   { label: 'Araçlar', href: '/araclar' },
-  { label: 'Takımlar', href: '/takimlar' },
+  { label: 'Takımımız', href: '/takimlar' },
   { label: 'Sponsorlar', href: '/sponsorlar' },
   { label: 'İletişim', href: '/iletisim' },
 ];
