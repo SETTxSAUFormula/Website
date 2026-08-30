@@ -58,6 +58,15 @@ const organizationSchema = {
     '@type': 'CollegeOrUniversity',
     name: 'Sakarya Üniversitesi',
   },
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress:
+      'Sakarya Üniversitesi Enerji Teknolojileri Laboratuvarı, Kemalpaşa Mahallesi, Sakarya Üniversitesi Esentepe Kampüsü',
+    addressLocality: 'Serdivan',
+    addressRegion: 'Sakarya',
+    postalCode: '54050',
+    addressCountry: 'TR',
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

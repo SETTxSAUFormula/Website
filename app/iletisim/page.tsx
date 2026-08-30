@@ -26,8 +26,18 @@ export default function ContactPage() {
           <article className="min-h-72 border-b border-r border-border bg-[#071b14] p-8">
             <MapPin className="size-8 text-[#008d4e]" aria-hidden="true" />
             <p className="mt-16 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Konum</p>
-            <h2 className="mt-2 font-heading text-3xl font-bold uppercase">Sakarya Üniversitesi</h2>
-            <p className="mt-3 text-sm leading-6 text-muted-foreground">Serdivan, Sakarya</p>
+            <h2 className="mt-2 font-heading text-3xl font-bold uppercase">Enerji Teknolojileri Laboratuvarı</h2>
+            <address className="mt-3 not-italic text-sm leading-6 text-muted-foreground">
+              Sakarya Üniversitesi Enerji Teknolojileri Laboratuvarı, Kemalpaşa Mahallesi, Sakarya Üniversitesi Esentepe Kampüsü, 54050 Serdivan/Sakarya, Türkiye
+            </address>
+            <Link
+              href="https://www.google.com/maps/search/?api=1&query=Sakarya+Universitesi+Enerji+Teknolojileri+Laboratuvari+Esentepe+Kampusu+Serdivan+Sakarya"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-5 inline-flex text-xs font-bold uppercase tracking-[0.14em] text-racing-green hover:text-white"
+            >
+              Haritada aç
+            </Link>
           </article>
           <article className="min-h-72 border-b border-r border-border bg-ink p-8 text-white">
             <Mail className="size-8 text-racing-green" aria-hidden="true" />

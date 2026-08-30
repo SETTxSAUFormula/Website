@@ -71,10 +71,12 @@ export function SiteFooter() {
         </div>
 
         <div className="flex flex-col gap-6 py-8 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-sm font-semibold">Sakarya Üniversitesi · Serdivan, Sakarya</p>
-            <p className="mt-2 text-sm text-white/45">Kurumsal e-posta adresi yayın öncesi doğrulanacaktır.</p>
-          </div>
+          <address className="max-w-3xl not-italic">
+            <p className="text-sm font-semibold">Sakarya Üniversitesi Enerji Teknolojileri Laboratuvarı</p>
+            <p className="mt-2 text-sm leading-6 text-white/45">
+              Kemalpaşa Mahallesi, Sakarya Üniversitesi Esentepe Kampüsü, 54050 Serdivan/Sakarya, Türkiye
+            </p>
+          </address>
           <Link href="/iletisim" className="text-xs font-bold uppercase tracking-[0.16em] text-racing-green hover:text-white">
             İletişim bilgileri
           </Link>
