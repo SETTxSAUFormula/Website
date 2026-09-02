@@ -1,24 +1,27 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
+import { localizedPath, type Language } from '@/lib/i18n';
 
 export function PageHero({
   eyebrow,
   title,
   description,
   aside,
+  language = 'tr',
 }: {
   eyebrow: string;
   title: string;
   description: string;
   aside?: ReactNode;
+  language?: Language;
 }) {
   return (
-    <section className="relative isolate overflow-hidden bg-ink px-5 py-14 text-white lg:px-10 lg:py-20">
+    <section className="relative isolate overflow-hidden bg-ink px-5 py-12 text-white lg:px-10 lg:py-14">
       <div className="tech-grid absolute inset-0 -z-10 opacity-25" />
       <div className="mx-auto grid max-w-[1500px] gap-8 lg:grid-cols-[1fr_0.55fr] lg:items-end">
         <div>
-          <nav aria-label="Sayfa işaret yolu" className="mb-6 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/35">
-            <Link href="/" className="transition-colors hover:text-racing-green">Ana sayfa</Link>
+          <nav aria-label={language === 'en' ? 'Breadcrumb' : 'Sayfa işaret yolu'} className="mb-6 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/35">
+            <Link href={localizedPath('/', language)} className="transition-colors hover:text-racing-green">{language === 'en' ? 'Home' : 'Ana sayfa'}</Link>
             <span aria-hidden="true">/</span>
             <span className="text-white/65">{title}</span>
           </nav>

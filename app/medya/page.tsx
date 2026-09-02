@@ -4,25 +4,41 @@ import Image from 'next/image';
 import { PageHero } from '@/components/page-hero';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
+import type { Language } from '@/lib/i18n';
 
 export const metadata: Metadata = {
   title: 'Medya',
   description: 'SAUFormula takımından, ADA-02 aracından ve pist çalışmalarından fotoğraflar.',
+  alternates: { canonical: '/medya', languages: { 'tr-TR': '/medya', 'en-US': '/en/medya' } },
 };
 
-const images = [
-  { src: '/media/ada-02-car.jpg', alt: 'SAUFormula ADA-02 aracı pist alanında', label: 'ADA-02 / Pist' },
-  { src: '/media/team-2026.jpg', alt: 'SAUFormula takım üyeleri', label: 'Takım / 2026' },
-];
+const pageCopy = {
+  tr: {
+    eyebrow: 'Fotoğraf ve video', title: 'Medya', description: 'Atölyedeki emeği, takım ruhunu ve ADA-02’nin pistteki hikâyesini kayıt altına alıyoruz.', note: 'Medya arşivindeki seçili kareler optimize edilerek galeriye aşamalı biçimde eklenecektir.',
+    images: [
+      { src: '/media/ada-02-car.jpg', alt: 'SAUFormula ADA-02 aracı pist alanında', label: 'ADA-02 / Pist' },
+      { src: '/media/team-2026.jpg', alt: 'SAUFormula takım üyeleri', label: 'Takım / 2026' },
+    ],
+  },
+  en: {
+    eyebrow: 'Photo and video', title: 'Media', description: 'We document the work in the workshop, the spirit of the team and ADA-02’s story on track.', note: 'Selected images from the media archive will be optimised and added to the gallery in stages.',
+    images: [
+      { src: '/media/ada-02-car.jpg', alt: 'SAUFormula ADA-02 in the paddock', label: 'ADA-02 / Track' },
+      { src: '/media/team-2026.jpg', alt: 'SAUFormula team members', label: 'Team / 2026' },
+    ],
+  },
+};
 
-export default function MediaPage() {
+export function MediaPageContent({ language = 'tr' }: { language?: Language }) {
+  const copy = pageCopy[language];
+
   return (
     <main>
-      <SiteHeader />
-      <PageHero eyebrow="Fotoğraf ve video" title="Medya" description="Atölyedeki emeği, takım ruhunu ve ADA-02’nin pistteki hikâyesini kayıt altına alıyoruz." />
+      <SiteHeader language={language} />
+      <PageHero eyebrow={copy.eyebrow} title={copy.title} description={copy.description} language={language} />
       <section className="bg-ink px-5 py-20 text-white lg:px-10 lg:py-28">
         <div className="mx-auto grid max-w-[1500px] gap-5 lg:grid-cols-2">
-          {images.map((item, index) => (
+          {copy.images.map((item, index) => (
             <figure key={item.src} className={`group relative overflow-hidden border border-white/15 ${index === 0 ? 'min-h-[620px]' : 'min-h-[480px] lg:mt-28'}`}>
               <Image src={item.src} alt={item.alt} fill sizes="(min-width:1024px) 50vw,100vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.025]" priority={index === 0} />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent" />
@@ -34,10 +50,14 @@ export default function MediaPage() {
           ))}
         </div>
         <p className="mx-auto mt-10 max-w-[1500px] text-sm leading-7 text-white/45">
-          Medya arşivindeki seçili kareler optimize edilerek galeriye aşamalı biçimde eklenecektir.
+          {copy.note}
         </p>
       </section>
-      <SiteFooter />
+      <SiteFooter language={language} />
     </main>
   );
+}
+
+export default function MediaPage() {
+  return <MediaPageContent />;
 }
