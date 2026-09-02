@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
+import Link from '@/components/site-link';
 import { MapPin } from 'lucide-react';
 
 import { ContactForm } from '@/components/contact-form';
@@ -32,18 +32,18 @@ export function ContactPageContent({ language = 'tr' }: { language?: Language })
     <main>
       <SiteHeader language={language} />
 
-      <section className="bg-ink px-5 py-12 text-white lg:px-10 lg:py-14">
+      <section className="bg-ink px-5 py-9 text-white sm:py-12 lg:px-10 lg:py-14">
         <div className="mx-auto max-w-[1500px]">
           <div className="grid gap-8 border-b border-white/15 pb-9 lg:grid-cols-[0.7fr_1.3fr] lg:items-end">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-racing-green">{copy.eyebrow}</p>
-              <h1 className="mt-4 font-heading text-[clamp(3.8rem,7vw,6.8rem)] font-black uppercase leading-[0.88]">{copy.title}</h1>
+              <h1 className="mt-4 font-heading text-[clamp(3rem,14vw,6.8rem)] font-black uppercase leading-[0.88]">{copy.title}</h1>
             </div>
             <p className="max-w-2xl text-base leading-7 text-white/60">{copy.intro}</p>
           </div>
 
           <div className="mt-8 grid border border-white/15 bg-[#071b14] lg:grid-cols-[1fr_1.25fr]">
-            <article className="border-b border-white/15 p-7 lg:border-b-0 lg:border-r lg:p-9">
+            <article className="border-b border-white/15 p-5 sm:p-7 lg:border-b-0 lg:border-r lg:p-9">
               <MapPin className="size-7 text-racing-green" aria-hidden="true" />
               <p className="mt-7 text-[10px] font-bold uppercase tracking-[0.2em] text-racing-green">{copy.location}</p>
               <h2 className="mt-2 font-heading text-3xl font-bold uppercase">{copy.lab}</h2>
@@ -53,7 +53,7 @@ export function ContactPageContent({ language = 'tr' }: { language?: Language })
 
             <div className="grid sm:grid-cols-3">
               {socialLinks.map(([network, label, href, logo]) => (
-                <Link key={label} href={href} target="_blank" rel="noreferrer" className="flex min-h-44 min-w-0 items-center gap-4 border-b border-white/12 p-6 transition-colors hover:bg-white/[0.03] sm:border-b-0 sm:border-r sm:last:border-r-0 xl:p-7">
+                <Link key={label} href={href} target="_blank" rel="noreferrer" className="flex min-h-28 min-w-0 items-center gap-4 border-b border-white/12 p-4 transition-colors hover:bg-white/[0.03] sm:min-h-44 sm:border-b-0 sm:border-r sm:p-6 sm:last:border-r-0 xl:p-7">
                   <Image src={logo} alt="" width={1024} height={1024} aria-hidden="true" className="size-9 shrink-0 rounded-[8px] object-contain" />
                   <span className="min-w-0 flex-1">
                     <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-racing-green">{network}</span>
@@ -75,10 +75,10 @@ export function ContactPageContent({ language = 'tr' }: { language?: Language })
             </div>
           </div>
 
-          <section className="mt-12 grid gap-8 border-t border-racing-green/30 pt-12 lg:grid-cols-[0.7fr_1.3fr] lg:items-start">
+          <section className="mt-9 grid gap-7 border-t border-racing-green/30 pt-9 sm:mt-12 sm:gap-8 sm:pt-12 lg:grid-cols-[0.7fr_1.3fr] lg:items-start">
             <div className="lg:sticky lg:top-8">
               <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-racing-green">{copy.formEyebrow}</p>
-              <h2 className="mt-4 max-w-xl font-heading text-5xl font-black uppercase leading-[0.9] sm:text-6xl">{copy.formTitle}</h2>
+              <h2 className="mt-4 max-w-xl font-heading text-4xl font-black uppercase leading-[0.9] sm:text-6xl">{copy.formTitle}</h2>
               <p className="mt-6 max-w-lg text-sm leading-7 text-white/50">{copy.formText}</p>
             </div>
             <ContactForm language={language} />

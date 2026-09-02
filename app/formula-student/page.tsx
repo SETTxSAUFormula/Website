@@ -173,15 +173,15 @@ export function FormulaStudentPageContent({ language = 'tr' }: { language?: Lang
   return (
     <main>
       <SiteHeader language={language} />
-      <section className="relative overflow-hidden bg-ink px-5 py-12 text-white lg:px-10 lg:py-14">
+      <section className="relative overflow-hidden bg-ink px-5 py-9 text-white sm:py-12 lg:px-10 lg:py-14">
         <div className="tech-grid absolute inset-0 opacity-20" />
         <div className="mx-auto max-w-[1500px]">
           <div className="relative grid gap-8 border-b border-white/15 pb-9 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-racing-green">{copy.eyebrow}</p>
-              <h1 className="mt-4 font-heading text-[clamp(3.8rem,7vw,6.8rem)] font-black uppercase leading-[0.88] tracking-[0.01em]">{copy.title}</h1>
+              <h1 className="mt-4 font-heading text-[clamp(3rem,14vw,6.8rem)] font-black uppercase leading-[0.88] tracking-[0.01em]">{copy.title}</h1>
             </div>
-            <p className="max-w-4xl text-base leading-8 text-white/60">
+            <p className="max-w-4xl text-sm leading-7 text-white/60 sm:text-base sm:leading-8">
               {copy.intro}
             </p>
           </div>
@@ -208,8 +208,8 @@ export function FormulaStudentPageContent({ language = 'tr' }: { language?: Lang
             <aside aria-label={copy.scoreLabel} className="border-t border-white/15 lg:border-l lg:border-t-0">
               <div className="grid h-full grid-cols-2">
                 {copy.scores.map(([value, label], index) => (
-                  <div key={label} className={`flex min-h-40 flex-col justify-center p-5 sm:p-7 ${index % 2 === 0 ? 'border-r border-white/15' : ''} ${index < 2 ? 'border-b border-white/15' : ''}`}>
-                    <p className="font-heading text-5xl font-black text-racing-green">{value}</p>
+                  <div key={label} className={`flex min-h-28 flex-col justify-center p-4 sm:min-h-40 sm:p-7 ${index % 2 === 0 ? 'border-r border-white/15' : ''} ${index < 2 ? 'border-b border-white/15' : ''}`}>
+                    <p className="font-heading text-4xl font-black text-racing-green sm:text-5xl">{value}</p>
                     <p className="mt-2 text-[10px] font-bold uppercase leading-4 tracking-[0.12em] text-white/45">{label}</p>
                   </div>
                 ))}
@@ -222,25 +222,25 @@ export function FormulaStudentPageContent({ language = 'tr' }: { language?: Lang
         </div>
       </section>
 
-      <section className="border-y border-white/10 bg-[#071b14] px-5 py-16 lg:px-10 lg:py-20">
+      <section className="border-y border-white/10 bg-[#071b14] px-5 py-12 sm:py-16 lg:px-10 lg:py-20">
         <div className="mx-auto max-w-[1500px]">
-          <div className="flex flex-col gap-6 border-b border-white/15 pb-10 lg:flex-row lg:items-end lg:justify-between">
+          <div className="flex flex-col gap-4 border-b border-white/15 pb-7 sm:gap-6 sm:pb-10 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-racing-green">{copy.staticEyebrow}</p>
-              <h2 className="mt-4 font-heading text-5xl font-black uppercase leading-none sm:text-6xl">{copy.staticTitle}</h2>
+              <h2 className="mt-4 font-heading text-4xl font-black uppercase leading-none sm:text-6xl">{copy.staticTitle}</h2>
             </div>
             <div className="lg:text-right">
-              <p className="font-heading text-6xl font-black text-racing-green">325</p>
+              <p className="font-heading text-5xl font-black text-racing-green sm:text-6xl">325</p>
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/45">{copy.totalPoints}</p>
             </div>
           </div>
 
-          <div className="mt-9 grid gap-x-10 gap-y-10 lg:grid-cols-3">
+          <div className="mt-8 grid snap-x snap-mandatory grid-flow-col auto-cols-[86%] gap-5 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid-flow-row lg:auto-cols-auto lg:grid-cols-3 lg:gap-x-10 lg:gap-y-10 lg:overflow-visible lg:pb-0">
             {staticEvents.map((event) => {
               const Icon = event.icon;
 
               return (
-                <article key={event.title} className="border-t border-white/15 pt-8">
+                <article key={event.title} className="snap-start border border-white/15 bg-ink/35 p-5 lg:border-x-0 lg:border-b-0 lg:bg-transparent lg:p-0 lg:pt-8">
                   <div className="flex items-start justify-between gap-5">
                     <Icon className="size-14 stroke-[1.4] text-racing-green" aria-hidden="true" />
                     <span className="bg-racing-green px-4 py-2 font-heading text-2xl font-black text-ink">{event.points} {copy.points}</span>
@@ -259,27 +259,27 @@ export function FormulaStudentPageContent({ language = 'tr' }: { language?: Lang
         </div>
       </section>
 
-      <section className="px-5 py-16 lg:px-10 lg:py-20">
+      <section className="px-5 py-12 sm:py-16 lg:px-10 lg:py-20">
         <div className="mx-auto max-w-[1500px]">
-          <div className="flex flex-col gap-6 border-b border-white/15 pb-10 lg:flex-row lg:items-end lg:justify-between">
+          <div className="flex flex-col gap-4 border-b border-white/15 pb-7 sm:gap-6 sm:pb-10 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-racing-green">{copy.dynamicEyebrow}</p>
-              <h2 className="mt-4 font-heading text-5xl font-black uppercase leading-none sm:text-6xl">{copy.dynamicTitle}</h2>
+              <h2 className="mt-4 font-heading text-4xl font-black uppercase leading-none sm:text-6xl">{copy.dynamicTitle}</h2>
             </div>
             <div className="lg:text-right">
-              <p className="font-heading text-6xl font-black text-racing-green">525</p>
+              <p className="font-heading text-5xl font-black text-racing-green sm:text-6xl">525</p>
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/45">{copy.drivenPoints}</p>
             </div>
           </div>
 
-          <div className="mt-9 grid gap-x-10 gap-y-10 md:grid-cols-6">
+          <div className="mt-8 grid snap-x snap-mandatory grid-flow-col auto-cols-[86%] gap-5 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid-flow-row md:auto-cols-auto md:grid-cols-6 md:gap-x-10 md:gap-y-10 md:overflow-visible md:pb-0">
             {dynamicEvents.map((event, index) => {
               const Icon = event.icon;
 
               return (
                 <article
                   key={event.title}
-                  className={`border-t border-white/15 pt-8 md:col-span-2 ${index === 3 ? 'md:col-start-2' : ''}`}
+                  className={`snap-start border border-white/15 bg-[#071b14] p-5 md:col-span-2 md:border-x-0 md:border-b-0 md:bg-transparent md:p-0 md:pt-8 ${index === 3 ? 'md:col-start-2' : ''}`}
                 >
                   <div className="flex items-start justify-between gap-5">
                     <Icon className="size-14 stroke-[1.4] text-racing-green" aria-hidden="true" />
@@ -295,40 +295,40 @@ export function FormulaStudentPageContent({ language = 'tr' }: { language?: Lang
         </div>
       </section>
 
-      <section className="border-y border-white/10 bg-[#071b14] px-5 py-16 lg:px-10 lg:py-20">
-        <div className="mx-auto grid max-w-[1500px] gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+      <section className="border-y border-white/10 bg-[#071b14] px-5 py-12 sm:py-16 lg:px-10 lg:py-20">
+        <div className="mx-auto grid max-w-[1500px] gap-8 sm:gap-12 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-racing-green">{copy.driverlessEyebrow}</p>
-            <h2 className="mt-5 font-heading text-5xl font-black uppercase leading-[0.92] sm:text-7xl">{copy.driverlessTitle}</h2>
+            <h2 className="mt-5 font-heading text-4xl font-black uppercase leading-[0.92] sm:text-7xl">{copy.driverlessTitle}</h2>
             <p className="mt-7 max-w-xl text-sm leading-7 text-white/50">
               {copy.driverlessText}
             </p>
           </div>
-          <div className="grid border-l border-t border-white/15 sm:grid-cols-2">
+          <div className="grid grid-cols-2 border-l border-t border-white/15">
             {copy.driverlessEvents.map(([title, english, points]) => (
-              <article key={title} className="min-h-72 border-b border-r border-white/15 p-8 lg:p-10">
-                <p className="font-heading text-5xl font-black text-racing-green">{points}</p>
+              <article key={title} className="min-h-52 border-b border-r border-white/15 p-4 sm:min-h-72 sm:p-8 lg:p-10">
+                <p className="font-heading text-4xl font-black text-racing-green sm:text-5xl">{points}</p>
                 <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.16em] text-white/30">{copy.points}</p>
-                <p className="mt-14 text-[10px] font-bold uppercase tracking-[0.18em] text-racing-green">{english}</p>
-                <h3 className="mt-3 font-heading text-3xl font-bold uppercase">{title}</h3>
+                <p className="mt-8 text-[8px] font-bold uppercase tracking-[0.12em] text-racing-green sm:mt-14 sm:text-[10px] sm:tracking-[0.18em]">{english}</p>
+                <h3 className="mt-3 font-heading text-xl font-bold uppercase sm:text-3xl">{title}</h3>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="px-5 py-16 lg:px-10 lg:py-20">
+      <section className="px-5 py-12 sm:py-16 lg:px-10 lg:py-20">
         <div className="mx-auto max-w-[1500px]">
           <div className="max-w-4xl">
             <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-racing-green">{copy.galleryEyebrow}</p>
-            <h2 className="mt-5 font-heading text-5xl font-black uppercase leading-[0.92] sm:text-7xl">{copy.galleryTitle}</h2>
+            <h2 className="mt-5 font-heading text-4xl font-black uppercase leading-[0.92] sm:text-7xl">{copy.galleryTitle}</h2>
             <p className="mt-7 max-w-2xl text-sm leading-7 text-white/50">
               {copy.galleryText}
             </p>
           </div>
-          <div className="mt-12 grid gap-px overflow-hidden border border-white/15 bg-white/15 lg:grid-cols-3">
+          <div className="mt-8 grid snap-x snap-mandatory grid-flow-col auto-cols-[88%] gap-px overflow-x-auto border border-white/15 bg-white/15 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mt-12 lg:grid-flow-row lg:auto-cols-auto lg:grid-cols-3 lg:overflow-hidden">
             {galleryImages.map((image, index) => (
-              <figure key={image.src} className="bg-[#071b14]">
+              <figure key={image.src} className="snap-start bg-[#071b14]">
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <Image
                     src={image.src}
@@ -338,7 +338,7 @@ export function FormulaStudentPageContent({ language = 'tr' }: { language?: Lang
                     className={`object-cover transition-transform duration-500 hover:scale-[1.02] ${index === 0 ? 'object-[50%_64%]' : ''}`}
                   />
                 </div>
-                <figcaption className="min-h-60 border-t border-white/10 p-7">
+                <figcaption className="min-h-52 border-t border-white/10 p-5 sm:min-h-60 sm:p-7">
                   <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-racing-green">0{index + 1} · FORMULA STUDENT ROMANIA</p>
                   <h3 className="mt-4 font-heading text-3xl font-bold uppercase">{image.title}</h3>
                   <p className="mt-4 text-sm leading-7 text-white/50">{image.text}</p>

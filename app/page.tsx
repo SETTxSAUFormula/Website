@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import Link from '@/components/site-link';
 import {
   ArrowDownRight,
   ArrowRight,
@@ -75,19 +75,19 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
     <main className="min-h-screen overflow-hidden bg-background text-foreground">
       <SiteHeader overlay language={language} />
 
-      <section className="relative isolate min-h-[780px] bg-ink pt-24 text-white lg:min-h-screen">
+      <section className="relative isolate min-h-[680px] bg-ink pt-20 text-white sm:min-h-[780px] sm:pt-24 lg:min-h-screen">
         <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_18%_70%,rgba(0,226,123,0.17),transparent_30%),linear-gradient(120deg,#03110d_0%,#071b14_48%,#04100c_100%)]" />
         <div className="tech-grid absolute inset-0 -z-10 opacity-35" />
         <div className="absolute inset-y-0 right-0 -z-10 hidden w-[49%] bg-racing-green/5 lg:block" />
 
         <div className="mx-auto grid min-h-[calc(100vh-6rem)] max-w-[1500px] items-stretch lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="flex flex-col justify-center px-5 py-16 lg:px-10 lg:py-20 xl:pr-20">
+          <div className="flex flex-col justify-center px-5 py-12 sm:py-16 lg:px-10 lg:py-20 xl:pr-20">
             <div className="mb-8 flex items-center gap-4 text-[11px] font-bold uppercase tracking-[0.24em] text-racing-green">
               <span className="h-px w-12 bg-racing-green" />
               {copy.heroEyebrow}
             </div>
 
-            <h1 className="max-w-4xl font-heading text-[clamp(4rem,8vw,8.8rem)] font-black uppercase leading-[0.86] tracking-[0.01em]">
+            <h1 className="max-w-4xl font-heading text-[clamp(3.35rem,15vw,8.8rem)] font-black uppercase leading-[0.86] tracking-[0.01em]">
               <span className="block text-white">Race</span>
               <span className="block text-outline">Beyond</span>
               <span className="block text-racing-green">THE LIMITS.</span>
@@ -108,7 +108,7 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
               </Link>
             </div>
 
-            <dl className="mt-14 grid max-w-2xl grid-cols-3 border-y border-white/15">
+            <dl className="mt-10 grid max-w-2xl grid-cols-3 border-y border-white/15 sm:mt-14">
               <div className="py-5 pr-4">
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">{copy.carNumber}</dt>
                 <dd className="mt-1 font-heading text-3xl font-bold">54</dd>
@@ -124,7 +124,7 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
             </dl>
           </div>
 
-          <div className="relative min-h-[560px] overflow-hidden border-l border-white/10 lg:min-h-0">
+          <div className="relative min-h-[430px] overflow-hidden border-l border-white/10 sm:min-h-[560px] lg:min-h-0">
             <Image
               src="/media/fs-ada02-front.webp"
               alt={isEnglish ? 'Front view of SAUFormula ADA-02, Formula Student car number 54' : 'SAUFormula ADA-02, 54 numaralı Formula Student yarış aracı önden görünüm'}
@@ -153,9 +153,9 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
         </div>
       </section>
 
-      <section id="takim" className="border-y border-racing-green/25 bg-[#071b14] px-5 py-16 lg:px-10 lg:py-20">
+      <section id="takim" className="border-y border-racing-green/25 bg-[#071b14] px-5 py-12 sm:py-16 lg:px-10 lg:py-20">
         <div className="mx-auto grid max-w-[1500px] overflow-hidden border border-white/12 bg-[#061811] lg:grid-cols-[0.92fr_1.08fr]">
-          <div className="relative min-h-[420px] overflow-hidden bg-ink lg:min-h-[660px]">
+          <div className="relative min-h-[340px] overflow-hidden bg-ink sm:min-h-[420px] lg:min-h-[660px]">
             <Image
               src="/media/fs-team-romania.webp"
               alt={isEnglish ? 'SAUFormula team members at the track' : 'SAUFormula takım üyeleri pist alanında'}
@@ -173,9 +173,9 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
             </div>
           </div>
 
-          <div className="relative flex flex-col justify-center p-8 sm:p-10 lg:p-14 xl:p-16">
+          <div className="relative flex flex-col justify-center p-6 sm:p-10 lg:p-14 xl:p-16">
             <div className="tech-grid absolute inset-0 opacity-25" />
-            <h2 className="max-w-3xl font-heading text-[clamp(4rem,7vw,7rem)] font-extrabold uppercase leading-[0.9] tracking-[0.01em] text-white">
+            <h2 className="max-w-3xl font-heading text-[clamp(3rem,13vw,7rem)] font-extrabold uppercase leading-[0.9] tracking-[0.01em] text-white">
               {copy.who}
             </h2>
             <p className="relative mt-7 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
@@ -204,8 +204,8 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
         </div>
       </section>
 
-      <section id="araclar" className="bg-ink px-5 py-16 text-white lg:px-10 lg:py-20">
-        <div className="relative mx-auto min-h-[560px] max-w-[1500px] overflow-hidden border border-racing-green/30 sm:min-h-[620px]">
+      <section id="araclar" className="bg-ink px-5 py-12 text-white sm:py-16 lg:px-10 lg:py-20">
+        <div className="relative mx-auto min-h-[440px] max-w-[1500px] overflow-hidden border border-racing-green/30 sm:min-h-[620px]">
           <Image
             src="/media/fs-ada02-front.webp"
             alt={isEnglish ? 'SAUFormula ADA-02 race car in the Formula Student Romania paddock' : 'SAUFormula ADA-02 yarış aracı Formula Student Romania paddock alanında'}
@@ -216,13 +216,13 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
           <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/80 to-ink/15" />
           <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-ink/20" />
 
-          <div className="relative flex min-h-[560px] items-center p-8 sm:min-h-[620px] sm:p-12 lg:p-16 xl:p-20">
+          <div className="relative flex min-h-[440px] items-center p-6 sm:min-h-[620px] sm:p-12 lg:p-16 xl:p-20">
             <div className="max-w-3xl">
               <div className="flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.22em] text-racing-green">
                 <span className="h-px w-12 bg-racing-green" aria-hidden="true" />
                 {copy.currentGeneration}
               </div>
-              <h2 className="mt-7 font-heading text-[clamp(4.4rem,8vw,8.5rem)] font-black uppercase leading-[0.84] tracking-[0.01em]">
+              <h2 className="mt-6 font-heading text-[clamp(3.6rem,17vw,8.5rem)] font-black uppercase leading-[0.84] tracking-[0.01em] sm:mt-7">
                 ADA-02
               </h2>
               <p className="mt-7 max-w-2xl text-base leading-8 text-white/75 sm:text-lg">
@@ -243,8 +243,8 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
         </div>
       </section>
 
-      <section id="yarismalar" className="bg-ink px-5 py-16 lg:px-10 lg:py-20">
-        <div className="relative mx-auto min-h-[560px] max-w-[1500px] overflow-hidden border border-racing-green/30 text-white sm:min-h-[620px]">
+      <section id="yarismalar" className="bg-ink px-5 py-12 sm:py-16 lg:px-10 lg:py-20">
+        <div className="relative mx-auto min-h-[440px] max-w-[1500px] overflow-hidden border border-racing-green/30 text-white sm:min-h-[620px]">
           <Image
             src="/media/fs-romania-grid-wide.webp"
             alt={isEnglish ? 'Race cars from different universities at Formula Student Romania' : 'Formula Student Romania yarış alanında farklı üniversitelerin yarış araçları'}
@@ -255,13 +255,13 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
           <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/80 to-ink/15" />
           <div className="absolute inset-0 bg-gradient-to-t from-ink/75 via-transparent to-ink/20" />
 
-          <div className="relative flex min-h-[560px] items-center p-8 sm:min-h-[620px] sm:p-12 lg:p-16 xl:p-20">
+          <div className="relative flex min-h-[440px] items-center p-6 sm:min-h-[620px] sm:p-12 lg:p-16 xl:p-20">
             <div className="max-w-3xl">
               <div className="flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.22em] text-racing-green">
                 <span className="h-px w-12 bg-racing-green" aria-hidden="true" />
                 {copy.fsEyebrow}
               </div>
-              <h2 className="mt-7 font-heading text-[clamp(4rem,7.5vw,7.8rem)] font-black uppercase leading-[0.84] tracking-[0.01em]">
+              <h2 className="mt-6 font-heading text-[clamp(3.35rem,14vw,7.8rem)] font-black uppercase leading-[0.84] tracking-[0.01em] sm:mt-7">
                 Formula Student
               </h2>
               <p className="mt-7 max-w-2xl text-base leading-8 text-white/75 sm:text-lg">

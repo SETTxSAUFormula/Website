@@ -62,12 +62,12 @@ export function AboutPageContent({ language = 'tr' }: { language?: Language }) {
     <main>
       <SiteHeader language={language} />
 
-      <section className="bg-ink px-5 py-12 text-white lg:px-10 lg:py-14">
+      <section className="bg-ink px-5 py-9 text-white sm:py-12 lg:px-10 lg:py-14">
         <div className="mx-auto max-w-[1500px]">
           <div className="grid gap-8 border-b border-white/15 pb-10 lg:grid-cols-[0.7fr_1.3fr] lg:items-end">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-racing-green">{copy.since}</p>
-              <h1 className="mt-4 font-heading text-[clamp(3.8rem,7vw,6.8rem)] font-black uppercase leading-[0.88]">{copy.title}</h1>
+              <h1 className="mt-4 font-heading text-[clamp(3rem,14vw,6.8rem)] font-black uppercase leading-[0.88]">{copy.title}</h1>
             </div>
             <div className="grid gap-5 text-base leading-7 text-white/60 md:grid-cols-2">
               <p>{copy.intro1}</p>
@@ -76,7 +76,7 @@ export function AboutPageContent({ language = 'tr' }: { language?: Language }) {
           </div>
 
           <figure className="mt-8 grid overflow-hidden border border-white/12 bg-[#071b14] lg:grid-cols-[1.15fr_0.85fr]">
-            <div className="relative min-h-[360px] lg:min-h-[500px]">
+            <div className="relative min-h-[280px] sm:min-h-[360px] lg:min-h-[500px]">
               <Image src="/media/team-2026.jpg" alt={isEnglish ? 'SAUFormula team members at the competition' : 'SAUFormula takım üyeleri yarış alanında'} fill priority sizes="(min-width: 1024px) 58vw, 100vw" className="object-cover" />
             </div>
             <figcaption className="flex flex-col justify-center p-7 sm:p-10">
@@ -88,7 +88,7 @@ export function AboutPageContent({ language = 'tr' }: { language?: Language }) {
         </div>
       </section>
 
-      <section className="border-y border-racing-green/25 bg-[#061811] px-5 py-16 lg:px-10 lg:py-20">
+      <section className="border-y border-racing-green/25 bg-[#061811] px-5 py-12 sm:py-16 lg:px-10 lg:py-20">
         <div className="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-center">
           <div className="border border-white/12 bg-[#0a241b] p-7">
             <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-racing-green">{copy.merger}</p>
@@ -108,7 +108,7 @@ export function AboutPageContent({ language = 'tr' }: { language?: Language }) {
         </div>
       </section>
 
-      <section id="vizyon-misyon" className="scroll-mt-24 px-5 py-16 lg:px-10 lg:py-20">
+      <section id="vizyon-misyon" className="scroll-mt-24 px-5 py-12 sm:py-16 lg:px-10 lg:py-20">
         <div className="mx-auto max-w-[1500px]">
           <div className="grid border-l border-t border-white/15 lg:grid-cols-2">
             <article className="border-b border-r border-white/15 p-7 sm:p-10">

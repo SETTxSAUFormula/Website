@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { PageHero } from '@/components/page-hero';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
+import { VehicleHistory, type VehicleDetail } from '@/components/vehicle-history';
 import type { Language } from '@/lib/i18n';
 
 export const metadata: Metadata = {
@@ -12,26 +13,24 @@ export const metadata: Metadata = {
   alternates: { canonical: '/araclar', languages: { 'tr-TR': '/araclar', 'en-US': '/en/araclar' } },
 };
 
-type Vehicle = { year: string; name: string; result: string; category: string; image: string; scale: number };
-
-const vehicleHistory: Record<Language, Vehicle[]> = {
+const vehicleHistory: Record<Language, VehicleDetail[]> = {
   tr: [
-    { year: '2007', name: 'Hidrokartal', result: 'Türkiye 2.si', category: 'TÜBİTAK Hidromobil Yarışması', image: '/vehicles/hidrokartal.png', scale: 1.04 },
-    { year: '2008', name: 'HidroSETT-2', result: 'Türkiye 6.sı', category: 'Hidrojen enerjili', image: '/vehicles/hidrosett-2.png', scale: 0.9 },
-    { year: '2009', name: 'TUAR', result: 'Türkiye 3.sü', category: 'TÜBİTAK Hidromobil Yarışları', image: '/vehicles/tuar.png', scale: 1.05 },
-    { year: '2010', name: 'SETTAR', result: 'Türkiye 1.si · Avrupa 7.si', category: 'Shell Eco-marathon', image: '/vehicles/settar.png', scale: 1.04 },
-    { year: '2013', name: 'SUNSETT', result: 'Türkiye 2.si', category: 'Formula-G Olympia', image: '/vehicles/formula-g.png', scale: 1 },
-    { year: '2024–25', name: 'ADA-01', result: 'Avrupa 2.si · Türkiye 1.si', category: 'Formula Student', image: '/vehicles/ada-01.png', scale: 0.76 },
-    { year: '2026', name: 'ADA-02', result: 'FORMULA STUDENT ROMANIA', category: 'Formula Student', image: '/vehicles/ada-02.png', scale: 1.28 },
+    { year: '2007', name: 'Hidrokartal', result: 'Türkiye 2.si', category: 'TÜBİTAK Hidromobil Yarışması', image: '/vehicles/hidrokartal.webp', technology: 'Hidrojen yakıt hücresi', competition: 'TÜBİTAK Hidromobil 2007', description: 'SETT’in hidrojen yakıt hücreli mobilite çalışmalarının ilk güçlü kilometre taşlarından biri olan Hidrokartal, TÜBİTAK Hidromobil Yarışması için geliştirildi. Türkiye ikinciliği; tasarım, üretim ve takım çalışmasında sonraki araçlara aktarılan temel deneyimi oluşturdu.', sourceUrl: 'https://enerjiteknolojileri.org/projeler/projeler.html' },
+    { year: '2008', name: 'HidroSETT-2', result: 'Türkiye 6.sı', category: 'Hidrojen enerjili', image: '/vehicles/hidrosett-2.webp', technology: 'Hidrojen enerjisi', competition: 'Hidrojen Enerjili Otomobil Yarışması 2008', description: 'HidroSETT-2, ekibin hidrojen enerjili araç geliştirme çizgisini ikinci sezona taşıdı. 2008’de düzenlenen Hidrojen Enerjili Otomobil Yarışması’nı Türkiye altıncısı olarak tamamlayarak yakıt hücresi, araç entegrasyonu ve yarış operasyonu bilgisini büyüttü.', sourceUrl: 'https://enerjiteknolojileri.org/projeler/projeler.html' },
+    { year: '2009', name: 'TUAR', result: 'Türkiye 3.sü', category: 'TÜBİTAK Hidromobil Yarışları', image: '/vehicles/tuar.webp', technology: 'Hidrojen yakıt hücresi', competition: 'TÜBİTAK Hidromobil 2009', description: 'TUAR, 2009 TÜBİTAK Hidromobil yarışları için geliştirilen hidrojen yakıt hücreli bir araçtı. Temiz enerjiyle hareket hedefini aerodinamik gövde, düşük tüketim ve yarış güvenilirliğiyle bir araya getiren proje Türkiye üçüncülüğüne ulaştı.', sourceUrl: 'https://enerjiteknolojileri.org/projeler/projeler.html' },
+    { year: '2010', name: 'SETTAR', result: 'Türkiye 1.si · Avrupa 7.si', category: 'Shell Eco-marathon', image: '/vehicles/settar.webp', technology: 'Hidrojen yakıt hücresi', competition: 'Shell Eco-marathon Europe 2010', description: 'SETTAR, depolanan hidrojeni yakıt hücresinde elektrik enerjisine dönüştürerek elektrik motorunu besleyen şehir konseptli bir verimlilik aracıydı. Shell Eco-marathon Europe 2010’da kendi kategorisinde Avrupa yedincisi ve Türkiye birincisi oldu.', sourceUrl: 'https://www.shell.com.tr/media/_jcr_content/root/main/section_1073788075/promo_copy_164329186_1100663819/links/item0.stream/1721053140325/7687b5722a02d2a72f92e2db29f9515d96c4b06f/2011-pr-turkey.pdf' },
+    { year: '2013', name: 'SUNSETT', result: 'Türkiye 2.si', category: 'Formula-G Olympia', image: '/vehicles/formula-g.webp', technology: 'Güneş enerjisi', competition: 'Formula-G Olympia', description: 'SUNSETT, SETT’in hidrojen çalışmalarından güneş enerjili mobiliteye uzanan mühendislik çeşitliliğini temsil etti. Güneşten elde edilen enerjiyi yarış performansına dönüştüren araç, Formula-G Olympia’da Türkiye ikinciliği kazandı.', sourceUrl: 'https://enerjiteknolojileri.org/projeler/projeler.html' },
+    { year: '2024–25', name: 'ADA-01', result: 'Avrupa 2.si · Türkiye 1.si', category: 'Formula Student', image: '/vehicles/ada-01.webp', technology: 'İçten yanmalı Formula Student', competition: 'Formula Student', description: 'ADA-01, SAUFormula’nın ilk Formula Student otomobili ve takımın yarış aracı geliştirme altyapısının başlangıcı oldu. İçten yanmalı sınıfta geliştirilen projede hafif gövde yaklaşımı ve paslanmaz çelik şasi öne çıktı; ekip, Formula Student Russia’nın Project Work kategorisinde ikincilik elde etti.', sourceUrl: 'https://uticdergisi.sakarya.edu.tr/hayallerin-hizla-bulustugu-nokta-sau-formula/', scale: 0.78 },
+    { year: '2026', name: 'ADA-02', result: 'FORMULA STUDENT ROMANIA', category: 'Formula Student', image: '/vehicles/ada-02.webp', technology: 'Formula Student yarış otomobili', competition: 'Formula Student Romania 2026', description: 'ADA-02, yaklaşık bir yıllık tasarım, analiz ve üretim sürecinde baştan geliştirildi. On yedi kişilik SAUFormula ekibi aracı Formula Student Romania 2026’ya taşıdı; teknik incelemelerin yanı sıra statik ve dinamik etaplarda uluslararası mühendislik deneyimi kazandı.', sourceUrl: 'https://haber.sakarya.edu.tr/saul-renciler-ada02-ile-uluslararas-arenada', scale: 1.14 },
   ],
   en: [
-    { year: '2007', name: 'Hidrokartal', result: '2nd in Türkiye', category: 'TÜBİTAK Hydromobile Competition', image: '/vehicles/hidrokartal.png', scale: 1.04 },
-    { year: '2008', name: 'HidroSETT-2', result: '6th in Türkiye', category: 'Hydrogen-powered', image: '/vehicles/hidrosett-2.png', scale: 0.9 },
-    { year: '2009', name: 'TUAR', result: '3rd in Türkiye', category: 'TÜBİTAK Hydromobile Competition', image: '/vehicles/tuar.png', scale: 1.05 },
-    { year: '2010', name: 'SETTAR', result: '1st in Türkiye · 7th in Europe', category: 'Shell Eco-marathon', image: '/vehicles/settar.png', scale: 1.04 },
-    { year: '2013', name: 'SUNSETT', result: '2nd in Türkiye', category: 'Formula-G Olympia', image: '/vehicles/formula-g.png', scale: 1 },
-    { year: '2024–25', name: 'ADA-01', result: '2nd in Europe · 1st in Türkiye', category: 'Formula Student', image: '/vehicles/ada-01.png', scale: 0.76 },
-    { year: '2026', name: 'ADA-02', result: 'FORMULA STUDENT ROMANIA', category: 'Formula Student', image: '/vehicles/ada-02.png', scale: 1.28 },
+    { year: '2007', name: 'Hidrokartal', result: '2nd in Türkiye', category: 'TÜBİTAK Hydromobile Competition', image: '/vehicles/hidrokartal.webp', technology: 'Hydrogen fuel cell', competition: 'TÜBİTAK Hydromobile 2007', description: 'Hidrokartal was one of the first major milestones in SETT’s hydrogen fuel-cell mobility work. Developed for the TÜBİTAK Hydromobile Competition, its second-place finish in Türkiye established design, manufacturing and teamwork experience that carried into later cars.', sourceUrl: 'https://enerjiteknolojileri.org/projeler/projeler.html' },
+    { year: '2008', name: 'HidroSETT-2', result: '6th in Türkiye', category: 'Hydrogen-powered', image: '/vehicles/hidrosett-2.webp', technology: 'Hydrogen energy', competition: 'Hydrogen Car Competition 2008', description: 'HidroSETT-2 carried the team’s hydrogen-powered vehicle programme into a second season. It finished sixth in Türkiye at the 2008 Hydrogen-Powered Automobile Competition, expanding the team’s knowledge of fuel cells, vehicle integration and race operations.', sourceUrl: 'https://enerjiteknolojileri.org/projeler/projeler.html' },
+    { year: '2009', name: 'TUAR', result: '3rd in Türkiye', category: 'TÜBİTAK Hydromobile Competition', image: '/vehicles/tuar.webp', technology: 'Hydrogen fuel cell', competition: 'TÜBİTAK Hydromobile 2009', description: 'TUAR was a hydrogen fuel-cell vehicle developed for the 2009 TÜBİTAK Hydromobile competition. The project combined clean-energy propulsion with an aerodynamic body, low consumption and race reliability, earning third place in Türkiye.', sourceUrl: 'https://enerjiteknolojileri.org/projeler/projeler.html' },
+    { year: '2010', name: 'SETTAR', result: '1st in Türkiye · 7th in Europe', category: 'Shell Eco-marathon', image: '/vehicles/settar.webp', technology: 'Hydrogen fuel cell', competition: 'Shell Eco-marathon Europe 2010', description: 'SETTAR was an urban-concept efficiency car whose fuel cell converted stored hydrogen into electricity for its motor. At Shell Eco-marathon Europe 2010, it finished seventh in Europe and first among the Turkish entrants in its category.', sourceUrl: 'https://www.shell.com.tr/media/_jcr_content/root/main/section_1073788075/promo_copy_164329186_1100663819/links/item0.stream/1721053140325/7687b5722a02d2a72f92e2db29f9515d96c4b06f/2011-pr-turkey.pdf' },
+    { year: '2013', name: 'SUNSETT', result: '2nd in Türkiye', category: 'Formula-G Olympia', image: '/vehicles/formula-g.webp', technology: 'Solar energy', competition: 'Formula-G Olympia', description: 'SUNSETT represents the breadth of SETT’s engineering journey from hydrogen research to solar mobility. Transforming solar energy into race performance, the car secured second place in Türkiye at Formula-G Olympia.', sourceUrl: 'https://enerjiteknolojileri.org/projeler/projeler.html' },
+    { year: '2024–25', name: 'ADA-01', result: '2nd in Europe · 1st in Türkiye', category: 'Formula Student', image: '/vehicles/ada-01.webp', technology: 'Combustion Formula Student', competition: 'Formula Student', description: 'ADA-01 became SAUFormula’s first Formula Student car and the foundation of its race-car development programme. Developed for the combustion class, it featured a lightweight body approach and a stainless-steel chassis; the team placed second in Formula Student Russia’s Project Work category.', sourceUrl: 'https://uticdergisi.sakarya.edu.tr/hayallerin-hizla-bulustugu-nokta-sau-formula/', scale: 0.78 },
+    { year: '2026', name: 'ADA-02', result: 'FORMULA STUDENT ROMANIA', category: 'Formula Student', image: '/vehicles/ada-02.webp', technology: 'Formula Student race car', competition: 'Formula Student Romania 2026', description: 'ADA-02 was redesigned and built through roughly a year of design, analysis and manufacturing work. A 17-member SAUFormula team took the car to Formula Student Romania 2026, gaining international engineering experience through technical inspection and the static and dynamic events.', sourceUrl: 'https://haber.sakarya.edu.tr/saul-renciler-ada02-ile-uluslararas-arenada', scale: 1.14 },
   ],
 };
 
@@ -40,50 +39,15 @@ const pageCopy = {
     eyebrow: '2007’den bugüne · Mühendislik mirası', title: 'Araçlarımız', description: 'Hidrojen ve güneş enerjili verimlilik araçlarından Formula Student otomobillerine uzanan ortak mühendislik hafızamız.', aside: '7 araç · 19 yıllık birikim',
     frontAlt: 'ADA-02 ön görünümü', frontLabel: 'Ön görünüm', rearAlt: 'ADA-02 arka görünümü', rearLabel: 'Arka görünüm',
     current: 'Güncel nesil · 2026', currentText: 'ADA-02, SETT’in enerji teknolojileri mirasını SAUFormula’nın Formula Student hedefiyle buluşturan güncel yarış otomobilidir. Üretilebilirlik, güvenilirlik ve pist performansı aynı geliştirme döngüsünde ele alınır.', currentNote: 'Formula Student Romania’da teknik kontroller, statik sunumlar, paddock hazırlıkları ve pist operasyonları takım tarafından birlikte yönetildi.',
-    car: 'Araç', number: 'Numara', season: 'Sezon', achievements: 'Bu yolda başardıklarımız', heritage: 'Mühendislik mirası', heritageText: 'Her proje farklı bir enerji yaklaşımını temsil eder; tasarım ve üretim deneyimi aynı çizgide bir sonraki araca aktarılır.', vehicleAlt: 'aracının tamamı',
+    car: 'Araç', number: 'Numara', season: 'Sezon', achievements: 'Bu yolda başardıklarımız', heritage: 'Mühendislik mirası', heritageText: 'Her proje farklı bir enerji yaklaşımını temsil eder; tasarım ve üretim deneyimi aynı çizgide bir sonraki araca aktarılır.', vehicleAlt: 'aracının tamamı', inspect: 'Araç dosyasını aç', dialogEyebrow: 'Mühendislik arşivi', story: 'Proje hikâyesi', technology: 'Teknoloji', competition: 'Yarışma', achievement: 'Derece', source: 'Kaynağı incele', previous: 'Önceki araç', next: 'Sonraki araç', close: 'Pencereyi kapat',
   },
   en: {
     eyebrow: 'Engineering heritage · Since 2007', title: 'Our Cars', description: 'Our shared engineering memory, from hydrogen and solar-efficiency vehicles to Formula Student race cars.', aside: '7 cars · 19 years of experience',
     frontAlt: 'Front view of ADA-02', frontLabel: 'Front view', rearAlt: 'Rear view of ADA-02', rearLabel: 'Rear view',
     current: 'Current generation · 2026', currentText: 'ADA-02 is our current race car, bringing SETT’s energy-technology heritage together with SAUFormula’s Formula Student ambition. Manufacturability, reliability and track performance are developed in the same cycle.', currentNote: 'At Formula Student Romania, the team managed technical inspections, static presentations, paddock preparation and track operations together.',
-    car: 'Car', number: 'Number', season: 'Season', achievements: 'What we achieved along the way', heritage: 'Engineering heritage', heritageText: 'Each project represents a different approach to energy, while its design and manufacturing experience carries forward into the next car.', vehicleAlt: 'race car in full view',
+    car: 'Car', number: 'Number', season: 'Season', achievements: 'What we achieved along the way', heritage: 'Engineering heritage', heritageText: 'Each project represents a different approach to energy, while its design and manufacturing experience carries forward into the next car.', vehicleAlt: 'race car in full view', inspect: 'Open vehicle file', dialogEyebrow: 'Engineering archive', story: 'Project story', technology: 'Technology', competition: 'Competition', achievement: 'Result', source: 'View source', previous: 'Previous car', next: 'Next car', close: 'Close window',
   },
 };
-
-function VehicleCopy({ vehicle }: { vehicle: Vehicle }) {
-  return (
-    <div className="min-w-0">
-      <p className="font-heading text-2xl font-black text-racing-green">{vehicle.year}</p>
-      <h3 className="mt-1 break-words font-heading text-xl font-bold uppercase leading-none 2xl:text-2xl">{vehicle.name}</h3>
-      <p className="mt-3 text-[9px] font-bold uppercase leading-4 tracking-[0.1em] text-white/70 2xl:text-[10px]">{vehicle.result}</p>
-      <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.16em] text-white/30">{vehicle.category}</p>
-    </div>
-  );
-}
-
-function VehicleVisual({
-  vehicle,
-  className = 'h-52',
-  language,
-}: {
-  vehicle: Vehicle;
-  className?: string;
-  language: Language;
-}) {
-  return (
-    <div className={`relative flex w-full items-center justify-center overflow-visible ${className}`}>
-      <Image
-        src={vehicle.image}
-        alt={`${vehicle.name} ${pageCopy[language].vehicleAlt}`}
-        draggable={false}
-        fill
-        sizes="(min-width: 1280px) 235px, (min-width: 640px) 45vw, 100vw"
-        className="object-contain"
-        style={{ transform: `scale(${vehicle.scale})`, transformOrigin: 'center' }}
-      />
-    </div>
-  );
-}
 
 export function VehiclesPageContent({ language = 'tr' }: { language?: Language }) {
   const copy = pageCopy[language];
@@ -146,35 +110,7 @@ export function VehiclesPageContent({ language = 'tr' }: { language?: Language }
             <p className="max-w-xl text-sm leading-7 text-white/45">{copy.heritageText}</p>
           </div>
 
-          <div className="mt-10 grid gap-x-5 gap-y-8 sm:grid-cols-2 xl:hidden">
-            {vehicles.map((vehicle) => (
-              <article key={vehicle.name} className="grid min-h-64 grid-cols-[1.08fr_0.92fr] items-center border-t border-white/15 py-5">
-                <VehicleVisual vehicle={vehicle} className="h-56" language={language} />
-                <div className="border-l border-white/10 pl-5">
-                  <VehicleCopy vehicle={vehicle} />
-                </div>
-              </article>
-            ))}
-          </div>
-
-          <div className="relative mt-12 hidden xl:block">
-            <div className="absolute left-[7.14%] right-[7.14%] top-[7px] h-px bg-racing-green/70" />
-            <div className="relative grid grid-cols-7 gap-3">
-              {vehicles.map((vehicle) => (
-                <article key={vehicle.name} className="min-w-0 text-center">
-                  <div className="grid h-4 place-items-center">
-                    <span className="z-10 size-4 rounded-full border-4 border-ink bg-racing-green" />
-                  </div>
-                  <div className="mt-6">
-                    <VehicleVisual vehicle={vehicle} className="mx-auto h-[220px] max-w-[235px] 2xl:h-[240px] 2xl:max-w-[260px]" language={language} />
-                    <div className="mx-auto mt-4 max-w-[230px] border-t border-white/15 pt-4">
-                      <VehicleCopy vehicle={vehicle} />
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
+          <VehicleHistory vehicles={vehicles} language={language} copy={copy} />
         </div>
       </section>
 

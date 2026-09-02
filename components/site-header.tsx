@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
+import Link from '@/components/site-link';
 import { Menu, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -50,7 +50,7 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
   return (
     <header className={overlay ? 'absolute inset-x-0 top-0 z-40 text-white' : 'relative z-40 bg-ink text-white'}>
       <div className="border-b border-white/10 bg-[#03110d]/92 px-5 backdrop-blur-xl lg:px-10">
-        <div className="mx-auto flex h-24 max-w-[1500px] items-center justify-between gap-6">
+        <div className="mx-auto flex h-20 max-w-[1500px] items-center justify-between gap-6 sm:h-24 xl:h-28">
           <Link href={localizedPath('/', language)} aria-label={language === 'en' ? 'SAUFormula home' : 'SAUFormula ana sayfa'} className="shrink-0">
             <Image
               src="/brand/sauformula-logo-light.png"
@@ -58,17 +58,17 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
               width={2400}
               height={1510}
               priority
-              className="h-20 w-auto max-w-none origin-left scale-125 object-contain"
+              className="h-16 w-auto max-w-none origin-left scale-110 object-contain sm:h-20 sm:scale-125 xl:h-[5.5rem]"
             />
           </Link>
 
-          <nav aria-label={language === 'en' ? 'Main menu' : 'Ana menü'} className="hidden h-24 items-stretch border-x border-white/12 xl:flex">
+          <nav aria-label={language === 'en' ? 'Main menu' : 'Ana menü'} className="hidden h-28 items-stretch border-x border-white/12 xl:flex">
             {items.map((item) => (
               <Link
                 key={item.label}
                 href={localizedPath(item.href, language)}
                 aria-current={isActive(item.href) ? 'page' : undefined}
-                className={`flex items-center border-r border-white/12 px-4 text-[11px] font-extrabold uppercase tracking-[0.04em] transition-colors 2xl:px-5 ${
+                className={`flex items-center border-r border-white/12 px-5 text-xs font-extrabold uppercase tracking-[0.04em] transition-colors 2xl:px-6 ${
                   isActive(item.href)
                     ? 'bg-white/[0.07] text-white shadow-[inset_0_-2px_0_#00e27b]'
                     : 'text-white/65 hover:bg-white/[0.04] hover:text-white'
@@ -83,7 +83,7 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
             <Link
               href={switchPath}
               hrefLang={language === 'en' ? 'tr' : 'en'}
-              className="hidden h-10 items-center border-l border-white/15 pl-5 text-xs font-semibold tracking-[0.15em] text-white/70 lg:flex"
+              className="hidden h-12 items-center border-l border-white/15 pl-6 text-sm font-semibold tracking-[0.15em] text-white/70 lg:flex"
             >
               <span className={language === 'tr' ? 'text-white' : undefined}>TR</span>
               <span className="mx-2 text-white/25">/</span>
@@ -103,7 +103,7 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
       </div>
 
       {mobileOpen ? (
-        <div className="absolute inset-x-0 top-full border-b border-white/10 bg-ink px-5 py-5 shadow-2xl xl:hidden">
+        <div className="absolute inset-x-0 top-full max-h-[calc(100svh-5rem)] overflow-y-auto border-b border-white/10 bg-ink px-5 py-4 shadow-2xl sm:max-h-[calc(100svh-6rem)] xl:hidden">
           <nav aria-label={language === 'en' ? 'Mobile menu' : 'Mobil menü'} className="mx-auto grid max-w-[1500px] gap-1">
             {items.map((item, index) => (
               <Link
@@ -111,7 +111,7 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
                 href={localizedPath(item.href, language)}
                 onClick={() => setMobileOpen(false)}
                 aria-current={isActive(item.href) ? 'page' : undefined}
-                className={`flex items-center justify-between border-b border-white/10 py-4 font-heading text-2xl font-bold uppercase ${
+                className={`flex min-h-12 items-center justify-between border-b border-white/10 py-3 font-heading text-xl font-bold uppercase sm:py-4 sm:text-2xl ${
                   isActive(item.href) ? 'text-racing-green' : 'text-white'
                 }`}
               >

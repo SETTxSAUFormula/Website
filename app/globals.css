@@ -103,6 +103,68 @@ a {
   -webkit-text-stroke: 1px rgb(255 255 255 / 72%);
 }
 
+@keyframes vehicle-enter-next {
+  from {
+    opacity: 0;
+    transform: translate3d(24px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes vehicle-enter-previous {
+  from {
+    opacity: 0;
+    transform: translate3d(-24px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes vehicle-enter-open {
+  from {
+    opacity: 0;
+  }
+  to { opacity: 1; }
+}
+
+@keyframes vehicle-copy-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.vehicle-enter-next {
+  animation: vehicle-enter-next 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity;
+}
+
+.vehicle-enter-previous {
+  animation: vehicle-enter-previous 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity;
+}
+
+.vehicle-enter-open {
+  animation: vehicle-enter-open 260ms ease-out both;
+  will-change: opacity;
+}
+
+.vehicle-copy-enter {
+  animation: vehicle-copy-enter 220ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vehicle-enter-next,
+  .vehicle-enter-previous,
+  .vehicle-enter-open,
+  .vehicle-copy-enter {
+    animation: none;
+  }
+}
+
 @media (max-width: 640px) {
   .tech-grid {
     background-size: 44px 44px;

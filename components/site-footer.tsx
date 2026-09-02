@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import Link from '@/components/site-link';
 
 import { localizedPath, type Language } from '@/lib/i18n';
 
@@ -50,16 +50,16 @@ export function SiteFooter({ language = 'tr' }: { language?: Language }) {
   const isEnglish = language === 'en';
 
   return (
-    <footer id="iletisim" className="bg-ink px-5 pb-6 pt-16 text-white lg:px-10 lg:pt-24">
+    <footer id="iletisim" className="bg-ink px-5 pb-6 pt-12 text-white sm:pt-16 lg:px-10 lg:pt-24">
       <div className="mx-auto max-w-[1500px]">
-        <div className="grid gap-14 border-b border-white/15 pb-16 lg:grid-cols-[1.25fr_0.75fr_0.75fr]">
-          <div>
+        <div className="grid gap-9 border-b border-white/15 pb-12 sm:grid-cols-2 sm:gap-12 sm:pb-16 lg:grid-cols-[1.25fr_0.75fr_0.75fr]">
+          <div className="sm:col-span-2 lg:col-span-1">
             <Image
               src="/brand/sauformula-logo-light.png"
               alt="SAUFormula"
               width={2400}
               height={1510}
-              className="h-24 w-auto max-w-none object-contain"
+              className="h-20 w-auto max-w-none object-contain sm:h-24"
             />
             <p className="mt-6 max-w-xl text-lg leading-8 text-white/55">
               {isEnglish
