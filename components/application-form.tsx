@@ -85,6 +85,8 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
   const [turnstileToken, setTurnstileToken] = useState('');
   const [widgetVersion, setWidgetVersion] = useState(0);
   const [communityExperience, setCommunityExperience] = useState('no');
+  const [primaryTeam, setPrimaryTeam] = useState('');
+  const [secondaryTeam, setSecondaryTeam] = useState('');
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error' | 'verify'>('idle');
 
   useEffect(() => {
@@ -126,6 +128,8 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
       if (!response.ok) throw new Error('Application request failed');
       formElement.reset();
       setCommunityExperience('no');
+      setPrimaryTeam('');
+      setSecondaryTeam('');
       setTurnstileToken('');
       setWidgetVersion((version) => version + 1);
       setStatus('success');
@@ -154,8 +158,8 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
 
         <FormSection number="02" title={sectionTitles[1]}>
           <div className="grid gap-6 sm:grid-cols-2">
-            <Field><FieldLabel htmlFor="application-primary-team" className={labelClass}>{content.primaryTeam}</FieldLabel><NativeSelect id="application-primary-team" name="primaryTeam" required defaultValue="" className={selectClass}><NativeSelectOption value="" disabled>{content.select}</NativeSelectOption>{teams[language].map(([value, label]) => <NativeSelectOption key={value} value={value}>{label}</NativeSelectOption>)}</NativeSelect></Field>
-            <Field><FieldLabel htmlFor="application-secondary-team" className={labelClass}>{content.secondaryTeam}</FieldLabel><NativeSelect id="application-secondary-team" name="secondaryTeam" defaultValue="" className={selectClass}><NativeSelectOption value="">{content.none}</NativeSelectOption>{teams[language].map(([value, label]) => <NativeSelectOption key={value} value={value}>{label}</NativeSelectOption>)}</NativeSelect></Field>
+            <Field><FieldLabel htmlFor="application-primary-team" className={labelClass}>{content.primaryTeam}</FieldLabel><NativeSelect id="application-primary-team" name="primaryTeam" required value={primaryTeam} onChange={(event) => { const nextTeam = event.target.value; setPrimaryTeam(nextTeam); if (secondaryTeam === nextTeam) setSecondaryTeam(''); }} className={selectClass}><NativeSelectOption value="" disabled>{content.select}</NativeSelectOption>{teams[language].map(([value, label]) => <NativeSelectOption key={value} value={value}>{label}</NativeSelectOption>)}</NativeSelect></Field>
+            <Field><FieldLabel htmlFor="application-secondary-team" className={labelClass}>{content.secondaryTeam}</FieldLabel><NativeSelect id="application-secondary-team" name="secondaryTeam" value={secondaryTeam} onChange={(event) => setSecondaryTeam(event.target.value)} className={selectClass}><NativeSelectOption value="">{content.none}</NativeSelectOption>{teams[language].map(([value, label]) => <NativeSelectOption key={value} value={value} disabled={value === primaryTeam}>{label}</NativeSelectOption>)}</NativeSelect></Field>
             <Field><FieldLabel htmlFor="application-weekly-hours" className={labelClass}>{content.weeklyHours}</FieldLabel><NativeSelect id="application-weekly-hours" name="weeklyHours" required defaultValue="" className={selectClass}><NativeSelectOption value="" disabled>{content.select}</NativeSelectOption>{[['0-4','0–4'],['5-8','5–8'],['9-12','9–12'],['13-20','13–20'],['20+','20+']].map(([value, label]) => <NativeSelectOption key={value} value={value}>{label} {language === 'tr' ? 'saat' : 'hours'}</NativeSelectOption>)}</NativeSelect></Field>
             <Field><FieldLabel htmlFor="application-summer" className={labelClass}>{content.summer}</FieldLabel><NativeSelect id="application-summer" name="summerParticipation" required defaultValue="" className={selectClass}><NativeSelectOption value="" disabled>{content.select}</NativeSelectOption><NativeSelectOption value="yes">{content.yes}</NativeSelectOption><NativeSelectOption value="no">{content.no}</NativeSelectOption><NativeSelectOption value="depends">{content.depends}</NativeSelectOption></NativeSelect></Field>
           </div>
