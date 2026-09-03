@@ -189,12 +189,12 @@ export function SponsorsPageContent({ language = 'tr' }: { language?: Language }
               <p className="mt-7 max-w-xl text-base leading-8 text-white/72">{copy.collaborationText}</p>
               <p className="mt-5 max-w-xl text-sm leading-7 text-white/55">
                 {copy.contactBefore}{' '}
-                <a href="mailto:info@sauformula.com" className="font-bold text-white underline decoration-racing-green/70 underline-offset-4 transition-colors hover:text-racing-green">
-                  info@sauformula.com
+                <a href="mailto:info@sauformula.org" className="font-bold text-white underline decoration-racing-green/70 underline-offset-4 transition-colors hover:text-racing-green">
+                  info@sauformula.org
                 </a>{' '}
                 {copy.contactAfter}
               </p>
-              <a href="mailto:info@sauformula.com?subject=SAUFormula%20Sponsorluk%20Görüşmesi" className="mt-8 inline-flex min-h-14 items-center gap-4 bg-racing-green px-6 font-heading text-lg font-black uppercase text-ink transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
+              <a href="mailto:info@sauformula.org?subject=SAUFormula%20Sponsorluk%20Görüşmesi" className="mt-8 inline-flex min-h-14 items-center gap-4 bg-racing-green px-6 font-heading text-lg font-black uppercase text-ink transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
                 {copy.cta}
                 <ArrowUpRight className="size-5" aria-hidden="true" />
               </a>

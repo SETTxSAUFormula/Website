@@ -39,7 +39,7 @@ export function ContactForm({ language = 'tr' }: { language?: Language }) {
       : `Ad Soyad: ${name}\nE-posta: ${email}\nKonu: ${subject}\n\n${message}`;
 
     setPrepared(true);
-    window.location.href = `mailto:info@sauformula.com?subject=${encodeURIComponent(`[SAUFormula] ${subject}`)}&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:info@sauformula.org?subject=${encodeURIComponent(`[SAUFormula] ${subject}`)}&body=${encodeURIComponent(body)}`;
   }
 
   return (
