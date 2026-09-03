@@ -1,3 +1,5 @@
+import { env } from 'cloudflare:workers';
+
 const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 const RESEND_EMAIL_URL = 'https://api.resend.com/emails';
 const CONTACT_RECIPIENT = 'info@sauformula.org';
@@ -19,6 +21,14 @@ type TurnstileResult = {
   hostname?: string;
   action?: string;
 };
+
+type RuntimeEnv = {
+  RESEND_API_KEY?: string;
+  TURNSTILE_SECRET_KEY?: string;
+  TURNSTILE_SITE_KEY?: string;
+};
+
+const runtimeEnv = env as unknown as RuntimeEnv;
 
 function json(data: Record<string, unknown>, status = 200) {
   return Response.json(data, {
@@ -63,7 +73,7 @@ function requestIsSameOrigin(request: Request) {
 }
 
 export function GET() {
-  const siteKey = process.env.TURNSTILE_SITE_KEY;
+  const siteKey = runtimeEnv.TURNSTILE_SITE_KEY;
   if (!siteKey) return json({ ok: false }, 503);
   return json({ ok: true, siteKey });
 }
@@ -107,8 +117,8 @@ export async function POST(request: Request) {
     return json({ ok: false }, 400);
   }
 
-  const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
-  const resendApiKey = process.env.RESEND_API_KEY;
+  const turnstileSecret = runtimeEnv.TURNSTILE_SECRET_KEY;
+  const resendApiKey = runtimeEnv.RESEND_API_KEY;
   if (!turnstileSecret || !resendApiKey) return json({ ok: false }, 503);
 
   const verificationBody = new FormData();
