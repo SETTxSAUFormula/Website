@@ -75,25 +75,25 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
     <main className="min-h-screen overflow-hidden bg-background text-foreground">
       <SiteHeader overlay language={language} />
 
-      <section className="relative isolate min-h-[680px] bg-ink pt-20 text-white sm:min-h-[780px] sm:pt-24 lg:min-h-screen">
+      <section className="relative isolate min-h-[680px] bg-ink pt-20 text-white sm:min-h-[780px] sm:pt-24 lg:min-h-[100svh] xl:pt-28">
         <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_18%_70%,rgba(0,226,123,0.17),transparent_30%),linear-gradient(120deg,#03110d_0%,#071b14_48%,#04100c_100%)]" />
         <div className="tech-grid absolute inset-0 -z-10 opacity-35" />
         <div className="absolute inset-y-0 right-0 -z-10 hidden w-[49%] bg-racing-green/5 lg:block" />
 
-        <div className="mx-auto grid min-h-[calc(100vh-6rem)] max-w-[1500px] items-stretch lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="flex flex-col justify-center px-5 py-12 sm:py-16 lg:px-10 lg:py-20 xl:pr-20">
-            <div className="mb-8 flex items-center gap-4 text-[11px] font-bold uppercase tracking-[0.24em] text-racing-green">
+        <div className="mx-auto grid min-h-[calc(100svh-5rem)] max-w-[1500px] items-stretch sm:min-h-[calc(100svh-6rem)] lg:grid-cols-[1.05fr_0.95fr] xl:min-h-[calc(100svh-7rem)]">
+          <div className="flex flex-col justify-center px-5 py-12 sm:py-16 lg:px-10 lg:py-8 xl:pr-14 2xl:py-10 2xl:pr-20">
+            <div className="mb-5 flex items-center gap-4 text-[11px] font-bold uppercase tracking-[0.24em] text-racing-green 2xl:mb-8">
               <span className="h-px w-12 bg-racing-green" />
               {copy.heroEyebrow}
             </div>
 
-            <h1 className="max-w-4xl font-heading text-[clamp(3.35rem,15vw,8.8rem)] font-black uppercase leading-[0.86] tracking-[0.01em]">
-              <span className="block text-white">Race</span>
-              <span className="block text-outline">Beyond</span>
-              <span className="block text-racing-green">THE LIMITS.</span>
+            <h1 className="max-w-4xl font-heading text-[clamp(3.35rem,15vw,8.8rem)] font-black uppercase leading-[0.86] tracking-[0.01em] lg:text-[clamp(5rem,7.1vw,7.6rem)] 2xl:text-[clamp(6.25rem,6.7vw,8.2rem)]">
+              <span className="block whitespace-nowrap text-white">Race</span>
+              <span className="block whitespace-nowrap text-outline">Beyond</span>
+              <span className="block whitespace-nowrap text-racing-green">THE LIMITS.</span>
             </h1>
 
-            <div className="mt-10 grid max-w-2xl gap-8 border-t border-white/15 pt-7 sm:grid-cols-[1fr_auto] sm:items-end">
+            <div className="mt-7 grid max-w-2xl gap-6 border-t border-white/15 pt-5 sm:grid-cols-[1fr_auto] sm:items-end 2xl:mt-10 2xl:gap-8 2xl:pt-7">
               <p className="max-w-lg text-base leading-7 text-white/65 sm:text-lg">
                 {copy.intro}
               </p>
@@ -108,16 +108,16 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
               </Link>
             </div>
 
-            <dl className="mt-10 grid max-w-2xl grid-cols-3 border-y border-white/15 sm:mt-14">
-              <div className="py-5 pr-4">
+            <dl className="mt-7 grid max-w-2xl grid-cols-3 border-y border-white/15 2xl:mt-12">
+              <div className="py-3 pr-4 2xl:py-5">
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">{copy.carNumber}</dt>
                 <dd className="mt-1 font-heading text-3xl font-bold">54</dd>
               </div>
-              <div className="border-x border-white/15 px-4 py-5">
+              <div className="border-x border-white/15 px-4 py-3 2xl:py-5">
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">{copy.season}</dt>
                 <dd className="mt-1 font-heading text-3xl font-bold">2026</dd>
               </div>
-              <div className="py-5 pl-4">
+              <div className="py-3 pl-4 2xl:py-5">
                 <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">{copy.base}</dt>
                 <dd className="mt-1 font-heading text-3xl font-bold">SAÜ</dd>
               </div>
