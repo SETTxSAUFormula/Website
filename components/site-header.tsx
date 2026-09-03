@@ -50,7 +50,7 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
   return (
     <header className={overlay ? 'absolute inset-x-0 top-0 z-40 text-white' : 'relative z-40 bg-ink text-white'}>
       <div className="border-b border-white/10 bg-[#03110d]/92 px-5 backdrop-blur-xl lg:px-10">
-        <div className="mx-auto flex h-20 max-w-[1500px] items-center justify-between gap-6 sm:h-24 xl:h-28">
+        <div className="mx-auto flex h-20 max-w-[1920px] items-center justify-between gap-5 sm:h-24 lg:gap-6">
           <Link href={localizedPath('/', language)} aria-label={language === 'en' ? 'SAUFormula home' : 'SAUFormula ana sayfa'} className="shrink-0">
             <Image
               src="/brand/sauformula-logo-light.png"
@@ -58,11 +58,11 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
               width={2400}
               height={1510}
               priority
-              className="h-16 w-auto max-w-none origin-left scale-110 object-contain sm:h-20 sm:scale-125 xl:h-[5.5rem]"
+              className="h-16 w-auto max-w-none origin-left scale-105 object-contain sm:h-[4.5rem] sm:scale-110 2xl:h-20 2xl:scale-125"
             />
           </Link>
 
-          <nav aria-label={language === 'en' ? 'Main menu' : 'Ana menü'} className="hidden h-28 items-stretch border-x border-white/12 xl:flex">
+          <nav aria-label={language === 'en' ? 'Main menu' : 'Ana menü'} className="hidden h-24 items-stretch border-x border-white/12 xl:flex">
             {items.map((item) => (
               <Link
                 key={item.label}
