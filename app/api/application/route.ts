@@ -1,5 +1,7 @@
 import { env } from 'cloudflare:workers';
 
+import { insertApplication, setApplicationEmailStatus } from '@/lib/applications-db';
+
 const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 const RESEND_EMAIL_URL = 'https://api.resend.com/emails';
 const APPLICATION_RECIPIENT = 'info@sauformula.org';
@@ -74,6 +76,7 @@ type ApplicationPayload = {
 };
 
 type RuntimeEnv = {
+  APPLICATIONS_DB?: D1Database;
   RESEND_API_KEY?: string;
   TURNSTILE_SECRET_KEY?: string;
   TURNSTILE_SITE_KEY?: string;
@@ -281,6 +284,43 @@ export async function POST(request: Request) {
     dateStyle: 'long',
     timeStyle: 'short',
   });
+  const applicationId = crypto.randomUUID();
+  const submittedAt = Date.now();
+  let stored = false;
+
+  if (runtimeEnv.APPLICATIONS_DB) {
+    try {
+      await insertApplication(runtimeEnv.APPLICATIONS_DB, {
+        id: applicationId,
+        submittedAt,
+        name,
+        email,
+        phone,
+        university,
+        academicDepartment,
+        classLevel,
+        linkedin,
+        portfolio,
+        primaryTeam,
+        secondaryTeam,
+        programs,
+        weeklyHours,
+        summerParticipation,
+        busyPeriods,
+        communityExperience,
+        communityDetails,
+        projects,
+        motivation,
+        responsibilityScenario,
+        motivationFactor,
+        additionalNotes,
+        language,
+      });
+      stored = true;
+    } catch {
+      console.error('Application persistence failed', { applicationId });
+    }
+  }
 
   const text = [
     'YENİ SAUFORMULA TAKIM BAŞVURUSU',
@@ -360,9 +400,44 @@ export async function POST(request: Request) {
       signal: AbortSignal.timeout(10_000),
     });
   } catch {
+    if (stored && runtimeEnv.APPLICATIONS_DB) {
+      try {
+        await setApplicationEmailStatus(runtimeEnv.APPLICATIONS_DB, applicationId, 'failed');
+      } catch {
+        console.error('Application email status update failed', { applicationId });
+      }
+      return json({ ok: true, stored: true, emailed: false });
+    }
     return json({ ok: false }, 502);
   }
 
-  if (!emailResponse.ok) return json({ ok: false }, 502);
-  return json({ ok: true });
+  if (!emailResponse.ok) {
+    if (stored && runtimeEnv.APPLICATIONS_DB) {
+      try {
+        await setApplicationEmailStatus(runtimeEnv.APPLICATIONS_DB, applicationId, 'failed');
+      } catch {
+        console.error('Application email status update failed', { applicationId });
+      }
+      return json({ ok: true, stored: true, emailed: false });
+    }
+    return json({ ok: false }, 502);
+  }
+
+  let resendEmailId = '';
+  try {
+    const emailResult = (await emailResponse.json()) as { id?: unknown };
+    resendEmailId = typeof emailResult.id === 'string' ? emailResult.id : '';
+  } catch {
+    // Resend accepted the message; an unreadable response body must not turn a successful submission into an error.
+  }
+
+  if (stored && runtimeEnv.APPLICATIONS_DB) {
+    try {
+      await setApplicationEmailStatus(runtimeEnv.APPLICATIONS_DB, applicationId, 'sent', resendEmailId);
+    } catch {
+      console.error('Application email status update failed', { applicationId });
+    }
+  }
+
+  return json({ ok: true, stored, emailed: true });
 }
