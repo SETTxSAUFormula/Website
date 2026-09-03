@@ -14,6 +14,9 @@ const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === 'seatbelt';
 
 const localBindingConfig = {
   main: 'vinext/server/fetch-handler',
+  // Runtime values are managed in the Cloudflare dashboard. Keep them when
+  // Git-based deployments publish a new Worker version.
+  keep_vars: true,
   compatibility_flags: ['nodejs_compat'],
   d1_databases: d1
     ? [
