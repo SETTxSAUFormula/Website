@@ -1,7 +1,6 @@
 'use client';
 
-import Script from 'next/script';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AlertCircle, ArrowUpRight, CheckCircle2, LoaderCircle, ShieldCheck } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -9,6 +8,7 @@ import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
 import { Textarea } from '@/components/ui/textarea';
+import { TurnstileWidget } from '@/components/turnstile-widget';
 import type { Language } from '@/lib/i18n';
 
 const formCopy = {
@@ -19,66 +19,6 @@ const formCopy = {
     name: 'Full Name', namePlaceholder: 'Your full name', email: 'Email', emailPlaceholder: 'name@example.com', subject: 'Subject', message: 'Message', messagePlaceholder: 'Briefly tell us how you would like to help or what you would like to discuss.', send: 'Send message', sending: 'Sending', note: 'Your information is emailed to our team only to respond to your enquiry; it is not stored in a website database.', success: 'Your message was sent successfully. We will get back to you as soon as possible.', error: 'We could not send your message. Please try again shortly or email info@sauformula.org directly.', verify: 'Please wait for the security check to finish before sending.', security: 'Secure submission', options: ['General enquiry', 'Sponsorship and partnership', 'Join the team', 'Media and events', 'Technical collaboration'],
   },
 };
-
-type TurnstileApi = {
-  render: (container: HTMLElement, options: Record<string, unknown>) => string;
-  remove: (widgetId: string) => void;
-};
-
-declare global {
-  interface Window {
-    turnstile?: TurnstileApi;
-  }
-}
-
-function TurnstileWidget({
-  siteKey,
-  language,
-  onToken,
-}: {
-  siteKey: string;
-  language: Language;
-  onToken: (token: string) => void;
-}) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const widgetIdRef = useRef<string | null>(null);
-  const [scriptReady, setScriptReady] = useState(Boolean(globalThis.window?.turnstile));
-
-  useEffect(() => {
-    if (!scriptReady || !window.turnstile || !containerRef.current) return;
-
-    widgetIdRef.current = window.turnstile.render(containerRef.current, {
-      sitekey: siteKey,
-      action: 'contact',
-      size: 'flexible',
-      theme: 'dark',
-      language,
-      callback: onToken,
-      'expired-callback': () => onToken(''),
-      'error-callback': () => onToken(''),
-    });
-
-    return () => {
-      if (widgetIdRef.current && window.turnstile) {
-        window.turnstile.remove(widgetIdRef.current);
-      }
-      widgetIdRef.current = null;
-    };
-  }, [language, onToken, scriptReady, siteKey]);
-
-  return (
-    <>
-      <Script
-        id="cloudflare-turnstile"
-        src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
-        strategy="afterInteractive"
-        onLoad={() => setScriptReady(true)}
-        onReady={() => setScriptReady(true)}
-      />
-      <div ref={containerRef} className="min-h-[1px] w-full" />
-    </>
-  );
-}
 
 export function ContactForm({ language = 'tr' }: { language?: Language }) {
   const [siteKey, setSiteKey] = useState('');
@@ -172,7 +112,7 @@ export function ContactForm({ language = 'tr' }: { language?: Language }) {
             {copy.security}
           </div>
           {siteKey ? (
-            <TurnstileWidget key={widgetVersion} siteKey={siteKey} language={language} onToken={setTurnstileToken} />
+            <TurnstileWidget key={widgetVersion} siteKey={siteKey} language={language} action="contact" onToken={setTurnstileToken} />
           ) : null}
         </div>
 

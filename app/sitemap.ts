@@ -1,11 +1,11 @@
 import type { MetadataRoute } from 'next';
 
-const turkishRoutes = ['', '/hakkimizda', '/formula-student', '/araclar', '/takimlar', '/medya', '/sponsorlar', '/iletisim', '/gizlilik'];
+const turkishRoutes = ['', '/hakkimizda', '/formula-student', '/araclar', '/takimlar', '/medya', '/sponsorlar', '/bize-katil', '/iletisim', '/gizlilik'];
 const englishRoutes = turkishRoutes.map((route) => `/en${route}`);
 const routes = [...turkishRoutes, ...englishRoutes];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date('2026-08-30');
+  const lastModified = new Date('2026-09-03');
 
   return routes.map((route) => ({
     url: `https://sauformula.org${route}`,

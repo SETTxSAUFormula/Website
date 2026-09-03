@@ -16,6 +16,7 @@ const navigation = {
     { label: 'Araçlar', href: '/araclar' },
     { label: 'Takımımız', href: '/takimlar' },
     { label: 'Sponsorlar', href: '/sponsorlar' },
+    { label: 'Bize Katıl', href: '/bize-katil' },
     { label: 'İletişim', href: '/iletisim' },
   ],
   en: [
@@ -25,6 +26,7 @@ const navigation = {
     { label: 'Cars', href: '/araclar' },
     { label: 'Our Team', href: '/takimlar' },
     { label: 'Sponsors', href: '/sponsorlar' },
+    { label: 'Join Us', href: '/bize-katil' },
     { label: 'Contact', href: '/iletisim' },
   ],
 } satisfies Record<Language, Array<{ label: string; href: string }>>;
@@ -68,8 +70,12 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
                 key={item.label}
                 href={localizedPath(item.href, language)}
                 aria-current={isActive(item.href) ? 'page' : undefined}
-                className={`flex items-center border-r border-white/12 px-5 text-xs font-extrabold uppercase tracking-[0.04em] transition-colors 2xl:px-6 ${
-                  isActive(item.href)
+                className={`flex items-center border-r border-white/12 px-4 text-[11px] font-extrabold uppercase tracking-[0.04em] transition-colors 2xl:px-5 2xl:text-xs ${
+                  item.href === '/bize-katil'
+                    ? isActive(item.href)
+                      ? 'bg-[#bff9d9] text-ink shadow-[inset_0_-2px_0_#00e27b]'
+                      : 'bg-racing-green text-ink hover:bg-[#bff9d9]'
+                    : isActive(item.href)
                     ? 'bg-white/[0.07] text-white shadow-[inset_0_-2px_0_#00e27b]'
                     : 'text-white/65 hover:bg-white/[0.04] hover:text-white'
                 }`}

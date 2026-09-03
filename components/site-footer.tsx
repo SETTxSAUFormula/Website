@@ -20,6 +20,7 @@ const columns = {
       links: [
         ['Medya', '/medya'],
         ['Sponsorlar', '/sponsorlar'],
+        ['Bize Katıl', '/bize-katil'],
         ['İletişim', '/iletisim'],
       ],
     },
@@ -40,6 +41,7 @@ const columns = {
       links: [
         ['Media', '/medya'],
         ['Sponsors', '/sponsorlar'],
+        ['Join Us', '/bize-katil'],
         ['Contact', '/iletisim'],
       ],
     },
