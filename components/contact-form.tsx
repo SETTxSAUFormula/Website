@@ -123,7 +123,6 @@ export function ContactForm({ language = 'tr' }: { language?: Language }) {
           email: getText('email'),
           subject: getText('subject'),
           message: getText('message'),
-          company: getText('company'),
           language,
           turnstileToken,
         }),
@@ -144,10 +143,6 @@ export function ContactForm({ language = 'tr' }: { language?: Language }) {
   return (
     <form onSubmit={handleSubmit} className="border border-white/15 bg-[#071b14] p-6 sm:p-8 lg:p-10" aria-busy={status === 'sending'}>
       <FieldGroup className="gap-6">
-        <div className="pointer-events-none absolute -left-[9999px]" aria-hidden="true">
-          <label htmlFor="contact-company">Company</label>
-          <input id="contact-company" name="company" tabIndex={-1} autoComplete="off" />
-        </div>
         <div className="grid gap-6 sm:grid-cols-2">
           <Field>
             <FieldLabel htmlFor="contact-name" className="text-[10px] font-bold uppercase tracking-[0.18em] text-racing-green">{copy.name}</FieldLabel>

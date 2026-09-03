@@ -13,7 +13,6 @@ type ContactPayload = {
   message?: unknown;
   language?: unknown;
   turnstileToken?: unknown;
-  company?: unknown;
 };
 
 type TurnstileResult = {
@@ -92,9 +91,6 @@ export async function POST(request: Request) {
   } catch {
     return json({ ok: false }, 400);
   }
-
-  // Honeypot: bots commonly fill fields that are hidden from people.
-  if (readText(payload.company)) return json({ ok: true });
 
   const name = readText(payload.name);
   const email = readText(payload.email).toLowerCase();
