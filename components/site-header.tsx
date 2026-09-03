@@ -16,8 +16,8 @@ const navigation = {
     { label: 'Araçlar', href: '/araclar' },
     { label: 'Takımımız', href: '/takimlar' },
     { label: 'Sponsorlar', href: '/sponsorlar' },
-    { label: 'Bize Katıl', href: '/bize-katil' },
     { label: 'İletişim', href: '/iletisim' },
+    { label: 'Bize Katıl', href: '/bize-katil' },
   ],
   en: [
     { label: 'Home', href: '/' },
@@ -26,8 +26,8 @@ const navigation = {
     { label: 'Cars', href: '/araclar' },
     { label: 'Our Team', href: '/takimlar' },
     { label: 'Sponsors', href: '/sponsorlar' },
-    { label: 'Join Us', href: '/bize-katil' },
     { label: 'Contact', href: '/iletisim' },
+    { label: 'Join Us', href: '/bize-katil' },
   ],
 } satisfies Record<Language, Array<{ label: string; href: string }>>;
 

@@ -46,15 +46,6 @@ const availabilityLabels = {
   depends: 'Koşullara göre / Henüz emin değilim',
 } as const;
 
-const motivationLabels = {
-  production: 'Somut bir araç ve ürün ortaya çıkarmak',
-  learning: 'Teknik ve kişisel olarak gelişmek',
-  competition: 'Yarışma ortamında yer almak',
-  teamwork: 'Disiplinler arası bir ekiple çalışmak',
-  career: 'Kariyer ve profesyonel çevre kazanmak',
-  other: 'Diğer',
-} as const;
-
 type ApplicationPayload = {
   name?: unknown;
   email?: unknown;
@@ -237,7 +228,8 @@ export async function POST(request: Request) {
     motivation.length <= 2_500 &&
     responsibilityScenario.length >= 20 &&
     responsibilityScenario.length <= 2_500 &&
-    isKeyOf(motivationFactor, motivationLabels) &&
+    motivationFactor.length >= 10 &&
+    motivationFactor.length <= 1_500 &&
     additionalNotes.length <= 2_000 &&
     payload.consent === true &&
     turnstileToken.length >= 20 &&
@@ -284,7 +276,6 @@ export async function POST(request: Request) {
   const weeklyHoursLabel = weeklyHoursLabels[weeklyHours];
   const summerLabel = availabilityLabels[summerParticipation];
   const busyPeriodsLabel = availabilityLabels[busyPeriods];
-  const motivationFactorLabel = motivationLabels[motivationFactor];
   const receivedAt = new Date().toLocaleString('tr-TR', {
     timeZone: 'Europe/Istanbul',
     dateStyle: 'long',
@@ -327,7 +318,7 @@ export async function POST(request: Request) {
     '',
     `Bir sorumluluğu zamanında tamamlayamazsa izleyeceği yol:\n${responsibilityScenario}`,
     '',
-    `En çok motive eden unsur: ${motivationFactorLabel}`,
+    `Takımda en çok motive eden unsur:\n${motivationFactor}`,
     '',
     `Ek notlar:\n${additionalNotes || 'Yok'}`,
     '',
@@ -335,7 +326,7 @@ export async function POST(request: Request) {
     `Gönderim zamanı: ${receivedAt}`,
   ].filter(Boolean).join('\n');
 
-  const html = `<!doctype html><html><body style="margin:0;background:#eef5f1;font-family:Arial,sans-serif;color:#10231c"><div style="max-width:760px;margin:0 auto;padding:24px 12px"><div style="background:#041a12;border-top:5px solid #00e27b;padding:26px 28px;color:#fff"><div style="color:#00e27b;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase">SAUFormula · Yeni Başvuru</div><h1 style="margin:10px 0 6px;font-size:25px;line-height:1.25">${escapeHtml(name)}</h1><div style="color:#b5c8bf;font-size:14px;line-height:1.5">${escapeHtml(primaryTeamLabel)}</div></div><div style="background:#fff;padding:24px 28px"><h2 style="margin:0 0 12px;font-size:18px">Hızlı özet</h2><table role="presentation" style="width:100%;border-collapse:collapse;border:1px solid #dbe7e1">${infoRow('Üniversite', universityLabel)}${infoRow('Bölüm / Sınıf', `${academicDepartment} · ${classLabel}`)}${infoRow('Birinci tercih', primaryTeamLabel)}${infoRow('İkinci tercih', secondaryTeamLabel)}${infoRow('Haftalık süre', weeklyHoursLabel)}${infoRow('Gönderim zamanı', receivedAt)}</table><h2 style="margin:28px 0 12px;font-size:18px">İletişim</h2><table role="presentation" style="width:100%;border-collapse:collapse;border:1px solid #dbe7e1">${infoRow('E-posta', email)}${infoRow('Telefon', phone)}${infoRow('LinkedIn', linkedin || 'Belirtilmedi')}${infoRow('Portföy / GitHub', portfolio || 'Belirtilmedi')}</table><h2 style="margin:28px 0 12px;font-size:18px">Uygunluk ve zaman</h2><table role="presentation" style="width:100%;border-collapse:collapse;border:1px solid #dbe7e1">${infoRow('Yaz atölyelerine katılım', summerLabel)}${infoRow('Yoğun dönemlerde aktif rol', busyPeriodsLabel)}</table><h2 style="margin:28px 0 12px;font-size:18px">Deneyim ve yetkinlikler</h2>${responseBlock('Bildiği programlar ve araçlar', programs)}${responseBlock('Topluluk deneyimi', communityExperience === 'yes' ? communityDetails : 'Daha önce bir toplulukta yer almamış.')}${responseBlock('Daha önce yaptığı projeler', projects)}<h2 style="margin:28px 0 12px;font-size:18px">Motivasyon ve takım uyumu</h2>${responseBlock('Takıma neden katılmak istiyor?', motivation)}${responseBlock('Sorumluluğu zamanında tamamlayamazsa nasıl ilerler?', responsibilityScenario)}${responseBlock('Takımda en çok motive eden unsur', motivationFactorLabel)}${responseBlock('Eklemek istediği diğer bilgiler', additionalNotes || 'Ek bilgi belirtilmedi.')}<div style="margin-top:26px;padding:14px 16px;background:#e7f8ef;border-left:4px solid #00b865;color:#22533d;font-size:13px;line-height:1.55">Başvuru sahibi formdaki veri işleme bilgilendirmesini kabul etti. Yanıtlamak için bu e-postaya doğrudan cevap verebilirsiniz.</div></div></div></body></html>`;
+  const html = `<!doctype html><html><body style="margin:0;background:#eef5f1;font-family:Arial,sans-serif;color:#10231c"><div style="max-width:760px;margin:0 auto;padding:24px 12px"><div style="background:#041a12;border-top:5px solid #00e27b;padding:26px 28px;color:#fff"><div style="color:#00e27b;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase">SAUFormula · Yeni Başvuru</div><h1 style="margin:10px 0 6px;font-size:25px;line-height:1.25">${escapeHtml(name)}</h1><div style="color:#b5c8bf;font-size:14px;line-height:1.5">${escapeHtml(primaryTeamLabel)}</div></div><div style="background:#fff;padding:24px 28px"><h2 style="margin:0 0 12px;font-size:18px">Hızlı özet</h2><table role="presentation" style="width:100%;border-collapse:collapse;border:1px solid #dbe7e1">${infoRow('Üniversite', universityLabel)}${infoRow('Bölüm / Sınıf', `${academicDepartment} · ${classLabel}`)}${infoRow('Birinci tercih', primaryTeamLabel)}${infoRow('İkinci tercih', secondaryTeamLabel)}${infoRow('Haftalık süre', weeklyHoursLabel)}${infoRow('Gönderim zamanı', receivedAt)}</table><h2 style="margin:28px 0 12px;font-size:18px">İletişim</h2><table role="presentation" style="width:100%;border-collapse:collapse;border:1px solid #dbe7e1">${infoRow('E-posta', email)}${infoRow('Telefon', phone)}${infoRow('LinkedIn', linkedin || 'Belirtilmedi')}${infoRow('Portföy / GitHub', portfolio || 'Belirtilmedi')}</table><h2 style="margin:28px 0 12px;font-size:18px">Uygunluk ve zaman</h2><table role="presentation" style="width:100%;border-collapse:collapse;border:1px solid #dbe7e1">${infoRow('Yaz atölyelerine katılım', summerLabel)}${infoRow('Yoğun dönemlerde aktif rol', busyPeriodsLabel)}</table><h2 style="margin:28px 0 12px;font-size:18px">Deneyim ve yetkinlikler</h2>${responseBlock('Bildiği programlar ve araçlar', programs)}${responseBlock('Topluluk deneyimi', communityExperience === 'yes' ? communityDetails : 'Daha önce bir toplulukta yer almamış.')}${responseBlock('Daha önce yaptığı projeler', projects)}<h2 style="margin:28px 0 12px;font-size:18px">Motivasyon ve takım uyumu</h2>${responseBlock('Takıma neden katılmak istiyor?', motivation)}${responseBlock('Sorumluluğu zamanında tamamlayamazsa nasıl ilerler?', responsibilityScenario)}${responseBlock('Takımda en çok motive eden unsur', motivationFactor)}${responseBlock('Eklemek istediği diğer bilgiler', additionalNotes || 'Ek bilgi belirtilmedi.')}<div style="margin-top:26px;padding:14px 16px;background:#e7f8ef;border-left:4px solid #00b865;color:#22533d;font-size:13px;line-height:1.55">Başvuru sahibi formdaki veri işleme bilgilendirmesini kabul etti. Yanıtlamak için bu e-postaya doğrudan cevap verebilirsiniz.</div></div></div></body></html>`;
 
   let emailResponse: Response;
   try {

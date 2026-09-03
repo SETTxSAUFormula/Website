@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Cog, Handshake, Users } from 'lucide-react';
+import { Cog, Handshake } from 'lucide-react';
 
 import { ApplicationForm } from '@/components/application-form';
 import { SiteFooter } from '@/components/site-footer';
@@ -17,9 +17,11 @@ const pageCopy = {
     eyebrow: 'Takım başvurusu',
     title: 'Bize Katıl',
     intro: 'Formula Student aracının tasarımından üretimine, iletişimden yarış operasyonuna kadar gerçek sorumluluklar üstlenmek istiyorsanız başvurunuzu bize iletin.',
+    process: 'Başvuru süreci',
+    heroSteps: [['01', 'Bilgilerinizi paylaşın'], ['02', 'Departman tercihinizi belirtin'], ['03', 'Değerlendirme sonrası sizinle iletişime geçelim']],
     structureEyebrow: 'Çalışma alanları',
     structureTitle: 'Hangi departmanda katkı sağlayabilirsiniz?',
-    structureText: 'Takım Başkanı ve Başkan Yardımcısı; teknik ve organizasyonel departmanların ortak hedefler doğrultusunda çalışmasını koordine eder. Başvuruda ilginize ve yetkinliklerinize en yakın iki alanı seçebilirsiniz.',
+    structureText: 'Teknik ve organizasyonel departmanlar, aracın geliştirilmesinden takımın sürdürülebilir işleyişine kadar birbirini tamamlayan sorumluluklar üstlenir. Başvuruda ilginize ve yetkinliklerinize en yakın iki alanı seçebilirsiniz.',
     technical: 'Teknik Departmanlar',
     organizational: 'Organizasyonel Departmanlar',
     technicalTeams: [
@@ -43,9 +45,11 @@ const pageCopy = {
     eyebrow: 'Team application',
     title: 'Join Us',
     intro: 'Apply to take on real responsibilities across the design, manufacturing, communications and race operations of a Formula Student car.',
+    process: 'Application process',
+    heroSteps: [['01', 'Share your details'], ['02', 'Choose your departments'], ['03', 'We will contact you after reviewing your application']],
     structureEyebrow: 'Areas of work',
     structureTitle: 'Where can you contribute?',
-    structureText: 'The Team President and Vice President coordinate the technical and organisational departments towards shared goals. You may select the two areas closest to your interests and skills in the application.',
+    structureText: 'Technical and organisational departments take on complementary responsibilities, from developing the car to sustaining the team’s operations. You may select the two areas closest to your interests and skills.',
     technical: 'Technical Departments',
     organizational: 'Organisational Departments',
     technicalTeams: [
@@ -102,12 +106,25 @@ export function JoinPageContent({ language = 'tr' }: { language?: Language }) {
       <SiteHeader language={language} />
       <section className="bg-ink px-5 py-10 text-white sm:py-14 lg:px-10 lg:py-16">
         <div className="mx-auto max-w-[1500px]">
-          <header className="grid gap-7 border-b border-white/15 pb-10 lg:grid-cols-[0.75fr_1.25fr] lg:items-end">
-            <div>
+          <header className="grid gap-7 border-b border-white/15 pb-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-stretch">
+            <div className="flex flex-col justify-center">
               <p className="text-xs font-bold uppercase tracking-[0.22em] text-racing-green">{content.eyebrow as string}</p>
               <h1 className="mt-4 font-heading text-[clamp(3.5rem,10vw,7.5rem)] font-black uppercase leading-[0.86]">{content.title as string}</h1>
             </div>
-            <p className="max-w-3xl text-base leading-8 text-white/60 sm:text-lg">{content.intro as string}</p>
+            <div className="flex flex-col justify-between border border-white/15 bg-[#071b14] p-6 sm:p-8 lg:min-h-[18rem]">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.22em] text-racing-green">{content.process as string}</p>
+                <p className="mt-5 max-w-3xl text-base leading-8 text-white/65 sm:text-lg">{content.intro as string}</p>
+              </div>
+              <div className="mt-8 grid border-l border-t border-white/12 sm:grid-cols-3">
+                {(content.heroSteps as string[][]).map(([number, label]) => (
+                  <div key={number} className="border-b border-r border-white/12 p-4 sm:min-h-28">
+                    <span className="font-heading text-sm font-black text-racing-green">{number}</span>
+                    <p className="mt-3 text-sm font-semibold leading-6 text-white/80">{label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </header>
 
           <section className="py-10 sm:py-14">
@@ -117,8 +134,7 @@ export function JoinPageContent({ language = 'tr' }: { language?: Language }) {
                 <h2 className="mt-4 max-w-xl font-heading text-3xl font-black uppercase leading-[0.95] sm:text-5xl">{content.structureTitle as string}</h2>
               </div>
               <div className="border-l-2 border-racing-green/60 pl-5 sm:pl-7">
-                <div className="flex items-center gap-3 text-racing-green"><Users className="size-5" aria-hidden="true" /><span className="text-xs font-bold uppercase tracking-[0.16em]">Team President · Vice President</span></div>
-                <p className="mt-4 max-w-3xl text-base leading-8 text-white/60">{content.structureText as string}</p>
+                <p className="max-w-3xl text-base leading-8 text-white/60">{content.structureText as string}</p>
               </div>
             </div>
 
