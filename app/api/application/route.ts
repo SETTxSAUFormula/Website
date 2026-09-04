@@ -1,11 +1,16 @@
 import { env } from 'cloudflare:workers';
 
-import { insertApplication, setApplicationEmailStatus } from '@/lib/applications-db';
+import {
+  insertApplication,
+  setApplicationEmailStatus,
+} from '@/lib/applications-db';
 
-const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+const TURNSTILE_VERIFY_URL =
+  'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 const RESEND_EMAIL_URL = 'https://api.resend.com/emails';
 const APPLICATION_RECIPIENT = 'info@sauformula.org';
-const APPLICATION_SENDER = 'SAUFormula Başvuru <applications@forms.sauformula.org>';
+const APPLICATION_SENDER =
+  'SAUFormula Başvuru <applications@forms.sauformula.org>';
 const ALLOWED_HOSTNAMES = new Set(['sauformula.org', 'www.sauformula.org']);
 
 const universityLabels = {
@@ -23,15 +28,15 @@ const classLabels = {
 } as const;
 
 const teamLabels = {
-  'vehicle-dynamics': 'Vehicle Dynamics — Araç Dinamiği',
-  'chassis-structures': 'Chassis & Structures — Şasi ve Yapısal Sistemler',
-  powertrain: 'Powertrain — Güç Aktarma Sistemi',
-  aerodynamics: 'Aerodynamics — Aerodinamik',
-  'composites-manufacturing': 'Composites & Manufacturing — Kompozitler ve Üretim',
-  'electrical-electronics': 'Electrical & Electronics — Elektrik ve Elektronik',
-  'sponsorship-partnerships': 'Sponsorship & Partnerships — Sponsorluk ve İş Birlikleri',
-  'media-communications': 'Media & Communications — Medya ve İletişim',
-  'finance-operations': 'Finance & Operations — Finans ve Operasyon',
+  'vehicle-dynamics': 'Araç Dinamiği',
+  'chassis-structures': 'Şasi ve Yapısal Sistemler',
+  powertrain: 'Güç Aktarma Sistemleri',
+  aerodynamics: 'Aerodinamik',
+  'composites-manufacturing': 'Kompozitler ve Üretim',
+  'electrical-electronics': 'Elektrik ve Elektronik',
+  'sponsorship-partnerships': 'Sponsorluk ve İş Birlikleri',
+  'media-communications': 'Medya ve İletişim',
+  'finance-operations': 'Finans ve Operasyon',
 } as const;
 
 const weeklyHoursLabels = {
@@ -146,7 +151,10 @@ function requestIsSameOrigin(request: Request) {
   }
 }
 
-function isKeyOf<T extends object>(value: string, object: T): value is Extract<keyof T, string> {
+function isKeyOf<T extends object>(
+  value: string,
+  object: T,
+): value is Extract<keyof T, string> {
   return value in object;
 }
 
@@ -224,7 +232,8 @@ export async function POST(request: Request) {
     isKeyOf(summerParticipation, availabilityLabels) &&
     isKeyOf(busyPeriods, availabilityLabels) &&
     (communityExperience === 'yes' || communityExperience === 'no') &&
-    (communityExperience === 'no' || (communityDetails.length >= 10 && communityDetails.length <= 2_000)) &&
+    (communityExperience === 'no' ||
+      (communityDetails.length >= 10 && communityDetails.length <= 2_000)) &&
     projects.length >= 10 &&
     projects.length <= 2_500 &&
     motivation.length >= 20 &&
@@ -275,7 +284,10 @@ export async function POST(request: Request) {
   const universityLabel = universityLabels[university];
   const classLabel = classLabels[classLevel];
   const primaryTeamLabel = teamLabels[primaryTeam];
-  const secondaryTeamLabel = secondaryTeam && isKeyOf(secondaryTeam, teamLabels) ? teamLabels[secondaryTeam] : 'Belirtilmedi';
+  const secondaryTeamLabel =
+    secondaryTeam && isKeyOf(secondaryTeam, teamLabels)
+      ? teamLabels[secondaryTeam]
+      : 'Belirtilmedi';
   const weeklyHoursLabel = weeklyHoursLabels[weeklyHours];
   const summerLabel = availabilityLabels[summerParticipation];
   const busyPeriodsLabel = availabilityLabels[busyPeriods];
@@ -348,7 +360,9 @@ export async function POST(request: Request) {
     `Bildiği programlar / araçlar:\n${programs}`,
     '',
     `Topluluk deneyimi: ${communityExperience === 'yes' ? 'Var' : 'Yok'}`,
-    communityExperience === 'yes' ? `Topluluk deneyimi ayrıntıları:\n${communityDetails}` : '',
+    communityExperience === 'yes'
+      ? `Topluluk deneyimi ayrıntıları:\n${communityDetails}`
+      : '',
     '',
     `Daha önce yaptığı projeler:\n${projects}`,
     '',
@@ -364,7 +378,9 @@ export async function POST(request: Request) {
     '',
     `Başvuru dili: ${language.toUpperCase()}`,
     `Gönderim zamanı: ${receivedAt}`,
-  ].filter(Boolean).join('\n');
+  ]
+    .filter(Boolean)
+    .join('\n');
 
   const html = `<!doctype html><html><body style="margin:0;background:#eef5f1;font-family:Arial,sans-serif;color:#10231c"><div style="max-width:760px;margin:0 auto;padding:24px 12px"><div style="background:#041a12;border-top:5px solid #00e27b;padding:26px 28px;color:#fff"><div style="color:#00e27b;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase">SAUFormula · Yeni Başvuru</div><h1 style="margin:10px 0 6px;font-size:25px;line-height:1.25">${escapeHtml(name)}</h1><div style="color:#b5c8bf;font-size:14px;line-height:1.5">${escapeHtml(primaryTeamLabel)}</div></div><div style="background:#fff;padding:24px 28px"><h2 style="margin:0 0 12px;font-size:18px">Hızlı özet</h2><table role="presentation" style="width:100%;border-collapse:collapse;border:1px solid #dbe7e1">${infoRow('Üniversite', universityLabel)}${infoRow('Bölüm / Sınıf', `${academicDepartment} · ${classLabel}`)}${infoRow('Birinci tercih', primaryTeamLabel)}${infoRow('İkinci tercih', secondaryTeamLabel)}${infoRow('Haftalık süre', weeklyHoursLabel)}${infoRow('Gönderim zamanı', receivedAt)}</table><h2 style="margin:28px 0 12px;font-size:18px">İletişim</h2><table role="presentation" style="width:100%;border-collapse:collapse;border:1px solid #dbe7e1">${infoRow('E-posta', email)}${infoRow('Telefon', phone)}${infoRow('LinkedIn', linkedin || 'Belirtilmedi')}${infoRow('Portföy / GitHub', portfolio || 'Belirtilmedi')}</table><h2 style="margin:28px 0 12px;font-size:18px">Uygunluk ve zaman</h2><table role="presentation" style="width:100%;border-collapse:collapse;border:1px solid #dbe7e1">${infoRow('Yaz atölyelerine katılım', summerLabel)}${infoRow('Yoğun dönemlerde aktif rol', busyPeriodsLabel)}</table><h2 style="margin:28px 0 12px;font-size:18px">Deneyim ve yetkinlikler</h2>${responseBlock('Bildiği programlar ve araçlar', programs)}${responseBlock('Topluluk deneyimi', communityExperience === 'yes' ? communityDetails : 'Daha önce bir toplulukta yer almamış.')}${responseBlock('Daha önce yaptığı projeler', projects)}<h2 style="margin:28px 0 12px;font-size:18px">Motivasyon ve takım uyumu</h2>${responseBlock('Takıma neden katılmak istiyor?', motivation)}${responseBlock('Sorumluluğu zamanında tamamlayamazsa nasıl ilerler?', responsibilityScenario)}${responseBlock('Takımda en çok motive eden unsur', motivationFactor)}${responseBlock('Eklemek istediği diğer bilgiler', additionalNotes || 'Ek bilgi belirtilmedi.')}<div style="margin-top:26px;padding:14px 16px;background:#e7f8ef;border-left:4px solid #00b865;color:#22533d;font-size:13px;line-height:1.55">Başvuru sahibi formdaki veri işleme bilgilendirmesini kabul etti. Yanıtlamak için bu e-postaya doğrudan cevap verebilirsiniz.</div></div></div></body></html>`;
 
@@ -382,7 +398,7 @@ export async function POST(request: Request) {
         from: APPLICATION_SENDER,
         to: [APPLICATION_RECIPIENT],
         reply_to: email,
-        subject: `[ÖNEMLİ] Yeni takım başvurusu — ${name} · ${primaryTeamLabel.split(' — ')[0]}`,
+        subject: `[ÖNEMLİ] Yeni takım başvurusu — ${name} · ${primaryTeamLabel}`,
         text,
         html,
         headers: {
@@ -402,9 +418,15 @@ export async function POST(request: Request) {
   } catch {
     if (stored && runtimeEnv.APPLICATIONS_DB) {
       try {
-        await setApplicationEmailStatus(runtimeEnv.APPLICATIONS_DB, applicationId, 'failed');
+        await setApplicationEmailStatus(
+          runtimeEnv.APPLICATIONS_DB,
+          applicationId,
+          'failed',
+        );
       } catch {
-        console.error('Application email status update failed', { applicationId });
+        console.error('Application email status update failed', {
+          applicationId,
+        });
       }
       return json({ ok: true, stored: true, emailed: false });
     }
@@ -414,9 +436,15 @@ export async function POST(request: Request) {
   if (!emailResponse.ok) {
     if (stored && runtimeEnv.APPLICATIONS_DB) {
       try {
-        await setApplicationEmailStatus(runtimeEnv.APPLICATIONS_DB, applicationId, 'failed');
+        await setApplicationEmailStatus(
+          runtimeEnv.APPLICATIONS_DB,
+          applicationId,
+          'failed',
+        );
       } catch {
-        console.error('Application email status update failed', { applicationId });
+        console.error('Application email status update failed', {
+          applicationId,
+        });
       }
       return json({ ok: true, stored: true, emailed: false });
     }
@@ -433,9 +461,16 @@ export async function POST(request: Request) {
 
   if (stored && runtimeEnv.APPLICATIONS_DB) {
     try {
-      await setApplicationEmailStatus(runtimeEnv.APPLICATIONS_DB, applicationId, 'sent', resendEmailId);
+      await setApplicationEmailStatus(
+        runtimeEnv.APPLICATIONS_DB,
+        applicationId,
+        'sent',
+        resendEmailId,
+      );
     } catch {
-      console.error('Application email status update failed', { applicationId });
+      console.error('Application email status update failed', {
+        applicationId,
+      });
     }
   }
 

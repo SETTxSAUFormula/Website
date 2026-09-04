@@ -1,4 +1,10 @@
-export const applicationStatuses = ['new', 'reviewing', 'interview', 'accepted', 'rejected'] as const;
+export const applicationStatuses = [
+  'new',
+  'reviewing',
+  'interview',
+  'accepted',
+  'rejected',
+] as const;
 
 export type ApplicationStatus = (typeof applicationStatuses)[number];
 
@@ -112,7 +118,10 @@ function mapApplication(row: ApplicationRow): ApplicationRecord {
   };
 }
 
-export async function insertApplication(database: D1Database, record: NewApplicationRecord) {
+export async function insertApplication(
+  database: D1Database,
+  record: NewApplicationRecord,
+) {
   return database
     .prepare(`
       INSERT INTO applications (
@@ -168,7 +177,9 @@ export async function setApplicationEmailStatus(
   resendEmailId = '',
 ) {
   return database
-    .prepare('UPDATE applications SET email_delivery_status = ?, resend_email_id = ?, updated_at = ? WHERE id = ?')
+    .prepare(
+      'UPDATE applications SET email_delivery_status = ?, resend_email_id = ?, updated_at = ? WHERE id = ?',
+    )
     .bind(status, resendEmailId || null, Date.now(), id)
     .run();
 }
@@ -180,16 +191,23 @@ export async function listApplications(
   const conditions: string[] = [];
   const values: Array<string | number> = [];
 
-  if (filters.status && applicationStatuses.includes(filters.status as ApplicationStatus)) {
+  if (
+    filters.status &&
+    applicationStatuses.includes(filters.status as ApplicationStatus)
+  ) {
     conditions.push('status = ?');
     values.push(filters.status);
   }
   if (filters.team) {
-    conditions.push('(primary_team = ? OR secondary_team = ? OR assigned_department = ?)');
+    conditions.push(
+      '(primary_team = ? OR secondary_team = ? OR assigned_department = ?)',
+    );
     values.push(filters.team, filters.team, filters.team);
   }
   if (filters.search) {
-    conditions.push('(name LIKE ? OR email LIKE ? OR academic_department LIKE ?)');
+    conditions.push(
+      '(name LIKE ? OR email LIKE ? OR academic_department LIKE ?)',
+    );
     const search = `%${filters.search.slice(0, 100)}%`;
     values.push(search, search, search);
   }
@@ -197,8 +215,20 @@ export async function listApplications(
   const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
   const limit = Math.min(Math.max(filters.limit ?? 100, 1), 100);
   const result = await database
-    .prepare(`SELECT * FROM applications ${where} ORDER BY submitted_at DESC LIMIT ?`)
+    .prepare(
+      `SELECT * FROM applications ${where} ORDER BY submitted_at DESC LIMIT ?`,
+    )
     .bind(...values, limit)
+    .all<ApplicationRow>();
+
+  return (result.results ?? []).map(mapApplication);
+}
+
+export async function listAcceptedApplications(database: D1Database) {
+  const result = await database
+    .prepare(
+      "SELECT * FROM applications WHERE status = 'accepted' ORDER BY assigned_department, name LIMIT 5000",
+    )
     .all<ApplicationRow>();
 
   return (result.results ?? []).map(mapApplication);
