@@ -8,7 +8,6 @@ import {
   RefreshCw,
   Search,
 } from 'lucide-react';
-import Link from 'next/link';
 
 import type {
   ApplicationRecord,
@@ -290,13 +289,15 @@ export function ApplicationAdmin() {
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
-            <Link
+            {/* oxlint-disable-next-line next(no-html-link-for-pages) -- A native link preserves the file download response. */}
+            <a
               href="/api/admin/applications/export"
+              download
               className="inline-flex h-11 items-center justify-center gap-2 bg-racing-green px-4 text-sm font-black uppercase tracking-wider text-ink hover:bg-racing-green/85"
             >
               <FileSpreadsheet className="size-4" /> Kabul edilenleri Excel’e
               aktar
-            </Link>
+            </a>
             <button
               type="button"
               onClick={() => void load()}
