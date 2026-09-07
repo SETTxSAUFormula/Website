@@ -12,7 +12,7 @@ export default function NotFound() {
         <div>
           <p className="font-heading text-[clamp(8rem,25vw,20rem)] font-black leading-[0.7] text-racing-green">404</p>
           <h1 className="mt-10 font-heading text-5xl font-black uppercase sm:text-7xl">Bu viraj rotada yok.</h1>
-          <p className="mx-auto mt-5 max-w-xl text-base leading-8 text-white/55">Aradığınız sayfa taşınmış, silinmiş veya henüz piste çıkmamış olabilir.</p>
+          <p className="mx-auto mt-5 max-w-xl text-base leading-8 text-white/55">Aradığınız sayfa bulunamadı. Bağlantıyı kontrol edebilir veya ana sayfadan devam edebilirsiniz.</p>
           <Link href="/" className="mt-9 inline-flex items-center gap-3 border border-white/20 px-6 py-4 text-xs font-black uppercase tracking-[0.16em] hover:border-racing-green hover:text-racing-green">
             <ArrowLeft className="size-4" aria-hidden="true" /> Ana sayfaya dön
           </Link>

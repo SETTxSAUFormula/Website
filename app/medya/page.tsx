@@ -14,14 +14,14 @@ export const metadata: Metadata = {
 
 const pageCopy = {
   tr: {
-    eyebrow: 'Fotoğraf ve video', title: 'Medya', description: 'Atölyedeki emeği, takım ruhunu ve ADA-02’nin pistteki hikâyesini kayıt altına alıyoruz.', note: 'Medya arşivindeki seçili kareler optimize edilerek galeriye aşamalı biçimde eklenecektir.',
+    eyebrow: 'Fotoğraf ve video', title: 'Medya', description: 'Atölyedeki emeği, takım ruhunu ve ADA-02’nin pistteki hikâyesini kayıt altına alıyoruz.',
     images: [
       { src: '/media/ada-02-car.jpg', alt: 'SAUFormula ADA-02 aracı pist alanında', label: 'ADA-02 / Pist' },
       { src: '/media/team-2026.jpg', alt: 'SAUFormula takım üyeleri', label: 'Takım / 2026' },
     ],
   },
   en: {
-    eyebrow: 'Photo and video', title: 'Media', description: 'We document the work in the workshop, the spirit of the team and ADA-02’s story on track.', note: 'Selected images from the media archive will be optimised and added to the gallery in stages.',
+    eyebrow: 'Photo and video', title: 'Media', description: 'We document the work in the workshop, the spirit of the team and ADA-02’s story on track.',
     images: [
       { src: '/media/ada-02-car.jpg', alt: 'SAUFormula ADA-02 in the paddock', label: 'ADA-02 / Track' },
       { src: '/media/team-2026.jpg', alt: 'SAUFormula team members', label: 'Team / 2026' },
@@ -49,9 +49,6 @@ export function MediaPageContent({ language = 'tr' }: { language?: Language }) {
             </figure>
           ))}
         </div>
-        <p className="mx-auto mt-10 max-w-[1500px] text-sm leading-7 text-white/45">
-          {copy.note}
-        </p>
       </section>
       <SiteFooter language={language} />
     </main>

@@ -32,15 +32,15 @@ const pageCopy = {
     teamLeader: 'Takım lideri',
     member: 'Takım üyesi',
     rosterNote:
-      'Doğrulanmış isimler, görevler ve portreler geldiğinde kartlar bu hiyerarşi korunarak doldurulacak.',
+      'Takımımız; takım lideri, departman şefleri ve departman üyelerinden oluşur.',
     departments: [
       'Güç Aktarma Sistemleri',
       'Aerodinamik',
       'Kompozitler ve Üretim',
       'Elektrik ve Elektronik',
     ],
-    maintenanceKicker: 'Kadro güncelleniyor',
-    maintenanceTitle: 'Bu sayfa yakında açılacak.',
+    maintenanceKicker: 'Takımımız',
+    maintenanceTitle: 'Kadro bilgileri güncelleniyor.',
     maintenanceText: 'Takım kadromuzu ve görev dağılımını güncelliyoruz.',
   },
   en: {
@@ -60,15 +60,15 @@ const pageCopy = {
     teamLeader: 'Team leader',
     member: 'Team member',
     rosterNote:
-      'Verified names, roles and portraits will be added while preserving this hierarchy.',
+      'Our team consists of the team leader, department leads and department members.',
     departments: [
       'Powertrain',
       'Aerodynamics',
       'Composites',
       'Electrical & Electronics',
     ],
-    maintenanceKicker: 'Roster update in progress',
-    maintenanceTitle: 'This page will be available soon.',
+    maintenanceKicker: 'Our team',
+    maintenanceTitle: 'Roster update in progress.',
     maintenanceText: 'We are updating our team roster and roles.',
   },
 };

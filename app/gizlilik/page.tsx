@@ -7,29 +7,27 @@ import type { Language } from '@/lib/i18n';
 
 export const metadata: Metadata = {
   title: 'Gizlilik Politikası',
-  description: 'SAUFormula web sitesi gizlilik politikası taslağı.',
+  description: 'SAUFormula web sitesi gizlilik politikası; verilerin işlenmesi, saklanması, güvenlik ve ölçümleme hakkında bilgi.',
   alternates: { canonical: '/gizlilik', languages: { 'tr-TR': '/gizlilik', 'en-US': '/en/gizlilik' } },
 };
 
 const pageCopy = {
   tr: {
-    eyebrow: 'Yasal', title: 'Gizlilik', description: 'Bu sayfa, sauformula.org için yayın öncesi hazırlanmış gizlilik politikası iskeletidir.',
+    eyebrow: 'Yasal', title: 'Gizlilik', description: 'sauformula.org üzerinde paylaştığınız bilgilerin nasıl işlendiğini, saklandığını ve korunduğunu bu sayfada bulabilirsiniz.',
     sections: [
       ['Veri işleme yaklaşımı', 'İletişim ve takım başvuru formlarına girdiğiniz bilgiler; talebinizi veya başvurunuzu almak, değerlendirmek, başvuru sürecini yönetmek ve sizinle iletişim kurmak amacıyla işlenir. Takım başvuruları Cloudflare D1 veritabanında güvenli biçimde kaydedilir ve yetkili SAUFormula ekip üyelerinin erişimine sunulur. Başvuru bildirimi ayrıca Resend aracılığıyla info@sauformula.org adresine iletilir.'],
       ['Saklama ve erişim', 'Başvuru kayıtlarına yalnızca başvuru sürecini yürütmekle görevli yetkili ekip üyeleri erişebilir. Veriler, başvuru ve ekip oluşturma süreçleri için gerekli olduğu sürece saklanır; işleme amacı sona erdiğinde veya geçerli bir saklama yükümlülüğü bulunmadığında silinir.'],
       ['Güvenlik doğrulaması', 'Formun otomatik ve kötüye kullanım amaçlı gönderimlere karşı korunması için Cloudflare Turnstile kullanılır. Turnstile, form içeriğini değil doğrulama için gerekli sınırlı teknik sinyalleri işler.'],
       ['Çerezler ve ölçümleme', 'Site performansını ve toplu ziyaret istatistiklerini anlamak için çerez veya yerel depolama kullanmadan çalışan Cloudflare Web Analytics kullanılmaktadır. Pazarlama amaçlı izleme yapılmamaktadır.'],
-      ['Yayın öncesi inceleme', 'Bu metin hukuki danışmanlık değildir. Nihai altyapı, analiz araçları ve iletişim süreçleri belli olduğunda takım tarafından gözden geçirilip güncellenecektir.'],
     ],
   },
   en: {
-    eyebrow: 'Legal', title: 'Privacy', description: 'This page is the pre-launch privacy policy framework for sauformula.org.',
+    eyebrow: 'Legal', title: 'Privacy', description: 'Learn how information you share on sauformula.org is processed, stored and protected.',
     sections: [
       ['How we handle data', 'Information submitted through the contact and team application forms is processed to receive and evaluate your enquiry or application, manage the application process and contact you. Team applications are securely stored in a Cloudflare D1 database and made available to authorised SAUFormula team members. An application notification is also delivered to info@sauformula.org through Resend.'],
       ['Retention and access', 'Only authorised team members responsible for the application process may access application records. Data is retained while needed for application and team selection processes, and is deleted when the processing purpose ends unless a valid retention obligation applies.'],
       ['Security verification', 'Cloudflare Turnstile protects the form against automated and abusive submissions. Turnstile processes limited technical signals required for verification, not the contents of the form.'],
       ['Cookies and analytics', 'Cloudflare Web Analytics is used to understand aggregate visits and site performance without cookies or local storage. The website does not use analytics for marketing tracking.'],
-      ['Pre-launch review', 'This text is not legal advice. The team will review and update it once the final infrastructure, analytics tools and communication processes are confirmed.'],
     ],
   },
 };
