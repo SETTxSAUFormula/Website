@@ -154,12 +154,12 @@ const galleryImagesEn = galleryImagesTr.map((image, index) => ({
 const pageCopy = {
   tr: {
     eyebrow: 'Tasarım · Üretim · Doğrulama · Yarış', title: 'Formula Student Nedir?', intro: 'Formula Student, üniversite öğrencilerinin tek kişilik bir yarış otomobilini sıfırdan tasarladığı, ürettiği, doğruladığı ve yarıştırdığı uluslararası bir mühendislik yarışmasıdır. Kökeni 1981’de ABD’de başlayan Formula SAE’ye dayanır; Formula Student adıyla Birleşik Krallık’taki ilk gösteri organizasyonu 1998’de düzenlendi. Ana sınıflardan CV, içten yanmalı ve hibrit araçları; EV ise elektrikli araçları tanımlar. DV olarak anılan sürücüsüz ve otonom sistemler, güncel kurallarda CV veya EV araçların katılabildiği Driverless Cup ve otonom disiplinler kapsamında değerlendirilir. Araçlar piste çıkmadan önce teknik kontrolden geçer; takımlar tasarım, maliyet, üretim yaklaşımı ve iş planını statik etaplarda savunurken hızlanma, skidpad, autocross ve dayanıklılık performansını dinamik etaplarda gösterir. Böylece yarışı yalnızca en hızlı otomobil değil, güvenilirlik, verimlilik ve teknik kararlarıyla en güçlü toplam paketi sunan takım kazanır.',
-    heroAlt: 'Formula Student Romania yarış alanında farklı üniversitelerin araçları', caption: 'Formula Student Romania yarış alanı', archive: 'SAUFormula takım arşivi', scoreLabel: 'Formula Student puanları', scores: [['325', 'Statik etap'], ['525', 'Sürücülü dinamik'], ['150', 'Opsiyonel sürücüsüz'], ['1000', 'Azami toplam']], scoreNote: 'Puanlar 2026 uluslararası Formula Student kurallarındaki CV/EV dağılımını gösterir. Yarış organizasyonunun etkinlik el kitabı uygulama ayrıntılarını değiştirebilir.',
+    heroAlt: 'Formula Student Romania yarış alanında farklı üniversitelerin araçları', caption: 'Formula Student Romania yarış alanı', archive: 'SAUFormula takım arşivi',
     staticEyebrow: '01 · Pist öncesi değerlendirme', staticTitle: 'Statik Etaplar', totalPoints: 'Toplam puan', points: 'Puan', judgeFocus: 'Jürinin odağı', dynamicEyebrow: '02 · Pist üzerindeki değerlendirme', dynamicTitle: 'Dinamik Etaplar', drivenPoints: 'Sürücülü etap puanı', driverlessEyebrow: '03 · Opsiyonel sürücüsüz etaplar', driverlessTitle: '150 ek puan.', driverlessText: '2026 kurallarında CV ve EV takımları, otonom sistemi uygun olan araçlarla sürücüsüz Hızlanma ve Skidpad etaplarından ilave puan kazanabilir. Bu nedenle sürücülü beş dinamik etabın 525 puanına 150 puanlık opsiyonel bölüm eklenir.', driverlessEvents: [['Sürücüsüz Hızlanma', 'Driverless Acceleration', '75'], ['Sürücüsüz Skidpad', 'Driverless Skidpad', '75']], galleryEyebrow: 'Yarış haftasından', galleryTitle: 'FORMULA STUDENT ROMANIA.', galleryText: 'Etap açıklamalarından bağımsız bu galeri, ADA-02’nin yarış alanındaki hazırlıklarını, takım çalışmasını ve Formula Student atmosferini gösteriyor.',
   },
   en: {
     eyebrow: 'Design · Build · Validate · Race', title: 'What Is Formula Student?', intro: 'Formula Student is an international engineering competition in which university students design, build, validate and race a single-seat car from the ground up. Its roots go back to Formula SAE, founded in the United States in 1981, while the first UK demonstration event under the Formula Student name took place in 1998. CV covers combustion and hybrid vehicles, while EV refers to electric vehicles. Driverless and autonomous systems compete through the Driverless Cup and autonomous disciplines available to eligible CV or EV cars. Before reaching the track, cars must pass technical inspection. Teams defend their design, cost, manufacturing approach and business plan in static events, then demonstrate acceleration, skidpad, autocross and endurance performance in dynamic events. The strongest overall package wins—not simply the fastest car, but the team that combines reliability, efficiency and well-founded engineering decisions.',
-    heroAlt: 'Cars from different universities at Formula Student Romania', caption: 'Formula Student Romania competition grounds', archive: 'SAUFormula team archive', scoreLabel: 'Formula Student scores', scores: [['325', 'Static events'], ['525', 'Driven dynamics'], ['150', 'Optional driverless'], ['1000', 'Maximum total']], scoreNote: 'Scores reflect the CV/EV distribution in the 2026 international Formula Student rules. Event handbooks may change implementation details.',
+    heroAlt: 'Cars from different universities at Formula Student Romania', caption: 'Formula Student Romania competition grounds', archive: 'SAUFormula team archive',
     staticEyebrow: '01 · Pre-track assessment', staticTitle: 'Static Events', totalPoints: 'Total points', points: 'Points', judgeFocus: 'Judges focus on', dynamicEyebrow: '02 · On-track assessment', dynamicTitle: 'Dynamic Events', drivenPoints: 'Driven-event points', driverlessEyebrow: '03 · Optional driverless events', driverlessTitle: '150 additional points.', driverlessText: 'Under the 2026 rules, eligible CV and EV teams can earn additional points in Driverless Acceleration and Driverless Skidpad. This optional 150-point section is added to the 525 points available across the five driven dynamic events.', driverlessEvents: [['Driverless Acceleration', 'Autonomous straight-line performance', '75'], ['Driverless Skidpad', 'Autonomous lateral performance', '75']], galleryEyebrow: 'From race week', galleryTitle: 'FORMULA STUDENT ROMANIA.', galleryText: 'Beyond the event descriptions, this gallery shows ADA-02’s preparation at the competition, the team’s work and the Formula Student atmosphere.',
   },
 };
@@ -186,39 +186,23 @@ export function FormulaStudentPageContent({ language = 'tr' }: { language?: Lang
             </p>
           </div>
 
-          <div className="mt-8 grid overflow-hidden border border-white/15 bg-[#071b14] lg:grid-cols-[1.25fr_0.75fr]">
-            <figure className="relative min-w-0 overflow-hidden">
-              <div className="relative aspect-video sm:aspect-[16/8] lg:h-full lg:min-h-[460px]">
-                <Image
-                  src="/media/fs-romania-track-wide.jpg"
-                  alt={copy.heroAlt}
-                  fill
-                  sizes="(min-width: 1024px) 63vw, 100vw"
-                  className="object-cover object-[50%_38%]"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent" />
-              </div>
-              <figcaption className="absolute inset-x-0 bottom-0 flex flex-col gap-1 px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-white/70 sm:flex-row sm:items-center sm:justify-between">
-                <span>{copy.caption}</span>
-                <span className="text-white/40">{copy.archive}</span>
-              </figcaption>
-            </figure>
-
-            <aside aria-label={copy.scoreLabel} className="border-t border-white/15 lg:border-l lg:border-t-0">
-              <div className="grid h-full grid-cols-2">
-                {copy.scores.map(([value, label], index) => (
-                  <div key={label} className={`flex min-h-28 flex-col justify-center p-4 sm:min-h-40 sm:p-7 ${index % 2 === 0 ? 'border-r border-white/15' : ''} ${index < 2 ? 'border-b border-white/15' : ''}`}>
-                    <p className="font-heading text-4xl font-black text-racing-green sm:text-5xl">{value}</p>
-                    <p className="mt-2 text-[10px] font-bold uppercase leading-4 tracking-[0.12em] text-white/45">{label}</p>
-                  </div>
-                ))}
-              </div>
-            </aside>
-          </div>
-          <p className="mt-4 max-w-4xl text-xs leading-6 text-white/35">
-            {copy.scoreNote}
-          </p>
+          <figure className="relative mt-8 overflow-hidden border border-white/15 bg-[#071b14]">
+            <div className="relative aspect-video sm:aspect-[2/1] lg:aspect-[3/1]">
+              <Image
+                src="/media/fs-romania-track-wide.jpg"
+                alt={copy.heroAlt}
+                fill
+                sizes="(min-width: 1580px) 1500px, (min-width: 1024px) calc(100vw - 80px), calc(100vw - 40px)"
+                className="object-cover object-[50%_38%]"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent" />
+            </div>
+            <figcaption className="absolute inset-x-0 bottom-0 flex flex-col gap-1 px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-white/70 sm:flex-row sm:items-center sm:justify-between">
+              <span>{copy.caption}</span>
+              <span className="text-white/40">{copy.archive}</span>
+            </figcaption>
+          </figure>
         </div>
       </section>
 
