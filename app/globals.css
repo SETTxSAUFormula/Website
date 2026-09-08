@@ -213,18 +213,11 @@ a {
   }
 }
 
-/* Keep sponsor logos readable when mobile browsers auto-darken page colors. */
+/* Use one image-backed surface that always paints behind the sponsor logos. */
 .sponsor-card-surface {
-  --sponsor-card-surface: #73867c;
-  background-color: var(--sponsor-card-surface);
-  background-image: linear-gradient(
-    var(--sponsor-card-surface),
-    var(--sponsor-card-surface)
-  );
+  background-color: #73867c;
+  background-image: url('/ui/sponsor-card-surface.svg');
+  background-repeat: repeat;
+  background-size: 4px 4px;
   color-scheme: only light;
-}
-
-.sponsor-card-surface:hover,
-.sponsor-card-surface:focus-visible {
-  --sponsor-card-surface: #82988d;
 }
