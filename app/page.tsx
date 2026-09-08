@@ -197,15 +197,6 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
               {copy.story} <ArrowRight className="size-4" aria-hidden="true" />
             </Link>
 
-            <div className="relative mt-10 border-t border-white/12 pt-7">
-              <Image
-                src="/brand/ataturk-signature.svg"
-                alt={isEnglish ? 'Signature of Mustafa Kemal Atatürk' : 'Mustafa Kemal Atatürk imzası'}
-                width={572}
-                height={205}
-                className="h-auto w-48 brightness-0 invert opacity-80 sm:w-56"
-              />
-            </div>
           </div>
         </div>
       </section>

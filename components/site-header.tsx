@@ -53,16 +53,28 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
     <header className={overlay ? 'absolute inset-x-0 top-0 z-40 text-white' : 'relative z-40 bg-ink text-white'}>
       <div className="border-b border-white/10 bg-[#03110d]/92 px-5 backdrop-blur-xl lg:px-10">
         <div className="mx-auto flex h-20 max-w-[1920px] items-center justify-between gap-5 sm:h-24 lg:gap-6">
-          <Link href={localizedPath('/', language)} aria-label={language === 'en' ? 'SAUFormula home' : 'SAUFormula ana sayfa'} className="shrink-0">
-            <Image
-              src="/brand/sauformula-logo-light.png"
-              alt="SAUFormula"
-              width={2400}
-              height={1510}
-              priority
-              className="h-16 w-auto max-w-none origin-left scale-105 object-contain sm:h-[4.5rem] sm:scale-110 2xl:h-20 2xl:scale-125"
-            />
-          </Link>
+          <div className="flex shrink-0 items-center gap-3 sm:gap-4">
+            <Link href={localizedPath('/', language)} aria-label={language === 'en' ? 'SAUFormula home' : 'SAUFormula ana sayfa'} className="shrink-0">
+              <Image
+                src="/brand/sauformula-logo-light.png"
+                alt="SAUFormula"
+                width={2400}
+                height={1510}
+                priority
+                className="h-16 w-auto max-w-none origin-left scale-105 object-contain sm:h-[4.5rem] sm:scale-110 2xl:h-20 2xl:scale-125"
+              />
+            </Link>
+            {overlay ? (
+              <Image
+                src="/brand/ataturk-signature.svg"
+                alt={language === 'en' ? 'Signature of Mustafa Kemal Atatürk' : 'Mustafa Kemal Atatürk imzası'}
+                width={572}
+                height={205}
+                priority
+                className="h-auto w-20 shrink-0 brightness-0 invert opacity-80 sm:w-24 lg:w-28 2xl:w-32"
+              />
+            ) : null}
+          </div>
 
           <nav aria-label={language === 'en' ? 'Main menu' : 'Ana menü'} className="hidden h-24 items-stretch border-x border-white/12 xl:flex">
             {items.map((item) => (
