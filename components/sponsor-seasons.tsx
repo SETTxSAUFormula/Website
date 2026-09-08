@@ -136,8 +136,14 @@ export function SponsorSeasons({ language }: { language: Language }) {
 
                 <div className={`mt-4 grid border-l border-t border-white/25 ${tier.gridClass}`}>
                   {season === 2026 ? tier.sponsors.map((sponsor) => (
-                    <a key={sponsor.name} href={sponsor.website} target="_blank" rel="noreferrer" aria-label={`${sponsor.name}: ${copy.visit}`} className={`sponsor-card-surface group relative flex items-center justify-center overflow-hidden border-b border-r border-white/25 p-3 outline-none transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-racing-green sm:p-6 ${tier.cardClass}`}>
-                      <div className={`relative ${tier.logoBoxClass}`}>
+                    <a key={sponsor.name} href={sponsor.website} target="_blank" rel="noreferrer" aria-label={`${sponsor.name}: ${copy.visit}`} className={`sponsor-card-surface group relative isolate flex items-center justify-center overflow-hidden border-b border-r border-white/25 p-3 outline-none transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-racing-green sm:p-6 ${tier.cardClass}`}>
+                      <img
+                        src="/ui/sponsor-card-surface.svg"
+                        alt=""
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 h-full w-full object-cover transition-[filter] duration-300 group-hover:brightness-110 group-focus-visible:brightness-110"
+                      />
+                      <div className={`relative z-10 ${tier.logoBoxClass}`}>
                         <img
                           src={sponsor.src}
                           alt={`${sponsor.name} ${copy.logo}`}
@@ -147,10 +153,10 @@ export function SponsorSeasons({ language }: { language: Language }) {
                           style={{ transform: `scale(${sponsor.scale ?? 1})` }}
                         />
                       </div>
-                      <p className="absolute bottom-2 left-2 right-2 text-center text-[7px] font-bold uppercase tracking-[0.08em] text-[#071710]/65 sm:bottom-3 sm:left-4 sm:right-4 sm:text-[9px] sm:tracking-[0.12em]">
+                      <p className="absolute bottom-2 left-2 right-2 z-10 text-center text-[7px] font-bold uppercase tracking-[0.08em] text-[#071710]/65 sm:bottom-3 sm:left-4 sm:right-4 sm:text-[9px] sm:tracking-[0.12em]">
                         {sponsor.name}
                       </p>
-                      <ArrowUpRight className="absolute right-4 top-4 size-4 text-[#071710]/0 transition-all duration-300 group-hover:text-[#071710]/60 group-focus-visible:text-[#071710]/60" aria-hidden="true" />
+                      <ArrowUpRight className="absolute right-4 top-4 z-10 size-4 text-[#071710]/0 transition-all duration-300 group-hover:text-[#071710]/60 group-focus-visible:text-[#071710]/60" aria-hidden="true" />
                     </a>
                   )) : tier.sponsors.map((_, index) => (
                     <div key={index} aria-hidden="true" className={`flex items-center justify-center border-b border-r border-white/25 bg-[#73867c]/15 p-3 sm:p-6 ${tier.cardClass}`}>

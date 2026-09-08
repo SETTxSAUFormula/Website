@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { headers } from 'next/headers';
 import { Barlow, Manrope } from 'next/font/google';
 import './globals.css';
@@ -50,6 +50,11 @@ export const metadata: Metadata = {
     description: 'Sakarya Üniversitesi Formula Student Takımı ve ADA-02.',
     images: ['/media/ada-02-car.jpg'],
   },
+};
+
+export const viewport: Viewport = {
+  colorScheme: 'dark',
+  themeColor: '#03110d',
 };
 
 const organizationSchema = {
