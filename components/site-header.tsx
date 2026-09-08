@@ -53,7 +53,7 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
     <header className={overlay ? 'absolute inset-x-0 top-0 z-40 text-white' : 'relative z-40 bg-ink text-white'}>
       <div className="border-b border-white/10 bg-[#03110d]/92 px-5 backdrop-blur-xl lg:px-10">
         <div className="mx-auto flex h-20 max-w-[1920px] items-center justify-between gap-5 sm:h-24 lg:gap-6">
-          <div className="flex shrink-0 items-center gap-3 sm:gap-4">
+          <div className="flex shrink-0 items-center gap-4 sm:gap-6">
             <Link href={localizedPath('/', language)} aria-label={language === 'en' ? 'SAUFormula home' : 'SAUFormula ana sayfa'} className="shrink-0">
               <Image
                 src="/brand/sauformula-logo-light.png"
@@ -66,10 +66,10 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
             </Link>
             {overlay ? (
               <Image
-                src="/brand/ataturk-signature.svg"
+                src="/brand/ataturk-signature.png"
                 alt={language === 'en' ? 'Signature of Mustafa Kemal Atatürk' : 'Mustafa Kemal Atatürk imzası'}
-                width={572}
-                height={205}
+                width={800}
+                height={260}
                 priority
                 className="h-auto w-20 shrink-0 brightness-0 invert opacity-80 sm:w-24 lg:w-28 2xl:w-32"
               />
