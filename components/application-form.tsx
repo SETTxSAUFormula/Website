@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   AlertCircle,
   ArrowUpRight,
@@ -21,6 +21,10 @@ import {
 } from '@/components/ui/native-select';
 import { Textarea } from '@/components/ui/textarea';
 import { localizedPath, type Language } from '@/lib/i18n';
+import {
+  applicationErrorMessage,
+  applicationFieldError,
+} from '@/lib/application-feedback';
 
 const teams = {
   tr: [
@@ -90,7 +94,7 @@ const copy = {
       'Başvuru bilgilerimin başvuru sürecinin yürütülmesi, değerlendirilmesi ve benimle iletişim kurulması amacıyla güvenli biçimde kaydedilip işlenmesini kabul ediyorum.',
     privacy: 'Gizlilik Politikası',
     security: 'Güvenli başvuru',
-    note: 'Başvurunuz güvenli biçimde kaydedilir ve değerlendirme için SAUFormula ekibine e-posta bildirimi gönderilir.',
+    note: 'Başvurunuz güvenli biçimde kaydedilir ve yetkili SAUFormula ekibi tarafından başvuru panelinden değerlendirilir.',
     send: 'Başvuruyu gönder',
     sending: 'Gönderiliyor',
     success:
@@ -141,7 +145,7 @@ const copy = {
       'I consent to my application data being securely stored and processed to manage and evaluate my application and contact me.',
     privacy: 'Privacy Policy',
     security: 'Secure application',
-    note: 'Your application is securely recorded and the SAUFormula team receives an email notification for evaluation.',
+    note: 'Your application is securely saved and reviewed by authorised SAUFormula team members in the application panel.',
     send: 'Submit application',
     sending: 'Submitting',
     success:
@@ -184,9 +188,97 @@ function FormSection({
   );
 }
 
+const applicationFieldIds: Record<string, string> = {
+  name: 'application-name',
+  email: 'application-email',
+  phone: 'application-phone',
+  university: 'application-university',
+  academicDepartment: 'application-academic-department',
+  classLevel: 'application-class',
+  linkedin: 'application-linkedin',
+  portfolio: 'application-portfolio',
+  primaryTeam: 'application-primary-team',
+  secondaryTeam: 'application-secondary-team',
+  weeklyHours: 'application-weekly-hours',
+  summerParticipation: 'application-summer',
+  busyPeriods: 'application-busy',
+  programs: 'application-programs',
+  communityExperience: 'application-community',
+  communityDetails: 'application-community-details',
+  projects: 'application-projects',
+  motivation: 'application-motivation',
+  responsibilityScenario: 'application-responsibility',
+  motivationFactor: 'application-motivation-factor',
+  additionalNotes: 'application-additional',
+  consent: 'application-consent',
+};
+
+function RequiredMark() {
+  return (
+    <span aria-hidden="true" className="text-racing-green">
+      *
+    </span>
+  );
+}
+
+function ApplicationField({
+  name,
+  error,
+  children,
+}: {
+  name: string;
+  error?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Field data-invalid={Boolean(error)}>
+      {children}
+      {error ? (
+        <p
+          id={`application-error-${name}`}
+          className="text-sm leading-6 text-red-200"
+        >
+          {error}
+        </p>
+      ) : null}
+    </Field>
+  );
+}
+
 export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
   const content = copy[language];
   const sectionTitles = content.sections as string[];
+  const fieldLabels: Record<string, string> = {
+    name: content.name as string,
+    email: content.email as string,
+    phone: content.phone as string,
+    university: content.university as string,
+    academicDepartment: content.academicDepartment as string,
+    classLevel: content.classLevel as string,
+    linkedin: content.linkedin as string,
+    portfolio: content.portfolio as string,
+    primaryTeam: content.primaryTeam as string,
+    secondaryTeam: content.secondaryTeam as string,
+    weeklyHours: content.weeklyHours as string,
+    summerParticipation: content.summer as string,
+    busyPeriods: content.busy as string,
+    programs: content.programs as string,
+    communityExperience: content.community as string,
+    communityDetails: content.communityDetails as string,
+    projects: content.projects as string,
+    motivation: content.motivation as string,
+    responsibilityScenario:
+      language === 'tr' ? 'Sorumluluk senaryosu' : 'Responsibility scenario',
+    motivationFactor:
+      language === 'tr' ? 'Motivasyon kaynağı' : 'Motivation factor',
+    additionalNotes: content.additional as string,
+    consent:
+      language === 'tr' ? 'Veri işleme onayı' : 'Data processing consent',
+  };
+  const feedbackRef = useRef<HTMLDivElement>(null);
+  const [errorCode, setErrorCode] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [configurationVersion, setConfigurationVersion] = useState(0);
   const [siteKey, setSiteKey] = useState('');
   const [turnstileToken, setTurnstileToken] = useState('');
   const [widgetVersion, setWidgetVersion] = useState(0);
@@ -194,7 +286,7 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
   const [primaryTeam, setPrimaryTeam] = useState('');
   const [secondaryTeam, setSecondaryTeam] = useState('');
   const [status, setStatus] = useState<
-    'idle' | 'sending' | 'success' | 'error' | 'verify'
+    'idle' | 'sending' | 'success' | 'error'
   >('idle');
 
   useEffect(() => {
@@ -206,11 +298,22 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
         return response.json() as Promise<{ siteKey?: unknown }>;
       })
       .then((data: { siteKey?: unknown }) => {
-        if (typeof data.siteKey === 'string') setSiteKey(data.siteKey);
+        if (typeof data.siteKey !== 'string' || !data.siteKey)
+          throw new Error('Missing site key');
+        setSiteKey(data.siteKey);
+        setStatus('idle');
       })
-      .catch(() => setStatus('error'));
+      .catch(() => {
+        if (controller.signal.aborted) return;
+        setErrorCode('service_unavailable');
+        setStatus('error');
+      });
     return () => controller.abort();
-  }, []);
+  }, [configurationVersion]);
+
+  useEffect(() => {
+    if (status === 'error') feedbackRef.current?.focus();
+  }, [status, errorCode, fieldErrors]);
 
   async function handleSubmit(
     event: React.SyntheticEvent<HTMLFormElement, SubmitEvent>,
@@ -218,8 +321,46 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
     event.preventDefault();
     const formElement = event.currentTarget;
 
-    if (!turnstileToken) {
-      setStatus('verify');
+    if (status === 'sending') return;
+    const errors: Record<string, string> = {};
+    for (const element of Array.from(formElement.elements)) {
+      if (
+        !(
+          element instanceof HTMLInputElement ||
+          element instanceof HTMLSelectElement ||
+          element instanceof HTMLTextAreaElement
+        ) ||
+        !element.name ||
+        element.disabled
+      )
+        continue;
+      const error = applicationFieldError(
+        {
+          value: element.value,
+          required: element.required,
+          type: element.type,
+          minLength: 'minLength' in element ? element.minLength : undefined,
+          maxLength: 'maxLength' in element ? element.maxLength : undefined,
+          checked: 'checked' in element ? element.checked : undefined,
+        },
+        language,
+      );
+      if (error) errors[element.name] = error;
+    }
+    if (!new FormData(formElement).has('consent'))
+      errors.consent =
+        language === 'tr'
+          ? 'Başvuruyu göndermek için veri işleme bilgilendirmesini kabul edin.'
+          : 'Accept the data processing notice to submit your application.';
+    setFieldErrors(errors);
+    if (Object.keys(errors).length) {
+      setErrorCode('validation_failed');
+      setStatus('error');
+      return;
+    }
+    if (!siteKey || !turnstileToken) {
+      setErrorCode(!siteKey ? 'service_unavailable' : 'verification_required');
+      setStatus('error');
       return;
     }
 
@@ -262,15 +403,57 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
         }),
       });
 
-      if (!response.ok) throw new Error('Application request failed');
+      let result: {
+        ok?: boolean;
+        stored?: boolean;
+        code?: string;
+        fields?: unknown;
+      };
+      try {
+        const parsed: unknown = await response.json();
+        result =
+          parsed && typeof parsed === 'object' ? (parsed as typeof result) : {};
+      } catch {
+        result = {};
+      }
+      if (!response.ok || result.ok !== true || result.stored !== true) {
+        setErrorCode(
+          typeof result.code === 'string'
+            ? result.code
+            : response.status === 413
+              ? 'payload_too_large'
+              : 'request_failed',
+        );
+        const errors: Record<string, string> = {};
+        if (Array.isArray(result.fields)) {
+          for (const field of result.fields) {
+            if (
+              typeof field === 'string' &&
+              formElement.elements.namedItem(field)
+            )
+              errors[field] =
+                language === 'tr'
+                  ? 'Bu alanın değerini ve uzunluğunu kontrol edin.'
+                  : 'Check the value and length of this field.';
+          }
+        }
+        setFieldErrors(errors);
+        setTurnstileToken('');
+        setWidgetVersion((version) => version + 1);
+        setStatus('error');
+        return;
+      }
       formElement.reset();
       setCommunityExperience('no');
       setPrimaryTeam('');
       setSecondaryTeam('');
       setTurnstileToken('');
       setWidgetVersion((version) => version + 1);
+      setFieldErrors({});
+      setErrorCode('');
       setStatus('success');
     } catch {
+      setErrorCode('network_error');
       setTurnstileToken('');
       setWidgetVersion((version) => version + 1);
       setStatus('error');
@@ -280,47 +463,111 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
   return (
     <form
       onSubmit={handleSubmit}
+      noValidate
       className="border border-white/15 bg-[#071b14] p-6 sm:p-8 lg:p-10"
       aria-busy={status === 'sending'}
     >
+      <p className="mb-6 text-sm leading-6 text-white/75">
+        <RequiredMark />{' '}
+        {language === 'tr'
+          ? 'işaretli alanlar zorunludur.'
+          : 'marks required fields.'}
+      </p>
+      {status === 'error' ? (
+        <div
+          ref={feedbackRef}
+          role="alert"
+          tabIndex={-1}
+          className="mb-8 scroll-mt-6 border border-red-400/50 bg-red-400/10 p-5 text-base leading-7 text-red-100 outline-none focus-visible:ring-2 focus-visible:ring-red-300"
+        >
+          <p className="flex items-start gap-3">
+            <AlertCircle className="mt-1 size-5 shrink-0" aria-hidden="true" />
+            {applicationErrorMessage(errorCode, language)}
+          </p>
+          {Object.keys(fieldErrors).length ? (
+            <ul className="mt-3 space-y-2 pl-8">
+              {Object.entries(fieldErrors).map(([name, message]) => (
+                <li key={name}>
+                  <a
+                    href={`#${applicationFieldIds[name]}`}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      document
+                        .getElementById(applicationFieldIds[name])
+                        ?.focus();
+                    }}
+                    className="underline underline-offset-4"
+                  >
+                    {fieldLabels[name] ?? name}: {message}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          {!siteKey ? (
+            <button
+              type="button"
+              onClick={() => {
+                setStatus('idle');
+                setConfigurationVersion((value) => value + 1);
+              }}
+              className="mt-4 border border-red-200/50 px-4 py-2 font-semibold"
+            >
+              {language === 'tr' ? 'Yeniden bağlan' : 'Reconnect'}
+            </button>
+          ) : null}
+        </div>
+      ) : null}
       <div className="space-y-10">
         <FormSection number="01" title={sectionTitles[0]}>
           <div className="grid gap-6 sm:grid-cols-2">
-            <Field>
+            <ApplicationField name="name" error={fieldErrors.name}>
               <FieldLabel htmlFor="application-name" className={labelClass}>
-                {content.name}
+                {content.name} <RequiredMark />
               </FieldLabel>
               <Input
                 id="application-name"
                 name="name"
+                aria-invalid={Boolean(fieldErrors.name)}
+                aria-describedby={
+                  fieldErrors.name ? 'application-error-name' : undefined
+                }
                 autoComplete="name"
                 required
                 minLength={2}
                 maxLength={100}
                 className={inputClass}
               />
-            </Field>
-            <Field>
+            </ApplicationField>
+            <ApplicationField name="email" error={fieldErrors.email}>
               <FieldLabel htmlFor="application-email" className={labelClass}>
-                {content.email}
+                {content.email} <RequiredMark />
               </FieldLabel>
               <Input
                 id="application-email"
                 name="email"
+                aria-invalid={Boolean(fieldErrors.email)}
+                aria-describedby={
+                  fieldErrors.email ? 'application-error-email' : undefined
+                }
                 type="email"
                 autoComplete="email"
                 required
                 maxLength={254}
                 className={inputClass}
               />
-            </Field>
-            <Field>
+            </ApplicationField>
+            <ApplicationField name="phone" error={fieldErrors.phone}>
               <FieldLabel htmlFor="application-phone" className={labelClass}>
-                {content.phone}
+                {content.phone} <RequiredMark />
               </FieldLabel>
               <Input
                 id="application-phone"
                 name="phone"
+                aria-invalid={Boolean(fieldErrors.phone)}
+                aria-describedby={
+                  fieldErrors.phone ? 'application-error-phone' : undefined
+                }
                 type="tel"
                 autoComplete="tel"
                 required
@@ -329,17 +576,23 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
                 placeholder="05xx xxx xx xx"
                 className={inputClass}
               />
-            </Field>
-            <Field>
+            </ApplicationField>
+            <ApplicationField name="university" error={fieldErrors.university}>
               <FieldLabel
                 htmlFor="application-university"
                 className={labelClass}
               >
-                {content.university}
+                {content.university} <RequiredMark />
               </FieldLabel>
               <NativeSelect
                 id="application-university"
                 name="university"
+                aria-invalid={Boolean(fieldErrors.university)}
+                aria-describedby={
+                  fieldErrors.university
+                    ? 'application-error-university'
+                    : undefined
+                }
                 required
                 defaultValue=""
                 className={selectClass}
@@ -354,17 +607,26 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
                   Sakarya Uygulamalı Bilimler Üniversitesi
                 </NativeSelectOption>
               </NativeSelect>
-            </Field>
-            <Field>
+            </ApplicationField>
+            <ApplicationField
+              name="academicDepartment"
+              error={fieldErrors.academicDepartment}
+            >
               <FieldLabel
                 htmlFor="application-academic-department"
                 className={labelClass}
               >
-                {content.academicDepartment}
+                {content.academicDepartment} <RequiredMark />
               </FieldLabel>
               <Input
                 id="application-academic-department"
                 name="academicDepartment"
+                aria-invalid={Boolean(fieldErrors.academicDepartment)}
+                aria-describedby={
+                  fieldErrors.academicDepartment
+                    ? 'application-error-academicDepartment'
+                    : undefined
+                }
                 required
                 minLength={2}
                 maxLength={120}
@@ -375,14 +637,20 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
                 }
                 className={inputClass}
               />
-            </Field>
-            <Field>
+            </ApplicationField>
+            <ApplicationField name="classLevel" error={fieldErrors.classLevel}>
               <FieldLabel htmlFor="application-class" className={labelClass}>
-                {content.classLevel}
+                {content.classLevel} <RequiredMark />
               </FieldLabel>
               <NativeSelect
                 id="application-class"
                 name="classLevel"
+                aria-invalid={Boolean(fieldErrors.classLevel)}
+                aria-describedby={
+                  fieldErrors.classLevel
+                    ? 'application-error-classLevel'
+                    : undefined
+                }
                 required
                 defaultValue=""
                 className={selectClass}
@@ -402,22 +670,28 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
                   {language === 'tr' ? 'Lisansüstü' : 'Graduate'}
                 </NativeSelectOption>
               </NativeSelect>
-            </Field>
-            <Field>
+            </ApplicationField>
+            <ApplicationField name="linkedin" error={fieldErrors.linkedin}>
               <FieldLabel htmlFor="application-linkedin" className={labelClass}>
                 {content.linkedin}
               </FieldLabel>
               <Input
                 id="application-linkedin"
                 name="linkedin"
+                aria-invalid={Boolean(fieldErrors.linkedin)}
+                aria-describedby={
+                  fieldErrors.linkedin
+                    ? 'application-error-linkedin'
+                    : undefined
+                }
                 type="url"
                 inputMode="url"
                 maxLength={300}
                 placeholder="https://linkedin.com/in/..."
                 className={inputClass}
               />
-            </Field>
-            <Field>
+            </ApplicationField>
+            <ApplicationField name="portfolio" error={fieldErrors.portfolio}>
               <FieldLabel
                 htmlFor="application-portfolio"
                 className={labelClass}
@@ -427,28 +701,43 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
               <Input
                 id="application-portfolio"
                 name="portfolio"
+                aria-invalid={Boolean(fieldErrors.portfolio)}
+                aria-describedby={
+                  fieldErrors.portfolio
+                    ? 'application-error-portfolio'
+                    : undefined
+                }
                 type="url"
                 inputMode="url"
                 maxLength={300}
                 placeholder="https://..."
                 className={inputClass}
               />
-            </Field>
+            </ApplicationField>
           </div>
         </FormSection>
 
         <FormSection number="02" title={sectionTitles[1]}>
           <div className="grid gap-6 sm:grid-cols-2">
-            <Field>
+            <ApplicationField
+              name="primaryTeam"
+              error={fieldErrors.primaryTeam}
+            >
               <FieldLabel
                 htmlFor="application-primary-team"
                 className={labelClass}
               >
-                {content.primaryTeam}
+                {content.primaryTeam} <RequiredMark />
               </FieldLabel>
               <NativeSelect
                 id="application-primary-team"
                 name="primaryTeam"
+                aria-invalid={Boolean(fieldErrors.primaryTeam)}
+                aria-describedby={
+                  fieldErrors.primaryTeam
+                    ? 'application-error-primaryTeam'
+                    : undefined
+                }
                 required
                 value={primaryTeam}
                 onChange={(event) => {
@@ -467,8 +756,11 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
                   </NativeSelectOption>
                 ))}
               </NativeSelect>
-            </Field>
-            <Field>
+            </ApplicationField>
+            <ApplicationField
+              name="secondaryTeam"
+              error={fieldErrors.secondaryTeam}
+            >
               <FieldLabel
                 htmlFor="application-secondary-team"
                 className={labelClass}
@@ -478,6 +770,12 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
               <NativeSelect
                 id="application-secondary-team"
                 name="secondaryTeam"
+                aria-invalid={Boolean(fieldErrors.secondaryTeam)}
+                aria-describedby={
+                  fieldErrors.secondaryTeam
+                    ? 'application-error-secondaryTeam'
+                    : undefined
+                }
                 value={secondaryTeam}
                 onChange={(event) => setSecondaryTeam(event.target.value)}
                 className={selectClass}
@@ -493,17 +791,26 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
                   </NativeSelectOption>
                 ))}
               </NativeSelect>
-            </Field>
-            <Field>
+            </ApplicationField>
+            <ApplicationField
+              name="weeklyHours"
+              error={fieldErrors.weeklyHours}
+            >
               <FieldLabel
                 htmlFor="application-weekly-hours"
                 className={labelClass}
               >
-                {content.weeklyHours}
+                {content.weeklyHours} <RequiredMark />
               </FieldLabel>
               <NativeSelect
                 id="application-weekly-hours"
                 name="weeklyHours"
+                aria-invalid={Boolean(fieldErrors.weeklyHours)}
+                aria-describedby={
+                  fieldErrors.weeklyHours
+                    ? 'application-error-weeklyHours'
+                    : undefined
+                }
                 required
                 defaultValue=""
                 className={selectClass}
@@ -523,14 +830,23 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
                   </NativeSelectOption>
                 ))}
               </NativeSelect>
-            </Field>
-            <Field>
+            </ApplicationField>
+            <ApplicationField
+              name="summerParticipation"
+              error={fieldErrors.summerParticipation}
+            >
               <FieldLabel htmlFor="application-summer" className={labelClass}>
-                {content.summer}
+                {content.summer} <RequiredMark />
               </FieldLabel>
               <NativeSelect
                 id="application-summer"
                 name="summerParticipation"
+                aria-invalid={Boolean(fieldErrors.summerParticipation)}
+                aria-describedby={
+                  fieldErrors.summerParticipation
+                    ? 'application-error-summerParticipation'
+                    : undefined
+                }
                 required
                 defaultValue=""
                 className={selectClass}
@@ -546,15 +862,21 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
                   {content.depends}
                 </NativeSelectOption>
               </NativeSelect>
-            </Field>
+            </ApplicationField>
           </div>
-          <Field>
+          <ApplicationField name="busyPeriods" error={fieldErrors.busyPeriods}>
             <FieldLabel htmlFor="application-busy" className={labelClass}>
-              {content.busy}
+              {content.busy} <RequiredMark />
             </FieldLabel>
             <NativeSelect
               id="application-busy"
               name="busyPeriods"
+              aria-invalid={Boolean(fieldErrors.busyPeriods)}
+              aria-describedby={
+                fieldErrors.busyPeriods
+                  ? 'application-error-busyPeriods'
+                  : undefined
+              }
               required
               defaultValue=""
               className={selectClass}
@@ -568,17 +890,21 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
                 {content.depends}
               </NativeSelectOption>
             </NativeSelect>
-          </Field>
+          </ApplicationField>
         </FormSection>
 
         <FormSection number="03" title={sectionTitles[2]}>
-          <Field>
+          <ApplicationField name="programs" error={fieldErrors.programs}>
             <FieldLabel htmlFor="application-programs" className={labelClass}>
-              {content.programs}
+              {content.programs} <RequiredMark />
             </FieldLabel>
             <Textarea
               id="application-programs"
               name="programs"
+              aria-invalid={Boolean(fieldErrors.programs)}
+              aria-describedby={
+                fieldErrors.programs ? 'application-error-programs' : undefined
+              }
               required
               minLength={2}
               maxLength={1500}
@@ -589,14 +915,23 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
               }
               className={textareaClass}
             />
-          </Field>
-          <Field>
+          </ApplicationField>
+          <ApplicationField
+            name="communityExperience"
+            error={fieldErrors.communityExperience}
+          >
             <FieldLabel htmlFor="application-community" className={labelClass}>
-              {content.community}
+              {content.community} <RequiredMark />
             </FieldLabel>
             <NativeSelect
               id="application-community"
               name="communityExperience"
+              aria-invalid={Boolean(fieldErrors.communityExperience)}
+              aria-describedby={
+                fieldErrors.communityExperience
+                  ? 'application-error-communityExperience'
+                  : undefined
+              }
               required
               value={communityExperience}
               onChange={(event) => setCommunityExperience(event.target.value)}
@@ -605,32 +940,45 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
               <NativeSelectOption value="no">{content.no}</NativeSelectOption>
               <NativeSelectOption value="yes">{content.yes}</NativeSelectOption>
             </NativeSelect>
-          </Field>
+          </ApplicationField>
           {communityExperience === 'yes' ? (
-            <Field>
+            <ApplicationField
+              name="communityDetails"
+              error={fieldErrors.communityDetails}
+            >
               <FieldLabel
                 htmlFor="application-community-details"
                 className={labelClass}
               >
-                {content.communityDetails}
+                {content.communityDetails} <RequiredMark />
               </FieldLabel>
               <Textarea
                 id="application-community-details"
                 name="communityDetails"
+                aria-invalid={Boolean(fieldErrors.communityDetails)}
+                aria-describedby={
+                  fieldErrors.communityDetails
+                    ? 'application-error-communityDetails'
+                    : undefined
+                }
                 required
                 minLength={10}
                 maxLength={2000}
                 className={textareaClass}
               />
-            </Field>
+            </ApplicationField>
           ) : null}
-          <Field>
+          <ApplicationField name="projects" error={fieldErrors.projects}>
             <FieldLabel htmlFor="application-projects" className={labelClass}>
-              {content.projects}
+              {content.projects} <RequiredMark />
             </FieldLabel>
             <Textarea
               id="application-projects"
               name="projects"
+              aria-invalid={Boolean(fieldErrors.projects)}
+              aria-describedby={
+                fieldErrors.projects ? 'application-error-projects' : undefined
+              }
               required
               minLength={10}
               maxLength={2500}
@@ -641,49 +989,73 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
               }
               className={textareaClass}
             />
-          </Field>
+          </ApplicationField>
         </FormSection>
 
         <FormSection number="04" title={sectionTitles[3]}>
-          <Field>
+          <ApplicationField name="motivation" error={fieldErrors.motivation}>
             <FieldLabel htmlFor="application-motivation" className={labelClass}>
-              {content.motivation}
+              {content.motivation} <RequiredMark />
             </FieldLabel>
             <Textarea
               id="application-motivation"
               name="motivation"
+              aria-invalid={Boolean(fieldErrors.motivation)}
+              aria-describedby={
+                fieldErrors.motivation
+                  ? 'application-error-motivation'
+                  : undefined
+              }
               required
               minLength={20}
               maxLength={2500}
               className={textareaClass}
             />
-          </Field>
-          <Field>
+          </ApplicationField>
+          <ApplicationField
+            name="responsibilityScenario"
+            error={fieldErrors.responsibilityScenario}
+          >
             <FieldLabel
               htmlFor="application-responsibility"
               className={labelClass}
             >
-              {content.responsibility}
+              {content.responsibility} <RequiredMark />
             </FieldLabel>
             <Textarea
               id="application-responsibility"
               name="responsibilityScenario"
+              aria-invalid={Boolean(fieldErrors.responsibilityScenario)}
+              aria-describedby={
+                fieldErrors.responsibilityScenario
+                  ? 'application-error-responsibilityScenario'
+                  : undefined
+              }
               required
               minLength={20}
               maxLength={2500}
               className={textareaClass}
             />
-          </Field>
-          <Field>
+          </ApplicationField>
+          <ApplicationField
+            name="motivationFactor"
+            error={fieldErrors.motivationFactor}
+          >
             <FieldLabel
               htmlFor="application-motivation-factor"
               className={labelClass}
             >
-              {content.motivationFactor}
+              {content.motivationFactor} <RequiredMark />
             </FieldLabel>
             <Textarea
               id="application-motivation-factor"
               name="motivationFactor"
+              aria-invalid={Boolean(fieldErrors.motivationFactor)}
+              aria-describedby={
+                fieldErrors.motivationFactor
+                  ? 'application-error-motivationFactor'
+                  : undefined
+              }
               required
               minLength={10}
               maxLength={1500}
@@ -694,18 +1066,27 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
               }
               className={textareaClass}
             />
-          </Field>
-          <Field>
+          </ApplicationField>
+          <ApplicationField
+            name="additionalNotes"
+            error={fieldErrors.additionalNotes}
+          >
             <FieldLabel htmlFor="application-additional" className={labelClass}>
               {content.additional}
             </FieldLabel>
             <Textarea
               id="application-additional"
               name="additionalNotes"
+              aria-invalid={Boolean(fieldErrors.additionalNotes)}
+              aria-describedby={
+                fieldErrors.additionalNotes
+                  ? 'application-error-additionalNotes'
+                  : undefined
+              }
               maxLength={2000}
               className={textareaClass}
             />
-          </Field>
+          </ApplicationField>
         </FormSection>
 
         <div className="border-t border-white/12 pt-8">
@@ -734,6 +1115,10 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
           <Checkbox
             id="application-consent"
             name="consent"
+            aria-invalid={Boolean(fieldErrors.consent)}
+            aria-describedby={
+              fieldErrors.consent ? 'application-error-consent' : undefined
+            }
             required
             className="mt-1 size-5 rounded-none border-white/35 data-checked:border-racing-green data-checked:bg-racing-green data-checked:text-ink"
           />
@@ -741,7 +1126,7 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
             htmlFor="application-consent"
             className="max-w-3xl text-sm font-normal leading-7 text-white/65"
           >
-            {content.consent}{' '}
+            <RequiredMark /> {content.consent}{' '}
             <Link
               href={localizedPath('/gizlilik', language)}
               target="_blank"
@@ -752,13 +1137,19 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
           </FieldLabel>
         </Field>
 
+        {fieldErrors.consent ? (
+          <p id="application-error-consent" className="text-sm text-red-200">
+            {fieldErrors.consent}
+          </p>
+        ) : null}
+
         <div className="flex flex-col gap-5 border-t border-white/12 pt-7 sm:flex-row sm:items-center sm:justify-between">
           <p className="max-w-xl text-sm leading-6 text-white/45">
             {content.note}
           </p>
           <Button
             type="submit"
-            disabled={status === 'sending' || !siteKey}
+            disabled={status === 'sending'}
             className="h-14 shrink-0 rounded-none bg-racing-green px-7 text-xs font-black uppercase tracking-[0.15em] text-ink hover:bg-[#bff9d9]"
           >
             {status === 'sending' ? content.sending : content.send}
@@ -773,33 +1164,18 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
           </Button>
         </div>
 
-        <output
-          aria-live="polite"
-          className={
-            status === 'idle' || status === 'sending'
-              ? 'sr-only'
-              : `flex items-start gap-3 border px-4 py-3 text-sm leading-6 ${status === 'success' ? 'border-racing-green/40 bg-racing-green/10 text-[#bff9d9]' : 'border-red-400/35 bg-red-400/10 text-red-100'}`
-          }
-        >
-          {status === 'success' ? (
+        {status === 'success' ? (
+          <output
+            aria-live="polite"
+            className="flex items-start gap-3 border border-racing-green/40 bg-racing-green/10 px-4 py-3 text-base leading-7 text-[#bff9d9]"
+          >
             <CheckCircle2
               className="mt-0.5 size-5 shrink-0"
               aria-hidden="true"
             />
-          ) : (
-            <AlertCircle
-              className="mt-0.5 size-5 shrink-0"
-              aria-hidden="true"
-            />
-          )}
-          {status === 'success'
-            ? content.success
-            : status === 'verify'
-              ? content.verify
-              : status === 'error'
-                ? content.error
-                : ''}
-        </output>
+            {content.success}
+          </output>
+        ) : null}
       </div>
     </form>
   );

@@ -66,7 +66,7 @@ export function AboutPageContent({ language = 'tr' }: { language?: Language }) {
         <div className="mx-auto max-w-[1500px]">
           <div className="grid gap-8 border-b border-white/15 pb-10 lg:grid-cols-[0.7fr_1.3fr] lg:items-end">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-racing-green">{copy.since}</p>
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-racing-green">{copy.since}</p>
               <h1 className="mt-4 font-heading text-[clamp(3rem,14vw,6.8rem)] font-black uppercase leading-[0.88]">{copy.title}</h1>
             </div>
             <div className="grid gap-5 text-base leading-7 text-white/60 md:grid-cols-2">
@@ -80,9 +80,9 @@ export function AboutPageContent({ language = 'tr' }: { language?: Language }) {
               <Image src="/media/team-2026.jpg" alt={isEnglish ? 'SAUFormula team members at the competition' : 'SAUFormula takım üyeleri yarış alanında'} fill priority sizes="(min-width: 1024px) 58vw, 100vw" className="object-cover" />
             </div>
             <figcaption className="flex flex-col justify-center p-7 sm:p-10">
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-racing-green">{copy.studentLed}</p>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-racing-green">{copy.studentLed}</p>
               <p className="mt-5 text-lg leading-8 text-white/70">{copy.responsibility}</p>
-              <p className="mt-5 text-sm leading-7 text-white/45">{copy.purpose}</p>
+              <p className="mt-5 text-base leading-7 text-white/65">{copy.purpose}</p>
             </figcaption>
           </figure>
         </div>
@@ -91,7 +91,7 @@ export function AboutPageContent({ language = 'tr' }: { language?: Language }) {
       <section className="border-y border-racing-green/25 bg-[#061811] px-5 py-12 sm:py-16 lg:px-10 lg:py-20">
         <div className="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-center">
           <div className="border border-white/12 bg-[#0a241b] p-7">
-            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-racing-green">{copy.merger}</p>
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-racing-green">{copy.merger}</p>
             <div className="mt-7 flex items-center justify-center gap-6 sm:gap-9">
               <Image src="/brand/sett-logo.png" alt="SETT logosu" width={500} height={600} className="h-24 w-auto object-contain sm:h-28" />
               <span aria-hidden="true" className="font-heading text-4xl font-black text-racing-green">×</span>
@@ -100,7 +100,7 @@ export function AboutPageContent({ language = 'tr' }: { language?: Language }) {
           </div>
           <div>
             <h2 className="font-heading text-4xl font-black uppercase leading-none sm:text-5xl">SETT × SAUFormula</h2>
-            <div className="mt-6 grid gap-5 text-sm leading-7 text-white/55 md:grid-cols-2">
+            <div className="mt-6 grid gap-5 text-sm leading-7 text-white/65 md:grid-cols-2">
               <p>{copy.sett1}</p>
               <p>{copy.sett2}</p>
             </div>
@@ -113,11 +113,11 @@ export function AboutPageContent({ language = 'tr' }: { language?: Language }) {
           <div className="grid border-l border-t border-white/15 lg:grid-cols-2">
             <article className="border-b border-r border-white/15 p-7 sm:p-10">
               <h2 className="font-heading text-3xl font-black uppercase sm:text-4xl">{copy.visionTitle}</h2>
-              <p className="mt-5 max-w-2xl text-sm leading-7 text-white/55">{copy.vision}</p>
+              <p className="mt-5 max-w-2xl text-sm leading-7 text-white/65">{copy.vision}</p>
             </article>
             <article className="border-b border-r border-white/15 p-7 sm:p-10">
               <h2 className="font-heading text-3xl font-black uppercase sm:text-4xl">{copy.missionTitle}</h2>
-              <p className="mt-5 max-w-2xl text-sm leading-7 text-white/55">{copy.mission}</p>
+              <p className="mt-5 max-w-2xl text-sm leading-7 text-white/65">{copy.mission}</p>
             </article>
           </div>
 
@@ -126,7 +126,7 @@ export function AboutPageContent({ language = 'tr' }: { language?: Language }) {
               <article key={number} className="border-b border-r border-white/15 p-7">
                 <p className="font-heading text-2xl font-black text-racing-green">{number}</p>
                 <h3 className="mt-8 font-heading text-2xl font-bold uppercase">{title}</h3>
-                <p className="mt-4 text-sm leading-7 text-white/50">{text}</p>
+                <p className="mt-4 text-sm leading-7 text-white/65">{text}</p>
               </article>
             ))}
           </div>

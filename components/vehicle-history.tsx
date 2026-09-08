@@ -45,9 +45,9 @@ function VehicleCopy({ vehicle, inspect }: { vehicle: VehicleDetail; inspect: st
     <div className="min-w-0">
       <p className="font-heading text-2xl font-black text-racing-green">{vehicle.year}</p>
       <h3 className="mt-1 break-words font-heading text-xl font-bold uppercase leading-none 2xl:text-2xl">{vehicle.name}</h3>
-      <p className="mt-3 text-[9px] font-bold uppercase leading-4 tracking-[0.1em] text-white/70 2xl:text-[10px]">{vehicle.result}</p>
-      <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.16em] text-white/30">{vehicle.category}</p>
-      <span className="mt-4 inline-flex min-h-8 items-center gap-2 border border-racing-green bg-racing-green px-3 py-2 text-[9px] font-black uppercase tracking-[0.14em] text-ink shadow-[0_0_0_rgba(0,226,123,0)] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 group-hover:shadow-[0_0_24px_rgba(0,226,123,0.28)] group-focus-visible:-translate-y-0.5 group-focus-visible:shadow-[0_0_24px_rgba(0,226,123,0.28)]">
+      <p className="mt-3 text-sm font-bold uppercase leading-4 tracking-[0.1em] text-white/70">{vehicle.result}</p>
+      <p className="mt-1 text-xs font-bold uppercase tracking-[0.16em] text-white/65">{vehicle.category}</p>
+      <span className="mt-4 inline-flex min-h-8 items-center gap-2 border border-racing-green bg-racing-green px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-ink shadow-[0_0_0_rgba(0,226,123,0)] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 group-hover:shadow-[0_0_24px_rgba(0,226,123,0.28)] group-focus-visible:-translate-y-0.5 group-focus-visible:shadow-[0_0_24px_rgba(0,226,123,0.28)]">
         {inspect}
         <ArrowUpRight className="size-3.5" strokeWidth={2.5} />
       </span>
@@ -191,8 +191,8 @@ export function VehicleHistory({
               <div className="relative flex min-h-[300px] items-center justify-center overflow-hidden border-b border-ink/20 bg-[#93a098] p-5 sm:min-h-[460px] sm:p-10 lg:min-h-[620px] lg:border-b-0 lg:border-r lg:p-14">
                 <div aria-hidden="true" className="absolute inset-x-0 bottom-[15%] h-px bg-ink/15" />
                 <div aria-hidden="true" className="absolute bottom-[11%] left-1/2 h-8 w-[52%] -translate-x-1/2 rounded-[50%] bg-ink/10 blur-lg" />
-                <span className="absolute left-6 top-6 border-l-2 border-ink/70 pl-3 text-[10px] font-black uppercase tracking-[0.24em] text-ink/70">{selected.year}</span>
-                <span className="absolute bottom-6 right-6 text-[8px] font-bold uppercase tracking-[0.2em] text-ink/45">SAU FORMULA · ENGINEERING ARCHIVE</span>
+                <span className="absolute left-6 top-6 border-l-2 border-ink/70 pl-3 text-xs font-black uppercase tracking-[0.24em] text-ink/70">{selected.year}</span>
+                <span className="absolute bottom-6 right-6 text-xs font-bold uppercase tracking-[0.2em] text-ink/45">SAU FORMULA · ENGINEERING ARCHIVE</span>
                 <img
                   key={selected.name}
                   src={selected.image}
@@ -204,7 +204,7 @@ export function VehicleHistory({
 
               <div key={selected.name} className="vehicle-copy-enter relative flex flex-col p-6 sm:p-9 lg:p-10 xl:p-12">
                 <div className="pr-12">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-racing-green">{copy.dialogEyebrow}</p>
+                  <p className="text-xs font-bold uppercase tracking-[0.24em] text-racing-green">{copy.dialogEyebrow}</p>
                   <DialogTitle className="mt-3 font-heading text-5xl font-black uppercase leading-none sm:text-6xl lg:text-5xl xl:text-6xl">{selected.name}</DialogTitle>
                   <DialogDescription className="sr-only">{selected.description}</DialogDescription>
                 </div>
@@ -213,15 +213,15 @@ export function VehicleHistory({
                   <button type="button" onClick={() => move(-1)} className="grid size-10 place-items-center border border-white/15 text-white/70 transition hover:border-racing-green hover:text-racing-green focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-racing-green" aria-label={`${copy.previous}: ${vehicles[(selectedIndex! - 1 + vehicles.length) % vehicles.length].name}`}>
                     <ArrowLeft className="size-4" />
                   </button>
-                  <span className="min-w-12 text-center font-heading text-sm font-bold tracking-[0.16em] text-white/45">{selectedIndex! + 1} / {vehicles.length}</span>
+                  <span className="min-w-12 text-center font-heading text-sm font-bold tracking-[0.16em] text-white/65">{selectedIndex! + 1} / {vehicles.length}</span>
                   <button type="button" onClick={() => move(1)} className="grid size-10 place-items-center border border-white/15 text-white/70 transition hover:border-racing-green hover:text-racing-green focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-racing-green" aria-label={`${copy.next}: ${vehicles[(selectedIndex! + 1) % vehicles.length].name}`}>
                     <ArrowRight className="size-4" />
                   </button>
                 </div>
 
                 <div className="mt-7">
-                  <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/30">{copy.story}</p>
-                  <p className="mt-3 text-sm leading-7 text-white/65 sm:text-base">{selected.description}</p>
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/65">{copy.story}</p>
+                  <p className="mt-3 text-base leading-7 text-white/65 sm:text-base">{selected.description}</p>
                 </div>
 
                 <dl className="mt-7 grid border-y border-white/15 sm:grid-cols-3">
@@ -231,13 +231,13 @@ export function VehicleHistory({
                     [copy.achievement, selected.result],
                   ].map(([label, value]) => (
                     <div key={label} className="border-b border-white/10 px-0 py-4 last:border-b-0 sm:border-b-0 sm:border-r sm:px-4 sm:first:pl-0 sm:last:border-r-0">
-                      <dt className="text-[8px] font-bold uppercase tracking-[0.18em] text-white/30">{label}</dt>
-                      <dd className="mt-2 text-xs font-bold uppercase leading-5 text-white/80">{value}</dd>
+                      <dt className="text-xs font-bold uppercase tracking-[0.18em] text-white/65">{label}</dt>
+                      <dd className="mt-2 text-sm font-bold uppercase leading-5 text-white/80">{value}</dd>
                     </div>
                   ))}
                 </dl>
 
-                <a href={selected.sourceUrl} target="_blank" rel="noreferrer" className="mt-6 inline-flex w-fit items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-racing-green hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-racing-green">
+                <a href={selected.sourceUrl} target="_blank" rel="noreferrer" className="mt-6 inline-flex w-fit items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-racing-green hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-racing-green">
                   {copy.source}
                   <ArrowUpRight className="size-4" />
                 </a>

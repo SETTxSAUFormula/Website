@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { Barlow, Manrope } from 'next/font/google';
 import './globals.css';
 
@@ -22,6 +23,10 @@ export const metadata: Metadata = {
   description:
     'SAUFormula; Sakarya Üniversitesi öğrencilerinin tasarladığı, ürettiği ve yarışlara hazırladığı Formula Student araçlarının mühendislik hikâyesidir.',
   applicationName: 'SAUFormula',
+  icons: {
+    icon: [{ url: '/favicon.ico', sizes: '16x16 32x32 48x48', type: 'image/x-icon' }],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+  },
   alternates: {
     canonical: '/',
     languages: {
@@ -69,9 +74,10 @@ const organizationSchema = {
   },
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const language = (await headers()).get('x-sauformula-language') === 'en' ? 'en' : 'tr';
   return (
-    <html lang="tr">
+    <html lang={language}>
       <body className={`${manrope.variable} ${barlow.variable} antialiased`}>
         <script
           type="application/ld+json"

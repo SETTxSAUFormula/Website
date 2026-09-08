@@ -63,7 +63,7 @@ export function SiteFooter({ language = 'tr' }: { language?: Language }) {
               height={1510}
               className="h-20 w-auto max-w-none object-contain sm:h-24"
             />
-            <p className="mt-6 max-w-xl text-lg leading-8 text-white/55">
+            <p className="mt-6 max-w-xl text-lg leading-8 text-white/65">
               {isEnglish
                 ? 'The engineering story of Formula Student cars designed, built and prepared for competition by Sakarya University students.'
                 : 'Sakarya Üniversitesi öğrencilerinin tasarladığı, ürettiği ve yarışlara hazırladığı Formula Student araçlarının mühendislik hikâyesi.'}
@@ -83,7 +83,7 @@ export function SiteFooter({ language = 'tr' }: { language?: Language }) {
 
           {columns[language].map((column) => (
             <div key={column.title}>
-              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-racing-green">{column.title}</p>
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-racing-green">{column.title}</p>
               <ul className="mt-6 space-y-3">
                 {column.links.map(([label, href]) => (
                   <li key={label}>
@@ -100,7 +100,7 @@ export function SiteFooter({ language = 'tr' }: { language?: Language }) {
         <div className="flex flex-col gap-6 py-8 sm:flex-row sm:items-center sm:justify-between">
           <address className="max-w-3xl not-italic">
             <p className="text-sm font-semibold">Sakarya Üniversitesi Enerji Teknolojileri Laboratuvarı</p>
-            <p className="mt-2 text-sm leading-6 text-white/45">
+            <p className="mt-2 text-sm leading-6 text-white/65">
               Kemalpaşa Mahallesi, Sakarya Üniversitesi Esentepe Kampüsü, 54050 Serdivan/Sakarya, Türkiye
             </p>
           </address>
@@ -109,7 +109,7 @@ export function SiteFooter({ language = 'tr' }: { language?: Language }) {
           </Link>
         </div>
 
-        <div className="flex flex-col gap-3 border-t border-white/10 pt-6 text-[11px] text-white/35 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/65 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} SAUFormula. {isEnglish ? 'All rights reserved.' : 'Tüm hakları saklıdır.'}</p>
           <div className="flex gap-5">
             <Link href={localizedPath('/gizlilik', language)}>{isEnglish ? 'Privacy Policy' : 'Gizlilik Politikası'}</Link>

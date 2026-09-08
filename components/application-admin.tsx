@@ -195,7 +195,9 @@ function ReviewPanel({
       <div className="mt-5 border-t border-border pt-4 text-xs leading-6 text-white/45">
         <p>
           E-posta:{' '}
-          {application.emailDeliveryStatus === 'sent'
+          {application.emailDeliveryStatus === 'not_required'
+            ? 'Panel üzerinden takip'
+            : application.emailDeliveryStatus === 'sent'
             ? 'Gönderildi'
             : application.emailDeliveryStatus === 'failed'
               ? 'Gönderilemedi'

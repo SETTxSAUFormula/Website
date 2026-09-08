@@ -13,7 +13,7 @@ import { localizedPath, type Language } from '@/lib/i18n';
 const homeCopy = {
   tr: {
     heroEyebrow: 'Formula Student · Türkiye',
-    intro: 'Öğrencilerin yönettiği gerçek bir mühendislik ortamında, Türkiye’yi Formula Student pistlerinde temsil edecek yarış otomobilleri geliştiriyoruz.',
+    intro: 'Öğrencilerin yönettiği gerçek bir mühendislik ortamında, Türkiye’yi Formula Student pistlerinde temsil eden yarış otomobilleri geliştiriyoruz.',
     exploreCar: 'Aracı keşfet',
     carNumber: 'Araç No',
     season: 'Sezon',
@@ -28,8 +28,8 @@ const homeCopy = {
     mergeTitle: 'İki birikim, tek yarış hedefi',
     mergeText: 'SETT’in enerji teknolojileri mirası, 2025’te SAUFormula ile birleşerek ADA-02’nin ortak mühendislik kültürüne dönüştü.',
     story: 'Hikâyemizi keşfet',
-    currentGeneration: '2026 yarış aracı · 54',
-    carDescription: 'ADA-02 yalnızca ortaya çıkan otomobil değil; tasarım kararlarımızın, üretim kabiliyetimizin ve pistte doğruladığımız binlerce mühendislik detayının birleşimi. Her tur, öğrendiğimiz bir sonraki iyileştirmenin başlangıcı.',
+    currentGeneration: 'Atölyeden piste',
+    carDescription: 'ADA-02’nin tasarım, üretim ve yarış hazırlıklarını aynı ekip yürütüyor. Güncel aracımızı ve geçmiş projelerimizi keşfedin.',
     inspectCar: 'ADA-02’yi incele',
     fsEyebrow: 'Tasarla · üret · savun · yarış',
     fsDescription: 'Formula Student, üniversite öğrencilerinin tek kişilik bir yarış otomobilini sıfırdan tasarladığı, ürettiği ve pistte doğruladığı uluslararası bir mühendislik yarışmasıdır. Takımlar yalnızca hızla değil; tasarım, maliyet, iş planı, dayanıklılık ve enerji verimliliğiyle de değerlendirilir.',
@@ -55,8 +55,8 @@ const homeCopy = {
     mergeTitle: 'Two legacies, one racing goal',
     mergeText: 'SETT’s energy-technology heritage joined SAUFormula in 2025, becoming the shared engineering culture behind ADA-02.',
     story: 'Discover our story',
-    currentGeneration: '2026 race car · 54',
-    carDescription: 'ADA-02 is more than the finished car: it brings together our design decisions, manufacturing capability and thousands of engineering details validated on track. Every lap begins the next improvement.',
+    currentGeneration: 'From workshop to track',
+    carDescription: 'Our team handles ADA-02’s design, manufacturing and race preparation. Explore our current car and the projects that came before it.',
     inspectCar: 'Explore ADA-02',
     fsEyebrow: 'Design · build · defend · race',
     fsDescription: 'Formula Student is an international engineering competition in which university students design, build and validate a single-seat race car from the ground up. Teams are judged not only on speed, but also on design, cost, business planning, endurance and energy efficiency.',
@@ -82,7 +82,7 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
 
         <div className="mx-auto grid min-h-[calc(100svh-5rem)] max-w-[1920px] items-stretch sm:min-h-[calc(100svh-6rem)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
           <div className="home-hero-copy flex min-w-0 flex-col justify-center px-5 py-12 sm:py-16 lg:px-10 xl:pr-14 2xl:pr-20">
-            <div className="home-hero-eyebrow mb-5 flex items-center gap-4 text-[11px] font-bold uppercase tracking-[0.24em] text-racing-green 2xl:mb-8">
+            <div className="home-hero-eyebrow mb-5 flex items-center gap-4 text-xs font-bold uppercase tracking-[0.24em] text-racing-green 2xl:mb-8">
               <span className="h-px w-12 bg-racing-green" />
               {copy.heroEyebrow}
             </div>
@@ -110,15 +110,15 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
 
             <dl className="home-hero-stats mt-7 grid max-w-[760px] grid-cols-3 border-y border-white/15 2xl:mt-12">
               <div className="home-hero-stat py-3 pr-4 2xl:py-5">
-                <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">{copy.carNumber}</dt>
+                <dt className="text-xs font-semibold uppercase tracking-[0.2em] text-white/65">{copy.carNumber}</dt>
                 <dd className="mt-1 font-heading text-3xl font-bold">54</dd>
               </div>
               <div className="home-hero-stat border-x border-white/15 px-4 py-3 2xl:py-5">
-                <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">{copy.season}</dt>
+                <dt className="text-xs font-semibold uppercase tracking-[0.2em] text-white/65">{copy.season}</dt>
                 <dd className="mt-1 font-heading text-3xl font-bold">2026</dd>
               </div>
               <div className="home-hero-stat py-3 pl-4 2xl:py-5">
-                <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">{copy.base}</dt>
+                <dt className="text-xs font-semibold uppercase tracking-[0.2em] text-white/65">{copy.base}</dt>
                 <dd className="mt-1 font-heading text-3xl font-bold">SAÜ</dd>
               </div>
             </dl>
@@ -138,17 +138,14 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
 
             <div className="absolute bottom-0 left-0 right-0 flex items-end justify-between border-t border-white/15 bg-ink/65 p-6 backdrop-blur-md lg:p-8">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-racing-green">{copy.currentCar}</p>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-racing-green">{copy.currentCar}</p>
                 <p className="mt-2 font-heading text-4xl font-bold uppercase">ADA-02</p>
               </div>
-              <p className="max-w-[210px] text-right text-xs leading-5 text-white/55">
+              <p className="max-w-[210px] text-right text-sm leading-5 text-white/65">
                 {copy.carThought}
               </p>
             </div>
 
-            <div className="absolute right-0 top-20 bg-racing-green px-3 py-8 text-[10px] font-black uppercase tracking-[0.24em] text-ink [writing-mode:vertical-rl]">
-              ADA-02 · 54
-            </div>
           </div>
         </div>
       </section>
@@ -164,12 +161,11 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
               className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent" />
-            <div className="absolute left-6 top-6 border border-white/25 bg-ink/55 px-4 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-white backdrop-blur-md">
+            <div className="absolute left-6 top-6 border border-white/25 bg-ink/55 px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] text-white backdrop-blur-md">
               {copy.since}
             </div>
             <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between text-white">
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em]">{copy.team}</span>
-              <span className="font-heading text-5xl font-black text-racing-green">54</span>
+              <span className="text-xs font-bold uppercase tracking-[0.2em]">{copy.team}</span>
             </div>
           </div>
 
@@ -189,9 +185,9 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
                 <Image src="/brand/sauformula-logo-light.png" alt="SAUFormula logosu" width={2400} height={1510} className="h-16 w-auto object-contain" />
               </div>
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-racing-green">{copy.heritage}</p>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-racing-green">{copy.heritage}</p>
                 <h3 className="mt-3 font-heading text-2xl font-bold uppercase leading-tight text-white sm:text-3xl">{copy.mergeTitle}</h3>
-                <p className="mt-3 text-sm leading-6 text-white/50">
+                <p className="mt-3 text-sm leading-6 text-white/65">
                   {copy.mergeText}
                 </p>
               </div>
@@ -204,42 +200,17 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
         </div>
       </section>
 
-      <section id="araclar" className="bg-ink px-5 py-12 text-white sm:py-16 lg:px-10 lg:py-20">
-        <div className="relative mx-auto min-h-[440px] max-w-[1500px] overflow-hidden border border-racing-green/30 sm:min-h-[620px]">
-          <Image
-            src="/media/fs-ada02-front.webp"
-            alt={isEnglish ? 'SAUFormula ADA-02 race car in the Formula Student Romania paddock' : 'SAUFormula ADA-02 yarış aracı Formula Student Romania paddock alanında'}
-            fill
-            sizes="(min-width: 1540px) 1500px, 100vw"
-            className="object-cover object-[50%_64%]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/80 to-ink/15" />
-          <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-ink/20" />
-
-          <div className="relative flex min-h-[440px] items-center p-6 sm:min-h-[620px] sm:p-12 lg:p-16 xl:p-20">
-            <div className="max-w-3xl">
-              <div className="flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.22em] text-racing-green">
-                <span className="h-px w-12 bg-racing-green" aria-hidden="true" />
-                {copy.currentGeneration}
-              </div>
-              <h2 className="mt-6 font-heading text-[clamp(3.6rem,17vw,8.5rem)] font-black uppercase leading-[0.84] tracking-[0.01em] sm:mt-7">
-                ADA-02
-              </h2>
-              <p className="mt-7 max-w-2xl text-base leading-8 text-white/75 sm:text-lg">
-                {copy.carDescription}
-              </p>
-              <Link
-                href={localizedPath('/araclar', language)}
-                className="mt-9 inline-flex items-center gap-3 bg-racing-green px-6 py-4 text-xs font-black uppercase tracking-[0.16em] text-ink transition-colors hover:bg-[#bff9d9]"
-              >
-                {copy.inspectCar} <ArrowUpRight className="size-4" aria-hidden="true" />
-              </Link>
-            </div>
+      <section id="araclar" className="bg-ink px-5 py-10 text-white sm:py-12 lg:px-10 lg:py-16">
+        <div className="mx-auto grid max-w-[1500px] overflow-hidden border border-white/15 bg-[#071b14] lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="relative aspect-[4/3] sm:aspect-[16/9] lg:aspect-auto lg:min-h-[400px]">
+            <Image src="/media/fs-pit.webp" alt={isEnglish ? 'SAUFormula team preparing ADA-02 in the pit' : 'SAUFormula ekibi pit alanında ADA-02 üzerinde çalışıyor'} fill sizes="(min-width: 1580px) 825px, (min-width: 1024px) 55vw, 100vw" className="object-cover" />
           </div>
-
-          <p className="absolute bottom-5 right-6 hidden text-[9px] font-bold uppercase tracking-[0.18em] text-white/55 sm:block">
-            ADA-02 · Formula Student Romania
-          </p>
+          <div className="flex flex-col justify-center p-6 sm:p-9 lg:p-12">
+            <p className="text-sm font-bold uppercase tracking-[0.16em] text-racing-green">{copy.currentGeneration}</p>
+            <h2 className="mt-4 font-heading text-5xl font-black uppercase leading-none sm:text-6xl">ADA-02</h2>
+            <p className="mt-6 max-w-xl text-base leading-8 text-white/75">{copy.carDescription}</p>
+            <Link href={localizedPath('/araclar', language)} className="mt-7 inline-flex min-h-12 w-fit items-center gap-3 border-b border-racing-green text-sm font-bold text-white">{copy.inspectCar}<ArrowUpRight className="size-5" aria-hidden="true" /></Link>
+          </div>
         </div>
       </section>
 
@@ -257,7 +228,7 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
 
           <div className="relative flex min-h-[440px] items-center p-6 sm:min-h-[620px] sm:p-12 lg:p-16 xl:p-20">
             <div className="max-w-3xl">
-              <div className="flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.22em] text-racing-green">
+              <div className="flex items-center gap-4 text-xs font-black uppercase tracking-[0.22em] text-racing-green">
                 <span className="h-px w-12 bg-racing-green" aria-hidden="true" />
                 {copy.fsEyebrow}
               </div>
@@ -276,7 +247,7 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
             </div>
           </div>
 
-          <p className="absolute bottom-5 right-6 hidden text-[9px] font-bold uppercase tracking-[0.18em] text-white/55 sm:block">
+          <p className="absolute bottom-5 right-6 hidden text-xs font-bold uppercase tracking-[0.18em] text-white/65 sm:block">
             Formula Student Romania · Yarış alanı
           </p>
         </div>
@@ -285,7 +256,7 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
       <section className="border-t border-racing-green/30 bg-[#082119] px-5 py-14 text-white lg:px-10 lg:py-16">
         <div className="mx-auto flex max-w-[1500px] flex-col justify-between gap-10 lg:flex-row lg:items-end">
           <div>
-            <p className="text-[11px] font-black uppercase tracking-[0.2em] text-racing-green">{copy.together}</p>
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-racing-green">{copy.together}</p>
             <h2 className="mt-4 max-w-5xl font-heading text-[clamp(3.2rem,7vw,7rem)] font-extrabold uppercase leading-[0.95] tracking-[0.01em]">
               {copy.sponsorTitle}
             </h2>

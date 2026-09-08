@@ -1,16 +1,9 @@
 import { env } from 'cloudflare:workers';
 
-import {
-  insertApplication,
-  setApplicationEmailStatus,
-} from '@/lib/applications-db';
+import { insertApplication } from '@/lib/applications-db';
 
 const TURNSTILE_VERIFY_URL =
   'https://challenges.cloudflare.com/turnstile/v0/siteverify';
-const RESEND_EMAIL_URL = 'https://api.resend.com/emails';
-const APPLICATION_RECIPIENT = 'info@sauformula.org';
-const APPLICATION_SENDER =
-  'SAUFormula Başvuru <applications@forms.sauformula.org>';
 const ALLOWED_HOSTNAMES = new Set(['sauformula.org', 'www.sauformula.org']);
 
 const universityLabels = {
@@ -82,7 +75,6 @@ type ApplicationPayload = {
 
 type RuntimeEnv = {
   APPLICATIONS_DB?: D1Database;
-  RESEND_API_KEY?: string;
   TURNSTILE_SECRET_KEY?: string;
   TURNSTILE_SITE_KEY?: string;
 };
@@ -124,23 +116,6 @@ function isOptionalHttpUrl(value: string) {
   }
 }
 
-function escapeHtml(value: string) {
-  return value.replace(/[&<>"']/g, (character) => {
-    const entities: Record<string, string> = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#039;',
-    };
-    return entities[character];
-  });
-}
-
-function htmlText(value: string) {
-  return escapeHtml(value).replace(/\n/g, '<br>');
-}
-
 function requestIsSameOrigin(request: Request) {
   const origin = request.headers.get('Origin');
   if (!origin) return true;
@@ -155,36 +130,35 @@ function isKeyOf<T extends object>(
   value: string,
   object: T,
 ): value is Extract<keyof T, string> {
-  return value in object;
-}
-
-function infoRow(label: string, value: string) {
-  return `<tr><td style="width:190px;padding:10px 14px;border-bottom:1px solid #dbe7e1;color:#557066;font-size:13px;font-weight:700;vertical-align:top">${escapeHtml(label)}</td><td style="padding:10px 14px;border-bottom:1px solid #dbe7e1;color:#10231c;font-size:14px;line-height:1.55;vertical-align:top">${htmlText(value || '—')}</td></tr>`;
-}
-
-function responseBlock(title: string, value: string) {
-  return `<div style="margin:0 0 14px;padding:16px 18px;border:1px solid #dbe7e1;background:#f8fbf9"><div style="margin-bottom:7px;color:#26724e;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase">${escapeHtml(title)}</div><div style="color:#10231c;font-size:14px;line-height:1.65">${htmlText(value || '—')}</div></div>`;
+  return Object.hasOwn(object, value);
 }
 
 export function GET() {
   const siteKey = runtimeEnv.TURNSTILE_SITE_KEY;
-  if (!siteKey) return json({ ok: false }, 503);
+  if (!siteKey) return json({ ok: false, code: 'service_unavailable' }, 503);
   return json({ ok: true, siteKey });
 }
 
 export async function POST(request: Request) {
-  if (!requestIsSameOrigin(request)) return json({ ok: false }, 403);
+  if (!requestIsSameOrigin(request))
+    return json({ ok: false, code: 'invalid_origin' }, 403);
 
   const contentLength = Number(request.headers.get('Content-Length') ?? 0);
-  if (contentLength > 48_000) return json({ ok: false }, 413);
+  if (contentLength > 48_000)
+    return json({ ok: false, code: 'payload_too_large' }, 413);
 
   let payload: ApplicationPayload;
   try {
     const rawBody = await request.text();
-    if (rawBody.length > 48_000) return json({ ok: false }, 413);
-    payload = JSON.parse(rawBody) as ApplicationPayload;
+    if (rawBody.length > 48_000)
+      return json({ ok: false, code: 'payload_too_large' }, 413);
+    const parsed: unknown = JSON.parse(rawBody);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      return json({ ok: false, code: 'invalid_request' }, 400);
+    }
+    payload = parsed as ApplicationPayload;
   } catch {
-    return json({ ok: false }, 400);
+    return json({ ok: false, code: 'invalid_request' }, 400);
   }
 
   const name = readText(payload.name);
@@ -211,47 +185,55 @@ export async function POST(request: Request) {
   const language = payload.language === 'en' ? 'en' : 'tr';
   const turnstileToken = readText(payload.turnstileToken);
 
-  const valid =
-    name.length >= 2 &&
-    name.length <= 100 &&
-    isEmail(email) &&
-    phone.length >= 7 &&
-    phone.length <= 30 &&
-    isKeyOf(university, universityLabels) &&
-    academicDepartment.length >= 2 &&
-    academicDepartment.length <= 120 &&
-    isKeyOf(classLevel, classLabels) &&
-    isOptionalHttpUrl(linkedin) &&
-    isOptionalHttpUrl(portfolio) &&
-    isKeyOf(primaryTeam, teamLabels) &&
-    (!secondaryTeam || isKeyOf(secondaryTeam, teamLabels)) &&
-    secondaryTeam !== primaryTeam &&
-    programs.length >= 2 &&
-    programs.length <= 1_500 &&
-    isKeyOf(weeklyHours, weeklyHoursLabels) &&
-    isKeyOf(summerParticipation, availabilityLabels) &&
-    isKeyOf(busyPeriods, availabilityLabels) &&
-    (communityExperience === 'yes' || communityExperience === 'no') &&
-    (communityExperience === 'no' ||
-      (communityDetails.length >= 10 && communityDetails.length <= 2_000)) &&
-    projects.length >= 10 &&
-    projects.length <= 2_500 &&
-    motivation.length >= 20 &&
-    motivation.length <= 2_500 &&
-    responsibilityScenario.length >= 20 &&
-    responsibilityScenario.length <= 2_500 &&
-    motivationFactor.length >= 10 &&
-    motivationFactor.length <= 1_500 &&
-    additionalNotes.length <= 2_000 &&
-    payload.consent === true &&
-    turnstileToken.length >= 20 &&
-    turnstileToken.length <= 2_048;
-
-  if (!valid) return json({ ok: false }, 400);
+  const fields = {
+    name: name.length >= 2 && name.length <= 100,
+    email: isEmail(email),
+    phone: phone.length >= 7 && phone.length <= 30,
+    university: isKeyOf(university, universityLabels),
+    academicDepartment:
+      academicDepartment.length >= 2 && academicDepartment.length <= 120,
+    classLevel: isKeyOf(classLevel, classLabels),
+    linkedin: isOptionalHttpUrl(linkedin),
+    portfolio: isOptionalHttpUrl(portfolio),
+    primaryTeam: isKeyOf(primaryTeam, teamLabels),
+    secondaryTeam:
+      (!secondaryTeam || isKeyOf(secondaryTeam, teamLabels)) &&
+      secondaryTeam !== primaryTeam,
+    programs: programs.length >= 2 && programs.length <= 1500,
+    weeklyHours: isKeyOf(weeklyHours, weeklyHoursLabels),
+    summerParticipation: isKeyOf(summerParticipation, availabilityLabels),
+    busyPeriods: isKeyOf(busyPeriods, availabilityLabels),
+    communityExperience:
+      communityExperience === 'yes' || communityExperience === 'no',
+    communityDetails:
+      communityExperience === 'no' ||
+      (communityDetails.length >= 10 && communityDetails.length <= 2000),
+    projects: projects.length >= 10 && projects.length <= 2500,
+    motivation: motivation.length >= 20 && motivation.length <= 2500,
+    responsibilityScenario:
+      responsibilityScenario.length >= 20 &&
+      responsibilityScenario.length <= 2500,
+    motivationFactor:
+      motivationFactor.length >= 10 && motivationFactor.length <= 1500,
+    additionalNotes: additionalNotes.length <= 2000,
+    consent: payload.consent === true,
+  };
+  const invalidFields = Object.entries(fields)
+    .filter(([, valid]) => !valid)
+    .map(([field]) => field);
+  if (invalidFields.length)
+    return json(
+      { ok: false, code: 'validation_failed', fields: invalidFields },
+      400,
+    );
+  if (turnstileToken.length < 20 || turnstileToken.length > 2048) {
+    return json({ ok: false, code: 'verification_required' }, 400);
+  }
 
   const turnstileSecret = runtimeEnv.TURNSTILE_SECRET_KEY;
-  const resendApiKey = runtimeEnv.RESEND_API_KEY;
-  if (!turnstileSecret || !resendApiKey) return json({ ok: false }, 503);
+  const database = runtimeEnv.APPLICATIONS_DB;
+  if (!turnstileSecret || !database)
+    return json({ ok: false, code: 'service_unavailable' }, 503);
 
   const verificationBody = new FormData();
   verificationBody.set('secret', turnstileSecret);
@@ -267,212 +249,58 @@ export async function POST(request: Request) {
       body: verificationBody,
       signal: AbortSignal.timeout(10_000),
     });
+    if (!response.ok)
+      return json({ ok: false, code: 'verification_unavailable' }, 503);
     verification = (await response.json()) as TurnstileResult;
   } catch {
-    return json({ ok: false }, 503);
+    return json({ ok: false, code: 'verification_unavailable' }, 503);
   }
 
   if (
-    !verification.success ||
+    !verification?.success ||
     verification.action !== 'application' ||
     !verification.hostname ||
     !ALLOWED_HOSTNAMES.has(verification.hostname)
   ) {
-    return json({ ok: false }, 400);
+    return json({ ok: false, code: 'verification_failed' }, 400);
   }
 
-  const universityLabel = universityLabels[university];
-  const classLabel = classLabels[classLevel];
-  const primaryTeamLabel = teamLabels[primaryTeam];
-  const secondaryTeamLabel =
-    secondaryTeam && isKeyOf(secondaryTeam, teamLabels)
-      ? teamLabels[secondaryTeam]
-      : 'Belirtilmedi';
-  const weeklyHoursLabel = weeklyHoursLabels[weeklyHours];
-  const summerLabel = availabilityLabels[summerParticipation];
-  const busyPeriodsLabel = availabilityLabels[busyPeriods];
-  const receivedAt = new Date().toLocaleString('tr-TR', {
-    timeZone: 'Europe/Istanbul',
-    dateStyle: 'long',
-    timeStyle: 'short',
-  });
   const applicationId = crypto.randomUUID();
   const submittedAt = Date.now();
-  let stored = false;
-
-  if (runtimeEnv.APPLICATIONS_DB) {
-    try {
-      await insertApplication(runtimeEnv.APPLICATIONS_DB, {
-        id: applicationId,
-        submittedAt,
-        name,
-        email,
-        phone,
-        university,
-        academicDepartment,
-        classLevel,
-        linkedin,
-        portfolio,
-        primaryTeam,
-        secondaryTeam,
-        programs,
-        weeklyHours,
-        summerParticipation,
-        busyPeriods,
-        communityExperience,
-        communityDetails,
-        projects,
-        motivation,
-        responsibilityScenario,
-        motivationFactor,
-        additionalNotes,
-        language,
-      });
-      stored = true;
-    } catch {
-      console.error('Application persistence failed', { applicationId });
-    }
-  }
-
-  const text = [
-    'YENİ SAUFORMULA TAKIM BAŞVURUSU',
-    '================================',
-    '',
-    `Ad Soyad: ${name}`,
-    `E-posta: ${email}`,
-    `Telefon: ${phone}`,
-    `Üniversite: ${universityLabel}`,
-    `Bölüm / Program: ${academicDepartment}`,
-    `Sınıf: ${classLabel}`,
-    `LinkedIn: ${linkedin || 'Belirtilmedi'}`,
-    `Portföy / GitHub: ${portfolio || 'Belirtilmedi'}`,
-    '',
-    'DEPARTMAN VE ZAMAN',
-    '-------------------',
-    `Birinci tercih: ${primaryTeamLabel}`,
-    `İkinci tercih: ${secondaryTeamLabel}`,
-    `Haftalık ayırabileceği süre: ${weeklyHoursLabel}`,
-    `Yaz atölyelerine katılım: ${summerLabel}`,
-    `Yoğun dönemlerde aktif rol: ${busyPeriodsLabel}`,
-    '',
-    'DENEYİM VE YETKİNLİKLER',
-    '------------------------',
-    `Bildiği programlar / araçlar:\n${programs}`,
-    '',
-    `Topluluk deneyimi: ${communityExperience === 'yes' ? 'Var' : 'Yok'}`,
-    communityExperience === 'yes'
-      ? `Topluluk deneyimi ayrıntıları:\n${communityDetails}`
-      : '',
-    '',
-    `Daha önce yaptığı projeler:\n${projects}`,
-    '',
-    'MOTİVASYON VE TAKIM UYUMU',
-    '--------------------------',
-    `Takıma katılma nedeni:\n${motivation}`,
-    '',
-    `Bir sorumluluğu zamanında tamamlayamazsa izleyeceği yol:\n${responsibilityScenario}`,
-    '',
-    `Takımda en çok motive eden unsur:\n${motivationFactor}`,
-    '',
-    `Ek notlar:\n${additionalNotes || 'Yok'}`,
-    '',
-    `Başvuru dili: ${language.toUpperCase()}`,
-    `Gönderim zamanı: ${receivedAt}`,
-  ]
-    .filter(Boolean)
-    .join('\n');
-
-  const html = `<!doctype html><html><body style="margin:0;background:#eef5f1;font-family:Arial,sans-serif;color:#10231c"><div style="max-width:760px;margin:0 auto;padding:24px 12px"><div style="background:#041a12;border-top:5px solid #00e27b;padding:26px 28px;color:#fff"><div style="color:#00e27b;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase">SAUFormula · Yeni Başvuru</div><h1 style="margin:10px 0 6px;font-size:25px;line-height:1.25">${escapeHtml(name)}</h1><div style="color:#b5c8bf;font-size:14px;line-height:1.5">${escapeHtml(primaryTeamLabel)}</div></div><div style="background:#fff;padding:24px 28px"><h2 style="margin:0 0 12px;font-size:18px">Hızlı özet</h2><table role="presentation" style="width:100%;border-collapse:collapse;border:1px solid #dbe7e1">${infoRow('Üniversite', universityLabel)}${infoRow('Bölüm / Sınıf', `${academicDepartment} · ${classLabel}`)}${infoRow('Birinci tercih', primaryTeamLabel)}${infoRow('İkinci tercih', secondaryTeamLabel)}${infoRow('Haftalık süre', weeklyHoursLabel)}${infoRow('Gönderim zamanı', receivedAt)}</table><h2 style="margin:28px 0 12px;font-size:18px">İletişim</h2><table role="presentation" style="width:100%;border-collapse:collapse;border:1px solid #dbe7e1">${infoRow('E-posta', email)}${infoRow('Telefon', phone)}${infoRow('LinkedIn', linkedin || 'Belirtilmedi')}${infoRow('Portföy / GitHub', portfolio || 'Belirtilmedi')}</table><h2 style="margin:28px 0 12px;font-size:18px">Uygunluk ve zaman</h2><table role="presentation" style="width:100%;border-collapse:collapse;border:1px solid #dbe7e1">${infoRow('Yaz atölyelerine katılım', summerLabel)}${infoRow('Yoğun dönemlerde aktif rol', busyPeriodsLabel)}</table><h2 style="margin:28px 0 12px;font-size:18px">Deneyim ve yetkinlikler</h2>${responseBlock('Bildiği programlar ve araçlar', programs)}${responseBlock('Topluluk deneyimi', communityExperience === 'yes' ? communityDetails : 'Daha önce bir toplulukta yer almamış.')}${responseBlock('Daha önce yaptığı projeler', projects)}<h2 style="margin:28px 0 12px;font-size:18px">Motivasyon ve takım uyumu</h2>${responseBlock('Takıma neden katılmak istiyor?', motivation)}${responseBlock('Sorumluluğu zamanında tamamlayamazsa nasıl ilerler?', responsibilityScenario)}${responseBlock('Takımda en çok motive eden unsur', motivationFactor)}${responseBlock('Eklemek istediği diğer bilgiler', additionalNotes || 'Ek bilgi belirtilmedi.')}<div style="margin-top:26px;padding:14px 16px;background:#e7f8ef;border-left:4px solid #00b865;color:#22533d;font-size:13px;line-height:1.55">Başvuru sahibi formdaki veri işleme bilgilendirmesini kabul etti. Yanıtlamak için bu e-postaya doğrudan cevap verebilirsiniz.</div></div></div></body></html>`;
-
-  let emailResponse: Response;
   try {
-    emailResponse = await fetch(RESEND_EMAIL_URL, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${resendApiKey}`,
-        'Content-Type': 'application/json',
-        'Idempotency-Key': `application-${crypto.randomUUID()}`,
-        'User-Agent': 'SAUFormula-Website/1.0',
-      },
-      body: JSON.stringify({
-        from: APPLICATION_SENDER,
-        to: [APPLICATION_RECIPIENT],
-        reply_to: email,
-        subject: `[ÖNEMLİ] Yeni takım başvurusu — ${name} · ${primaryTeamLabel}`,
-        text,
-        html,
-        headers: {
-          Importance: 'high',
-          'X-Priority': '1',
-          'X-MSMail-Priority': 'High',
-          'X-Entity-Ref-ID': crypto.randomUUID(),
-        },
-        tags: [
-          { name: 'source', value: 'application-form' },
-          { name: 'department', value: primaryTeam },
-          { name: 'university', value: university },
-        ],
-      }),
-      signal: AbortSignal.timeout(10_000),
+    const result = await insertApplication(database, {
+      id: applicationId,
+      submittedAt,
+      name,
+      email,
+      phone,
+      university,
+      academicDepartment,
+      classLevel,
+      linkedin,
+      portfolio,
+      primaryTeam,
+      secondaryTeam,
+      programs,
+      weeklyHours,
+      summerParticipation,
+      busyPeriods,
+      communityExperience,
+      communityDetails,
+      projects,
+      motivation,
+      responsibilityScenario,
+      motivationFactor,
+      additionalNotes,
+      language,
     });
+    if (!result.success || result.meta.changes !== 1) {
+      throw new Error('Application insert did not succeed');
+    }
   } catch {
-    if (stored && runtimeEnv.APPLICATIONS_DB) {
-      try {
-        await setApplicationEmailStatus(
-          runtimeEnv.APPLICATIONS_DB,
-          applicationId,
-          'failed',
-        );
-      } catch {
-        console.error('Application email status update failed', {
-          applicationId,
-        });
-      }
-      return json({ ok: true, stored: true, emailed: false });
-    }
-    return json({ ok: false }, 502);
+    console.error('Application persistence failed', { applicationId });
+    return json({ ok: false, code: 'storage_failed' }, 503);
   }
 
-  if (!emailResponse.ok) {
-    if (stored && runtimeEnv.APPLICATIONS_DB) {
-      try {
-        await setApplicationEmailStatus(
-          runtimeEnv.APPLICATIONS_DB,
-          applicationId,
-          'failed',
-        );
-      } catch {
-        console.error('Application email status update failed', {
-          applicationId,
-        });
-      }
-      return json({ ok: true, stored: true, emailed: false });
-    }
-    return json({ ok: false }, 502);
-  }
-
-  let resendEmailId = '';
-  try {
-    const emailResult = (await emailResponse.json()) as { id?: unknown };
-    resendEmailId = typeof emailResult.id === 'string' ? emailResult.id : '';
-  } catch {
-    // Resend accepted the message; an unreadable response body must not turn a successful submission into an error.
-  }
-
-  if (stored && runtimeEnv.APPLICATIONS_DB) {
-    try {
-      await setApplicationEmailStatus(
-        runtimeEnv.APPLICATIONS_DB,
-        applicationId,
-        'sent',
-        resendEmailId,
-      );
-    } catch {
-      console.error('Application email status update failed', {
-        applicationId,
-      });
-    }
-  }
-
-  return json({ ok: true, stored, emailed: true });
+  return json({ ok: true, stored: true });
 }

@@ -125,8 +125,8 @@ const collaboration = {
 };
 
 const pageCopy = {
-  tr: { eyebrow: 'Birlikte geliştiriyoruz', title: 'Sponsorlar', description: 'ADA-02’yi ve gelecek araçlarımızı; tasarımdan üretime, yazılımdan yarış operasyonuna kadar üniversite, sanayi ve teknoloji ekosistemiyle kurduğumuz uzun soluklu iş birlikleriyle geliştiriyoruz.', partner: 'partner', logo: 'logosu', visit: 'web sitesini ziyaret et', note: 'Sponsorlarımız destek kademelerine göre sıralanmış, logolar özgün marka renkleriyle kullanılmıştır. Kurumsal sayfayı açmak için logoya tıklayabilirsiniz.', collaboration: 'İş birliği', headline: 'Birlikte piste çıkalım.', collaborationText: 'Bir Formula Student aracının arkasında yalnızca mühendislik değil; üretim, teknoloji, deneyim ve güçlü bir bütçe ortaklığı vardır.', contactBefore: 'ADA-02’nin gelişimine ortak olmak için', contactAfter: 'adresinden bize ulaşın.', cta: 'Sponsorluk görüşmesi başlat' },
-  en: { eyebrow: 'Developing together', title: 'Sponsors', description: 'We develop ADA-02 and our future cars through long-term partnerships across universities, industry and technology—from design and manufacturing to software and race operations.', partner: 'partners', logo: 'logo', visit: 'visit website', note: 'Our sponsors are grouped by support tier, with logos shown in their original brand colours. Click a logo to visit the organisation’s website.', collaboration: 'Partnership', headline: 'Let’s reach the grid together.', collaborationText: 'Behind a Formula Student car is more than engineering: it takes manufacturing, technology, experience and a strong financial partnership.', contactBefore: 'To become part of ADA-02’s development, contact us at', contactAfter: '.', cta: 'Start a sponsorship conversation' },
+  tr: { eyebrow: 'Birlikte geliştiriyoruz', title: 'Sponsorlar', description: 'ADA-02’yi ve gelecek araçlarımızı; tasarımdan üretime, yazılımdan yarış operasyonuna kadar üniversite, sanayi ve teknoloji ekosistemiyle kurduğumuz uzun soluklu iş birlikleriyle geliştiriyoruz.', partner: 'partner', logo: 'logosu', visit: 'web sitesini ziyaret et', collaboration: 'İş birliği', headline: 'Birlikte piste çıkalım.', collaborationText: 'Bir Formula Student aracının arkasında yalnızca mühendislik değil; üretim, teknoloji, deneyim ve güçlü bir bütçe ortaklığı vardır.', contactBefore: 'ADA-02’nin gelişimine ortak olmak için', contactAfter: 'adresinden bize ulaşın.', cta: 'Sponsorluk görüşmesi başlat' },
+  en: { eyebrow: 'Developing together', title: 'Sponsors', description: 'We develop ADA-02 and our future cars through long-term partnerships across universities, industry and technology—from design and manufacturing to software and race operations.', partner: 'partners', logo: 'logo', visit: 'visit website', collaboration: 'Partnership', headline: 'Let’s reach the grid together.', collaborationText: 'Behind a Formula Student car is more than engineering: it takes manufacturing, technology, experience and a strong financial partnership.', contactBefore: 'To become part of ADA-02’s development, contact us at', contactAfter: '.', cta: 'Start a sponsorship conversation' },
 };
 
 export function SponsorsPageContent({ language = 'tr' }: { language?: Language }) {
@@ -137,7 +137,7 @@ export function SponsorsPageContent({ language = 'tr' }: { language?: Language }
       <SiteHeader language={language} />
       <PageHero eyebrow={copy.eyebrow} title={copy.title} description={copy.description} language={language} />
 
-      <section className="px-5 py-9 sm:py-12 lg:px-10 lg:py-16">
+      <section id="current-sponsors" className="scroll-mt-6 px-5 py-9 sm:py-12 lg:px-10 lg:py-16">
         <div className="mx-auto max-w-[1500px]">
           <div className="space-y-10 sm:space-y-14">
             {sponsorTiers.map((tier) => (
@@ -174,7 +174,16 @@ export function SponsorsPageContent({ language = 'tr' }: { language?: Language }
             ))}
           </div>
 
-          <p className="mt-10 border-t border-white/10 pt-5 text-xs leading-6 text-white/35">{copy.note}</p>
+          <section aria-labelledby="sponsor-seasons-title" className="mt-12 border-t border-white/15 pt-7">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+              <h2 id="sponsor-seasons-title" className="text-sm font-bold uppercase tracking-[0.16em] text-white/75">{language === 'tr' ? 'Sponsor sezonları' : 'Sponsorship seasons'}</h2>
+              <div className="flex flex-wrap gap-3">
+                <a href="#current-sponsors" aria-current="true" className="inline-flex min-h-12 items-center gap-3 border border-racing-green bg-racing-green/10 px-5 text-base font-bold text-racing-green">2026 <span className="text-sm font-normal">{language === 'tr' ? 'Güncel sezon' : 'Current season'}</span></a>
+                <button type="button" disabled aria-describedby="sponsor-archive-note" className="inline-flex min-h-12 cursor-not-allowed items-center border border-white/15 px-5 text-base font-semibold text-white/40">2025</button>
+              </div>
+            </div>
+            <p id="sponsor-archive-note" className="mt-4 text-sm leading-6 text-white/65">{language === 'tr' ? '2025 sezonuna ait sponsor arşivi bulunmuyor.' : 'No sponsor archive is available for the 2025 season.'}</p>
+          </section>
         </div>
       </section>
 

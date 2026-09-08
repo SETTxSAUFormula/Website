@@ -132,7 +132,7 @@ export async function insertApplication(
         community_details, projects, motivation, responsibility_scenario,
         motivation_factor, additional_notes, language
       ) VALUES (
-        ?, ?, ?, 'new', 'pending',
+        ?, ?, ?, 'new', 'not_required',
         ?, ?, ?, ?, ?, ?,
         ?, ?, ?, ?, ?,
         ?, ?, ?, ?,
