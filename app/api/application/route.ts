@@ -199,7 +199,7 @@ export async function POST(request: Request) {
     secondaryTeam:
       (!secondaryTeam || isKeyOf(secondaryTeam, teamLabels)) &&
       secondaryTeam !== primaryTeam,
-    programs: programs.length >= 2 && programs.length <= 1500,
+    programs: programs.length <= 1500,
     weeklyHours: isKeyOf(weeklyHours, weeklyHoursLabels),
     summerParticipation: isKeyOf(summerParticipation, availabilityLabels),
     busyPeriods: isKeyOf(busyPeriods, availabilityLabels),
@@ -208,7 +208,7 @@ export async function POST(request: Request) {
     communityDetails:
       communityExperience === 'no' ||
       (communityDetails.length >= 10 && communityDetails.length <= 2000),
-    projects: projects.length >= 10 && projects.length <= 2500,
+    projects: projects.length <= 2500,
     motivation: motivation.length >= 20 && motivation.length <= 2500,
     responsibilityScenario:
       responsibilityScenario.length >= 20 &&

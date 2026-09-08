@@ -56,7 +56,7 @@ const copy = {
     sections: [
       'Kişisel ve eğitim bilgileri',
       'Departman tercihi ve zaman',
-      'Deneyim ve yetkinlikler',
+      'Takım deneyimi',
       'Motivasyon ve takım uyumu',
     ],
     name: 'Ad Soyad',
@@ -72,13 +72,10 @@ const copy = {
     weeklyHours: 'Takıma haftada ortalama kaç saat ayırabilirsiniz?',
     summer: 'Yaz dönemindeki atölye çalışmalarına katılabilir misiniz?',
     busy: 'Yarış ve üretim gibi yoğun dönemlerde aktif rol alabilir misiniz?',
-    programs:
-      'Hangi programları, yazılımları veya teknik araçları kullanabiliyorsunuz?',
     community:
       'Daha önce bir öğrenci topluluğunda veya takımda yer aldınız mı?',
     communityDetails:
       'Yer aldığınız topluluğu, departmanınızı ve üstlendiğiniz işleri anlatın.',
-    projects: 'Alanınızla ilgili daha önce yaptığınız projeleri anlatın.',
     motivation: 'SAUFormula’ya neden katılmak istiyorsunuz?',
     responsibility:
       'Takım içindeki bir sorumluluğu zamanında yerine getiremeyeceğinizi fark ederseniz nasıl bir yol izlersiniz?',
@@ -107,7 +104,7 @@ const copy = {
     sections: [
       'Personal and education details',
       'Department preference and availability',
-      'Experience and skills',
+      'Team experience',
       'Motivation and team fit',
     ],
     name: 'Full name',
@@ -124,12 +121,9 @@ const copy = {
       'How many hours can you dedicate to the team each week on average?',
     summer: 'Can you attend workshop activities during the summer?',
     busy: 'Can you take an active role during intensive periods such as manufacturing and competitions?',
-    programs: 'Which software, programmes or technical tools can you use?',
     community: 'Have you previously taken part in a student club or team?',
     communityDetails:
       'Describe the community, your department and the work you were responsible for.',
-    projects:
-      'Tell us about projects you have previously completed in your field.',
     motivation: 'Why would you like to join SAUFormula?',
     responsibility:
       'What would you do if you realised you could not complete a team responsibility on time?',
@@ -202,10 +196,8 @@ const applicationFieldIds: Record<string, string> = {
   weeklyHours: 'application-weekly-hours',
   summerParticipation: 'application-summer',
   busyPeriods: 'application-busy',
-  programs: 'application-programs',
   communityExperience: 'application-community',
   communityDetails: 'application-community-details',
-  projects: 'application-projects',
   motivation: 'application-motivation',
   responsibilityScenario: 'application-responsibility',
   motivationFactor: 'application-motivation-factor',
@@ -262,10 +254,8 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
     weeklyHours: content.weeklyHours as string,
     summerParticipation: content.summer as string,
     busyPeriods: content.busy as string,
-    programs: content.programs as string,
     communityExperience: content.community as string,
     communityDetails: content.communityDetails as string,
-    projects: content.projects as string,
     motivation: content.motivation as string,
     responsibilityScenario:
       language === 'tr' ? 'Sorumluluk senaryosu' : 'Responsibility scenario',
@@ -386,13 +376,11 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
           portfolio: getText('portfolio'),
           primaryTeam: getText('primaryTeam'),
           secondaryTeam: getText('secondaryTeam'),
-          programs: getText('programs'),
           weeklyHours: getText('weeklyHours'),
           summerParticipation: getText('summerParticipation'),
           busyPeriods: getText('busyPeriods'),
           communityExperience: getText('communityExperience'),
           communityDetails: getText('communityDetails'),
-          projects: getText('projects'),
           motivation: getText('motivation'),
           responsibilityScenario: getText('responsibilityScenario'),
           motivationFactor: getText('motivationFactor'),
@@ -894,28 +882,6 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
         </FormSection>
 
         <FormSection number="03" title={sectionTitles[2]}>
-          <ApplicationField name="programs" error={fieldErrors.programs}>
-            <FieldLabel htmlFor="application-programs" className={labelClass}>
-              {content.programs} <RequiredMark />
-            </FieldLabel>
-            <Textarea
-              id="application-programs"
-              name="programs"
-              aria-invalid={Boolean(fieldErrors.programs)}
-              aria-describedby={
-                fieldErrors.programs ? 'application-error-programs' : undefined
-              }
-              required
-              minLength={2}
-              maxLength={1500}
-              placeholder={
-                language === 'tr'
-                  ? 'Örn. SolidWorks, CATIA, ANSYS, MATLAB, Altium, Adobe Premiere, Excel… Seviyenizi de belirtebilirsiniz.'
-                  : 'e.g. SolidWorks, CATIA, ANSYS, MATLAB, Altium, Adobe Premiere, Excel… You may also indicate your level.'
-              }
-              className={textareaClass}
-            />
-          </ApplicationField>
           <ApplicationField
             name="communityExperience"
             error={fieldErrors.communityExperience}
@@ -968,28 +934,6 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
               />
             </ApplicationField>
           ) : null}
-          <ApplicationField name="projects" error={fieldErrors.projects}>
-            <FieldLabel htmlFor="application-projects" className={labelClass}>
-              {content.projects} <RequiredMark />
-            </FieldLabel>
-            <Textarea
-              id="application-projects"
-              name="projects"
-              aria-invalid={Boolean(fieldErrors.projects)}
-              aria-describedby={
-                fieldErrors.projects ? 'application-error-projects' : undefined
-              }
-              required
-              minLength={10}
-              maxLength={2500}
-              placeholder={
-                language === 'tr'
-                  ? 'Ders, kişisel çalışma, yarışma veya ekip projesi olabilir. Rolünüzü ve ortaya çıkan sonucu belirtin.'
-                  : 'This may be a course, personal, competition or team project. Describe your role and the outcome.'
-              }
-              className={textareaClass}
-            />
-          </ApplicationField>
         </FormSection>
 
         <FormSection number="04" title={sectionTitles[3]}>

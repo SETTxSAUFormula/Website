@@ -17,12 +17,10 @@ const validPayload = {
   classLevel: '2',
   primaryTeam: 'powertrain',
   secondaryTeam: '',
-  programs: 'CAD araçları',
   weeklyHours: '5-8',
   summerParticipation: 'yes',
   busyPeriods: 'yes',
   communityExperience: 'no',
-  projects: 'Ders kapsamında bir model geliştirdim.',
   motivation: 'Üretim ve tasarım deneyimi kazanmak istiyorum.',
   responsibilityScenario:
     'Takım liderime haber verir ve yeni bir plan yaparım.',
@@ -195,6 +193,8 @@ test('Turnstile -> D1 -> admin works without any Resend key or request', async (
   const record = applications[0];
   assert.equal(record.name, validPayload.name);
   assert.equal(record.primaryTeam, 'powertrain');
+  assert.equal(record.programs, '');
+  assert.equal(record.projects, '');
   assert.equal(record.status, 'new');
   assert.equal(record.emailDeliveryStatus, 'not_required');
   assert.equal(record.resendEmailId, '');
@@ -236,6 +236,8 @@ test('admin delete removes one or multiple selected applications', async (t) => 
     linkedin: '',
     portfolio: '',
     communityDetails: '',
+    programs: '',
+    projects: '',
     additionalNotes: '',
   };
   const second = {
