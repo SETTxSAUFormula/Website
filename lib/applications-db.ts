@@ -269,3 +269,19 @@ export async function updateApplicationReview(
 
   return result.meta.changes > 0;
 }
+
+export async function deleteApplications(
+  database: D1Database,
+  ids: string[],
+) {
+  const uniqueIds = [...new Set(ids)];
+  if (!uniqueIds.length) return 0;
+
+  const placeholders = uniqueIds.map(() => '?').join(', ');
+  const result = await database
+    .prepare(`DELETE FROM applications WHERE id IN (${placeholders})`)
+    .bind(...uniqueIds)
+    .run();
+
+  return result.meta.changes;
+}

@@ -7,6 +7,7 @@ import {
   LoaderCircle,
   RefreshCw,
   Search,
+  Trash2,
 } from 'lucide-react';
 
 import type {
@@ -79,11 +80,15 @@ function ReviewPanel({
   application,
   viewer,
   onSaved,
+  onDelete,
+  deleting,
   onError,
 }: {
   application: ApplicationRecord;
   viewer: string;
   onSaved: (updated: ApplicationRecord) => void;
+  onDelete: (application: ApplicationRecord) => void;
+  deleting: boolean;
   onError: (message: string) => void;
 }) {
   const [reviewStatus, setReviewStatus] = useState<ApplicationStatus>(
@@ -178,7 +183,7 @@ function ReviewPanel({
       <button
         type="button"
         onClick={() => void saveReview()}
-        disabled={saving}
+        disabled={saving || deleting}
         className="mt-5 inline-flex h-11 w-full items-center justify-center gap-2 bg-racing-green px-5 text-sm font-black uppercase tracking-wider text-ink disabled:opacity-50"
       >
         {saving ? (
@@ -191,6 +196,19 @@ function ReviewPanel({
           : saved
             ? 'Kaydedildi'
             : 'Değerlendirmeyi kaydet'}
+      </button>
+      <button
+        type="button"
+        onClick={() => onDelete(application)}
+        disabled={saving || deleting}
+        className="mt-3 inline-flex h-11 w-full items-center justify-center gap-2 border border-red-500/55 px-5 text-sm font-black uppercase tracking-wider text-red-300 transition-colors hover:border-red-400 hover:bg-red-500/10 hover:text-red-200 disabled:opacity-50"
+      >
+        {deleting ? (
+          <LoaderCircle className="size-4 animate-spin" />
+        ) : (
+          <Trash2 className="size-4" />
+        )}
+        {deleting ? 'Siliniyor' : 'Başvuruyu sil'}
       </button>
       <div className="mt-5 border-t border-border pt-4 text-xs leading-6 text-white/45">
         <p>
@@ -215,6 +233,8 @@ function ReviewPanel({
 export function ApplicationAdmin() {
   const [applications, setApplications] = useState<ApplicationRecord[]>([]);
   const [selectedId, setSelectedId] = useState('');
+  const [checkedIds, setCheckedIds] = useState<string[]>([]);
+  const [deletingIds, setDeletingIds] = useState<string[]>([]);
   const [statusFilter, setStatusFilter] = useState('');
   const [teamFilter, setTeamFilter] = useState('');
   const [search, setSearch] = useState('');
@@ -222,6 +242,7 @@ export function ApplicationAdmin() {
   const [viewer, setViewer] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
 
   const selected = useMemo(
     () =>
@@ -229,9 +250,74 @@ export function ApplicationAdmin() {
     [applications, selectedId],
   );
 
+  const checkedIdSet = useMemo(() => new Set(checkedIds), [checkedIds]);
+  const deleting = deletingIds.length > 0;
+
+  function toggleChecked(id: string) {
+    setCheckedIds((current) =>
+      current.includes(id)
+        ? current.filter((checkedId) => checkedId !== id)
+        : [...current, id],
+    );
+  }
+
+  async function removeApplications(ids: string[]) {
+    const uniqueIds = [...new Set(ids)];
+    const targets = applications.filter((application) =>
+      uniqueIds.includes(application.id),
+    );
+    if (!targets.length || deleting) return;
+
+    const message =
+      targets.length === 1
+        ? `${targets[0].name} başvurusunu kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`
+        : `${targets.length} başvuruyu kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`;
+    if (!window.confirm(message)) return;
+
+    setDeletingIds(uniqueIds);
+    setError('');
+    setNotice('');
+
+    try {
+      const response = await fetch('/api/admin/applications', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: uniqueIds }),
+      });
+      if (!response.ok) throw new Error('delete-failed');
+      const data = (await response.json()) as { deleted?: number };
+      const removedIds = new Set(uniqueIds);
+      const selectedIndex = applications.findIndex(
+        (application) => application.id === selectedId,
+      );
+      const nextApplications = applications.filter(
+        (application) => !removedIds.has(application.id),
+      );
+
+      setApplications(nextApplications);
+      setCheckedIds((current) =>
+        current.filter((id) => !removedIds.has(id)),
+      );
+      if (removedIds.has(selectedId)) {
+        setSelectedId(
+          nextApplications[
+            Math.min(Math.max(selectedIndex, 0), nextApplications.length - 1)
+          ]?.id ?? '',
+        );
+      }
+      const deletedCount = data.deleted ?? targets.length;
+      setNotice(`${deletedCount} başvuru silindi.`);
+    } catch {
+      setError('Başvurular silinemedi. Biraz sonra yeniden deneyin.');
+    } finally {
+      setDeletingIds([]);
+    }
+  }
+
   const load = useCallback(async () => {
     setLoading(true);
     setError('');
+    setNotice('');
     const params = new URLSearchParams();
     if (statusFilter) params.set('status', statusFilter);
     if (teamFilter) params.set('team', teamFilter);
@@ -258,6 +344,11 @@ export function ApplicationAdmin() {
       };
       const nextApplications = data.applications ?? [];
       setApplications(nextApplications);
+      setCheckedIds((current) =>
+        current.filter((id) =>
+          nextApplications.some((application) => application.id === id),
+        ),
+      );
       setViewer(data.viewer ?? '');
       setSelectedId((current) =>
         nextApplications.some((application) => application.id === current)
@@ -368,12 +459,38 @@ export function ApplicationAdmin() {
             {error}
           </div>
         ) : null}
+        {notice ? (
+          <div className="my-5 border border-racing-green/40 bg-racing-green/10 p-4 text-sm text-racing-green">
+            {notice}
+          </div>
+        ) : null}
 
         <div className="grid min-h-[650px] border-x border-b border-border lg:grid-cols-[390px_1fr]">
           <aside className="border-b border-border lg:border-b-0 lg:border-r">
-            <div className="flex items-center justify-between border-b border-border px-5 py-4 text-sm text-white/55">
-              <span>{applications.length} başvuru</span>
-              {loading ? (
+            <div className="flex min-h-14 items-center justify-between gap-3 border-b border-border px-4 py-2 text-sm text-white/55">
+              <div className="flex items-center gap-2">
+                <span>{applications.length} başvuru</span>
+                {checkedIds.length ? (
+                  <span className="text-racing-green">
+                    · {checkedIds.length} seçili
+                  </span>
+                ) : null}
+              </div>
+              {checkedIds.length ? (
+                <button
+                  type="button"
+                  onClick={() => void removeApplications(checkedIds)}
+                  disabled={deleting}
+                  className="inline-flex h-9 shrink-0 items-center justify-center gap-2 bg-red-600 px-3 text-xs font-black uppercase tracking-wider text-white transition-colors hover:bg-red-500 disabled:opacity-50"
+                >
+                  {deleting ? (
+                    <LoaderCircle className="size-4 animate-spin" />
+                  ) : (
+                    <Trash2 className="size-4" />
+                  )}
+                  Seçilenleri sil
+                </button>
+              ) : loading ? (
                 <LoaderCircle className="size-4 animate-spin" />
               ) : null}
             </div>
@@ -384,26 +501,40 @@ export function ApplicationAdmin() {
                 </p>
               ) : null}
               {applications.map((application) => (
-                <button
+                <div
                   key={application.id}
-                  type="button"
-                  onClick={() => setSelectedId(application.id)}
-                  className={`block w-full border-b border-border p-5 text-left transition-colors hover:bg-white/[0.04] ${selectedId === application.id ? 'bg-racing-green/[0.08]' : ''}`}
+                  className={`flex border-b border-border transition-colors hover:bg-white/[0.04] ${selectedId === application.id ? 'bg-racing-green/[0.08]' : ''} ${checkedIdSet.has(application.id) ? 'bg-red-500/[0.05]' : ''}`}
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <strong className="text-base">{application.name}</strong>
-                    <span className="shrink-0 border border-border px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-racing-green">
-                      {statusLabels[application.status]}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-sm text-white/60">
-                    {departmentName(application)}
-                  </p>
-                  <div className="mt-3 flex justify-between text-xs text-white/40">
-                    <span>{application.academicDepartment}</span>
-                    <span>{dateTime(application.submittedAt)}</span>
-                  </div>
-                </button>
+                  <label className="flex shrink-0 cursor-pointer items-start px-4 py-5">
+                    <input
+                      type="checkbox"
+                      checked={checkedIdSet.has(application.id)}
+                      onChange={() => toggleChecked(application.id)}
+                      disabled={deleting}
+                      aria-label={`${application.name} başvurusunu seç`}
+                      className="size-4 cursor-pointer accent-racing-green disabled:cursor-not-allowed"
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedId(application.id)}
+                    className="min-w-0 flex-1 py-5 pr-5 text-left outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-racing-green"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <strong className="text-base">{application.name}</strong>
+                      <span className="shrink-0 border border-border px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-racing-green">
+                        {statusLabels[application.status]}
+                      </span>
+                    </div>
+                    <p className="mt-2 text-sm text-white/60">
+                      {departmentName(application)}
+                    </p>
+                    <div className="mt-3 flex justify-between text-xs text-white/40">
+                      <span>{application.academicDepartment}</span>
+                      <span>{dateTime(application.submittedAt)}</span>
+                    </div>
+                  </button>
+                </div>
               ))}
             </div>
           </aside>
@@ -521,7 +652,11 @@ export function ApplicationAdmin() {
                   key={selected.id}
                   application={selected}
                   viewer={viewer}
+                  deleting={deleting}
                   onError={setError}
+                  onDelete={(application) =>
+                    void removeApplications([application.id])
+                  }
                   onSaved={(updated) =>
                     setApplications((current) =>
                       current.map((application) =>

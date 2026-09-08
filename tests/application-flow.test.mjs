@@ -127,8 +127,19 @@ async function harness(options = {}) {
     },
     { context },
   );
+  const accessModule = new vm.SyntheticModule(
+    ['requireCloudflareAccess'],
+    function () {
+      this.setExport('requireCloudflareAccess', async () =>
+        options.unauthorized ? null : { email: 'admin@sauformula.org' },
+      );
+    },
+    { context },
+  );
   const route = load(
-    options.contact
+    options.admin
+      ? 'app/api/admin/applications/route.ts'
+      : options.contact
       ? 'app/api/contact/route.ts'
       : 'app/api/application/route.ts',
   );
@@ -136,6 +147,7 @@ async function harness(options = {}) {
     if (specifier === 'cloudflare:workers') return envModule;
     if (specifier === '@/lib/applications-db')
       return load('lib/applications-db.ts');
+    if (specifier === '@/lib/cloudflare-access') return accessModule;
     throw new Error(`Unexpected import: ${specifier}`);
   });
   await route.evaluate();
@@ -157,6 +169,14 @@ function request(payload = validPayload, headers = {}) {
       ...headers,
     },
     body: JSON.stringify(payload),
+  });
+}
+
+function adminDeleteRequest(ids) {
+  return new Request('https://sauformula.org/api/admin/applications', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ids }),
   });
 }
 
@@ -199,6 +219,59 @@ test('Turnstile -> D1 -> admin works without any Resend key or request', async (
     ).length,
     1,
   );
+  assert.equal(
+    await h.db.deleteApplications(h.database, [record.id, 'missing-record']),
+    1,
+  );
+  assert.equal((await h.db.listApplications(h.database, {})).length, 0);
+});
+
+test('admin delete removes one or multiple selected applications', async (t) => {
+  const h = await harness({ admin: true });
+  t.after(() => h.sqlite.close());
+  const first = {
+    ...validPayload,
+    id: 'application-one',
+    submittedAt: 1,
+    linkedin: '',
+    portfolio: '',
+    communityDetails: '',
+    additionalNotes: '',
+  };
+  const second = {
+    ...first,
+    id: 'application-two',
+    submittedAt: 2,
+    email: 'second@example.com',
+  };
+  await h.db.insertApplication(h.database, first);
+  await h.db.insertApplication(h.database, second);
+
+  const response = await h.route.DELETE(
+    adminDeleteRequest([first.id, second.id]),
+  );
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), { ok: true, deleted: 2 });
+  assert.equal((await h.db.listApplications(h.database, {})).length, 0);
+});
+
+test('admin delete requires access and valid non-empty IDs', async (t) => {
+  const unauthorized = await harness({ admin: true, unauthorized: true });
+  t.after(() => unauthorized.sqlite.close());
+  assert.equal(
+    (await unauthorized.route.DELETE(adminDeleteRequest(['application-one'])))
+      .status,
+    401,
+  );
+
+  const authorized = await harness({ admin: true });
+  t.after(() => authorized.sqlite.close());
+  for (const ids of [[], [''], Array.from({ length: 101 }, (_, index) => `id-${index}`)]) {
+    assert.equal(
+      (await authorized.route.DELETE(adminDeleteRequest(ids))).status,
+      400,
+    );
+  }
 });
 
 for (const [name, options, code] of [

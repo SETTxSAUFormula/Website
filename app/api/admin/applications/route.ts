@@ -2,6 +2,7 @@ import { env } from 'cloudflare:workers';
 
 import {
   applicationStatuses,
+  deleteApplications,
   listApplications,
   updateApplicationReview,
   type ApplicationStatus,
@@ -85,6 +86,46 @@ export async function PATCH(request: Request) {
       reviewedBy: identity.email,
     });
     return json({ ok: updated }, updated ? 200 : 404);
+  } catch {
+    return json({ ok: false }, 500);
+  }
+}
+
+export async function DELETE(request: Request) {
+  const identity = await requireCloudflareAccess(request, runtimeEnv);
+  if (!identity) return json({ ok: false }, 401);
+  if (!runtimeEnv.APPLICATIONS_DB) return json({ ok: false }, 503);
+
+  let payload: unknown;
+  try {
+    payload = await request.json();
+  } catch {
+    return json({ ok: false }, 400);
+  }
+
+  const rawIds =
+    payload && typeof payload === 'object' && 'ids' in payload
+      ? (payload as { ids?: unknown }).ids
+      : undefined;
+  if (
+    !Array.isArray(rawIds) ||
+    rawIds.length === 0 ||
+    rawIds.length > 100 ||
+    rawIds.some(
+      (id) =>
+        typeof id !== 'string' ||
+        id.trim().length === 0 ||
+        id.trim().length > 128,
+    )
+  ) {
+    return json({ ok: false }, 400);
+  }
+
+  const ids = [...new Set(rawIds.map((id) => (id as string).trim()))];
+
+  try {
+    const deleted = await deleteApplications(runtimeEnv.APPLICATIONS_DB, ids);
+    return json({ ok: true, deleted });
   } catch {
     return json({ ok: false }, 500);
   }
