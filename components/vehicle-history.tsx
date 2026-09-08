@@ -42,12 +42,12 @@ export type VehicleHistoryCopy = {
 
 function VehicleCopy({ vehicle, inspect }: { vehicle: VehicleDetail; inspect: string }) {
   return (
-    <div className="min-w-0">
+    <div className="flex min-w-0 flex-1 flex-col">
       <p className="font-heading text-2xl font-black text-racing-green">{vehicle.year}</p>
       <h3 className="mt-1 break-words font-heading text-xl font-bold uppercase leading-none 2xl:text-2xl">{vehicle.name}</h3>
       <p className="mt-3 text-sm font-bold uppercase leading-4 tracking-[0.1em] text-white/70">{vehicle.result}</p>
-      <p className="mt-1 text-xs font-bold uppercase tracking-[0.16em] text-white/65">{vehicle.category}</p>
-      <span className="mt-4 inline-flex min-h-8 items-center gap-2 border border-racing-green bg-racing-green px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-ink shadow-[0_0_0_rgba(0,226,123,0)] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 group-hover:shadow-[0_0_24px_rgba(0,226,123,0.28)] group-focus-visible:-translate-y-0.5 group-focus-visible:shadow-[0_0_24px_rgba(0,226,123,0.28)]">
+      <p className="mt-1 flex-1 text-xs font-bold uppercase tracking-[0.16em] text-white/65">{vehicle.category}</p>
+      <span className="mt-4 inline-flex min-h-8 self-start xl:self-center items-center gap-2 border border-racing-green bg-racing-green px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-ink shadow-[0_0_0_rgba(0,226,123,0)] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 group-hover:shadow-[0_0_24px_rgba(0,226,123,0.28)] group-focus-visible:-translate-y-0.5 group-focus-visible:shadow-[0_0_24px_rgba(0,226,123,0.28)]">
         {inspect}
         <ArrowUpRight className="size-3.5" strokeWidth={2.5} />
       </span>
@@ -152,15 +152,15 @@ export function VehicleHistory({
               key={vehicle.name}
               type="button"
               onClick={() => openVehicle(index)}
-              className="group min-w-0 text-center outline-none"
+              className="group flex min-w-0 flex-col text-center outline-none"
               aria-label={`${vehicle.name}: ${copy.inspect}`}
             >
               <div className="grid h-4 place-items-center">
                 <span className="z-10 size-4 rounded-full border-4 border-ink bg-racing-green transition-shadow group-hover:shadow-[0_0_18px_rgba(0,226,123,0.85)] group-focus-visible:shadow-[0_0_18px_rgba(0,226,123,0.85)]" />
               </div>
-              <div className="mt-6 rounded-sm transition-colors group-hover:bg-white/[0.025] group-focus-visible:bg-white/[0.025] group-focus-visible:ring-1 group-focus-visible:ring-racing-green">
+              <div className="mt-6 flex w-full flex-1 flex-col rounded-sm transition-colors group-hover:bg-white/[0.025] group-focus-visible:bg-white/[0.025] group-focus-visible:ring-1 group-focus-visible:ring-racing-green">
                 <VehicleVisual vehicle={vehicle} className="mx-auto h-[220px] max-w-[235px] 2xl:h-[240px] 2xl:max-w-[260px]" language={language} />
-                <div className="mx-auto mt-4 max-w-[230px] border-t border-white/15 px-2 pb-4 pt-4 transition-colors group-hover:border-racing-green/60">
+                <div className="mx-auto mt-4 flex w-full max-w-[230px] flex-1 flex-col border-t border-white/15 px-2 pb-4 pt-4 transition-colors group-hover:border-racing-green/60">
                   <VehicleCopy vehicle={vehicle} inspect={copy.inspect} />
                 </div>
               </div>
