@@ -28,9 +28,6 @@ const homeCopy = {
     mergeTitle: 'İki birikim, tek yarış hedefi',
     mergeText: 'SETT’in enerji teknolojileri mirası, 2025’te SAUFormula ile birleşerek ADA-02’nin ortak mühendislik kültürüne dönüştü.',
     story: 'Hikâyemizi keşfet',
-    currentGeneration: 'Atölyeden piste',
-    carDescription: 'ADA-02’nin tasarım, üretim ve yarış hazırlıklarını aynı ekip yürütüyor. Güncel aracımızı ve geçmiş projelerimizi keşfedin.',
-    inspectCar: 'ADA-02’yi incele',
     fsEyebrow: 'Tasarla · üret · savun · yarış',
     fsDescription: 'Formula Student, üniversite öğrencilerinin tek kişilik bir yarış otomobilini sıfırdan tasarladığı, ürettiği ve pistte doğruladığı uluslararası bir mühendislik yarışmasıdır. Takımlar yalnızca hızla değil; tasarım, maliyet, iş planı, dayanıklılık ve enerji verimliliğiyle de değerlendirilir.',
     discoverFs: 'Formula Student’ı keşfet',
@@ -55,9 +52,6 @@ const homeCopy = {
     mergeTitle: 'Two legacies, one racing goal',
     mergeText: 'SETT’s energy-technology heritage joined SAUFormula in 2025, becoming the shared engineering culture behind ADA-02.',
     story: 'Discover our story',
-    currentGeneration: 'From workshop to track',
-    carDescription: 'Our team handles ADA-02’s design, manufacturing and race preparation. Explore our current car and the projects that came before it.',
-    inspectCar: 'Explore ADA-02',
     fsEyebrow: 'Design · build · defend · race',
     fsDescription: 'Formula Student is an international engineering competition in which university students design, build and validate a single-seat race car from the ground up. Teams are judged not only on speed, but also on design, cost, business planning, endurance and energy efficiency.',
     discoverFs: 'Discover Formula Student',
@@ -197,20 +191,6 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
               {copy.story} <ArrowRight className="size-4" aria-hidden="true" />
             </Link>
 
-          </div>
-        </div>
-      </section>
-
-      <section id="araclar" className="bg-ink px-5 py-10 text-white sm:py-12 lg:px-10 lg:py-16">
-        <div className="mx-auto grid max-w-[1500px] overflow-hidden border border-white/15 bg-[#071b14] lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="relative aspect-[4/3] sm:aspect-[16/9] lg:aspect-auto lg:min-h-[400px]">
-            <Image src="/media/fs-pit.webp" alt={isEnglish ? 'SAUFormula team preparing ADA-02 in the pit' : 'SAUFormula ekibi pit alanında ADA-02 üzerinde çalışıyor'} fill sizes="(min-width: 1580px) 825px, (min-width: 1024px) 55vw, 100vw" className="object-cover" />
-          </div>
-          <div className="flex flex-col justify-center p-6 sm:p-9 lg:p-12">
-            <p className="text-sm font-bold uppercase tracking-[0.16em] text-racing-green">{copy.currentGeneration}</p>
-            <h2 className="mt-4 font-heading text-5xl font-black uppercase leading-none sm:text-6xl">ADA-02</h2>
-            <p className="mt-6 max-w-xl text-base leading-8 text-white/75">{copy.carDescription}</p>
-            <Link href={localizedPath('/araclar', language)} className="mt-7 inline-flex min-h-12 w-fit items-center gap-3 border-b border-racing-green text-sm font-bold text-white">{copy.inspectCar}<ArrowUpRight className="size-5" aria-hidden="true" /></Link>
           </div>
         </div>
       </section>
