@@ -136,7 +136,7 @@ export function SponsorSeasons({ language }: { language: Language }) {
 
                 <div className={`mt-4 grid border-l border-t border-white/25 ${tier.gridClass}`}>
                   {season === 2026 ? tier.sponsors.map((sponsor) => (
-                    <a key={sponsor.name} href={sponsor.website} target="_blank" rel="noreferrer" aria-label={`${sponsor.name}: ${copy.visit}`} className={`group relative flex items-center justify-center overflow-hidden border-b border-r border-white/25 bg-[#73867c] p-3 outline-none transition-colors duration-300 hover:bg-[#82988d] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-racing-green sm:p-6 ${tier.cardClass}`}>
+                    <a key={sponsor.name} href={sponsor.website} target="_blank" rel="noreferrer" aria-label={`${sponsor.name}: ${copy.visit}`} className={`sponsor-card-surface group relative flex items-center justify-center overflow-hidden border-b border-r border-white/25 p-3 outline-none transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-racing-green sm:p-6 ${tier.cardClass}`}>
                       <div className={`relative ${tier.logoBoxClass}`}>
                         <img
                           src={sponsor.src}

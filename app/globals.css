@@ -212,3 +212,19 @@ a {
     background-size: 44px 44px;
   }
 }
+
+/* Keep sponsor logos readable when mobile browsers auto-darken page colors. */
+.sponsor-card-surface {
+  --sponsor-card-surface: #73867c;
+  background-color: var(--sponsor-card-surface);
+  background-image: linear-gradient(
+    var(--sponsor-card-surface),
+    var(--sponsor-card-surface)
+  );
+  color-scheme: only light;
+}
+
+.sponsor-card-surface:hover,
+.sponsor-card-surface:focus-visible {
+  --sponsor-card-surface: #82988d;
+}
