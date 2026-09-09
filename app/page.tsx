@@ -238,7 +238,7 @@ export function HomePageContent({ language = 'tr' }: { language?: Language }) {
         <div className="mx-auto flex max-w-[1500px] flex-col justify-between gap-10 lg:flex-row lg:items-end">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.2em] text-racing-green">{copy.together}</p>
-            <h2 className="mt-4 max-w-5xl font-heading text-[clamp(3.2rem,7vw,7rem)] font-extrabold uppercase leading-[0.95] tracking-[0.01em]">
+            <h2 className="mt-4 max-w-full font-heading text-[clamp(2rem,9.5vw,3.2rem)] font-extrabold uppercase leading-[0.95] tracking-[0.01em] sm:max-w-5xl sm:text-[clamp(3.2rem,7vw,7rem)]">
               {copy.sponsorTitle}
             </h2>
           </div>

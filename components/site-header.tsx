@@ -36,6 +36,7 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
   const pathname = usePathname();
 
   const items = navigation[language];
+  const mobileItems = items.filter((item) => item.href !== '/bize-katil');
   const switchPath = languageSwitchPath(pathname, language);
 
   useEffect(() => {
@@ -123,7 +124,7 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
       {mobileOpen ? (
         <div className="absolute inset-x-0 top-full max-h-[calc(100svh-5rem)] overflow-y-auto border-b border-white/10 bg-ink px-5 py-4 shadow-2xl sm:max-h-[calc(100svh-6rem)] xl:hidden">
           <nav aria-label={language === 'en' ? 'Mobile menu' : 'Mobil menü'} className="mx-auto grid max-w-[1500px] gap-1">
-            {items.map((item, index) => (
+            {mobileItems.map((item, index) => (
               <Link
                 key={item.label}
                 href={localizedPath(item.href, language)}
@@ -141,8 +142,12 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
               <Link href={switchPath} hrefLang={language === 'en' ? 'tr' : 'en'} className="flex h-12 flex-1 items-center justify-center border border-white/15 text-xs font-bold tracking-[0.16em]">
                 TR / EN
               </Link>
-              <Link href={localizedPath('/sponsorlar', language)} className="flex h-12 flex-1 items-center justify-center bg-racing-green text-xs font-bold uppercase tracking-[0.12em] text-ink">
-                {language === 'en' ? 'Sponsors' : 'Sponsorlar'}
+              <Link
+                href={localizedPath('/bize-katil', language)}
+                onClick={() => setMobileOpen(false)}
+                className="flex h-12 flex-1 items-center justify-center bg-racing-green text-xs font-bold uppercase tracking-[0.12em] text-ink"
+              >
+                {language === 'en' ? 'Join Us' : 'Bize Katıl'}
               </Link>
             </div>
           </nav>
