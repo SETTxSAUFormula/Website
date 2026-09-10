@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from '@/components/site-link';
-import { Menu, X } from 'lucide-react';
+import { LogIn, Menu, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -31,7 +31,13 @@ const navigation = {
   ],
 } satisfies Record<Language, Array<{ label: string; href: string }>>;
 
-export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boolean; language?: Language }) {
+export function SiteHeader({
+  overlay = false,
+  language = 'tr',
+}: {
+  overlay?: boolean;
+  language?: Language;
+}) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
@@ -51,11 +57,23 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
   };
 
   return (
-    <header className={overlay ? 'absolute inset-x-0 top-0 z-40 text-white' : 'relative z-40 bg-ink text-white'}>
+    <header
+      className={
+        overlay
+          ? 'absolute inset-x-0 top-0 z-40 text-white'
+          : 'relative z-40 bg-ink text-white'
+      }
+    >
       <div className="border-b border-white/10 bg-[#03110d]/92 px-5 backdrop-blur-xl lg:px-10">
         <div className="mx-auto flex h-20 max-w-[1920px] items-center justify-between gap-5 sm:h-24 lg:gap-6">
           <div className="flex shrink-0 items-center gap-8 sm:gap-12">
-            <Link href={localizedPath('/', language)} aria-label={language === 'en' ? 'SAUFormula home' : 'SAUFormula ana sayfa'} className="shrink-0">
+            <Link
+              href={localizedPath('/', language)}
+              aria-label={
+                language === 'en' ? 'SAUFormula home' : 'SAUFormula ana sayfa'
+              }
+              className="shrink-0"
+            >
               <Image
                 src="/brand/sauformula-logo-light.png"
                 alt="SAUFormula"
@@ -68,7 +86,11 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
             {overlay ? (
               <Image
                 src="/brand/ataturk-signature.png"
-                alt={language === 'en' ? 'Signature of Mustafa Kemal Atatürk' : 'Mustafa Kemal Atatürk imzası'}
+                alt={
+                  language === 'en'
+                    ? 'Signature of Mustafa Kemal Atatürk'
+                    : 'Mustafa Kemal Atatürk imzası'
+                }
                 width={800}
                 height={260}
                 priority
@@ -77,7 +99,10 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
             ) : null}
           </div>
 
-          <nav aria-label={language === 'en' ? 'Main menu' : 'Ana menü'} className="hidden h-24 items-stretch border-x border-white/12 xl:flex">
+          <nav
+            aria-label={language === 'en' ? 'Main menu' : 'Ana menü'}
+            className="hidden h-24 items-stretch border-x border-white/12 xl:flex"
+          >
             {items.map((item) => (
               <Link
                 key={item.label}
@@ -89,8 +114,8 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
                       ? 'bg-[#bff9d9] text-ink shadow-[inset_0_-2px_0_#00e27b]'
                       : 'bg-racing-green text-ink hover:bg-[#bff9d9]'
                     : isActive(item.href)
-                    ? 'bg-white/[0.07] text-white shadow-[inset_0_-2px_0_#00e27b]'
-                    : 'text-white/65 hover:bg-white/[0.04] hover:text-white'
+                      ? 'bg-white/[0.07] text-white shadow-[inset_0_-2px_0_#00e27b]'
+                      : 'text-white/65 hover:bg-white/[0.04] hover:text-white'
                 }`}
               >
                 {item.label}
@@ -98,24 +123,50 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4 2xl:gap-6">
             <Link
               href={switchPath}
               hrefLang={language === 'en' ? 'tr' : 'en'}
               className="hidden h-12 items-center border-l border-white/15 pl-6 text-sm font-semibold tracking-[0.15em] text-white/70 lg:flex"
             >
-              <span className={language === 'tr' ? 'text-white' : undefined}>TR</span>
+              <span className={language === 'tr' ? 'text-white' : undefined}>
+                TR
+              </span>
               <span className="mx-2 text-white/25">/</span>
-              <span className={language === 'en' ? 'text-white' : undefined}>EN</span>
+              <span className={language === 'en' ? 'text-white' : undefined}>
+                EN
+              </span>
+            </Link>
+            <Link
+              href="/admin/panel"
+              className="hidden size-11 items-center justify-center border border-white/15 text-white/70 transition-colors hover:border-racing-green hover:text-racing-green lg:inline-flex 2xl:h-11 2xl:w-auto 2xl:gap-2 2xl:px-4"
+              aria-label={language === 'en' ? 'Member login' : 'Üye girişi'}
+            >
+              <LogIn className="size-4" aria-hidden="true" />
+              <span className="hidden text-xs font-bold uppercase tracking-[0.1em] 2xl:inline">
+                {language === 'en' ? 'Member Login' : 'Üye Girişi'}
+              </span>
             </Link>
             <button
               type="button"
               onClick={() => setMobileOpen((open) => !open)}
               className="grid size-11 place-items-center border border-white/15 text-white xl:hidden"
-              aria-label={mobileOpen ? (language === 'en' ? 'Close menu' : 'Menüyü kapat') : language === 'en' ? 'Open menu' : 'Menüyü aç'}
+              aria-label={
+                mobileOpen
+                  ? language === 'en'
+                    ? 'Close menu'
+                    : 'Menüyü kapat'
+                  : language === 'en'
+                    ? 'Open menu'
+                    : 'Menüyü aç'
+              }
               aria-expanded={mobileOpen}
             >
-              {mobileOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+              {mobileOpen ? (
+                <X aria-hidden="true" />
+              ) : (
+                <Menu aria-hidden="true" />
+              )}
             </button>
           </div>
         </div>
@@ -123,7 +174,10 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
 
       {mobileOpen ? (
         <div className="absolute inset-x-0 top-full max-h-[calc(100svh-5rem)] overflow-y-auto border-b border-white/10 bg-ink px-5 py-4 shadow-2xl sm:max-h-[calc(100svh-6rem)] xl:hidden">
-          <nav aria-label={language === 'en' ? 'Mobile menu' : 'Mobil menü'} className="mx-auto grid max-w-[1500px] gap-1">
+          <nav
+            aria-label={language === 'en' ? 'Mobile menu' : 'Mobil menü'}
+            className="mx-auto grid max-w-[1500px] gap-1"
+          >
             {mobileItems.map((item, index) => (
               <Link
                 key={item.label}
@@ -139,7 +193,11 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
               </Link>
             ))}
             <div className="mt-4 flex gap-3">
-              <Link href={switchPath} hrefLang={language === 'en' ? 'tr' : 'en'} className="flex h-12 flex-1 items-center justify-center border border-white/15 text-xs font-bold tracking-[0.16em]">
+              <Link
+                href={switchPath}
+                hrefLang={language === 'en' ? 'tr' : 'en'}
+                className="flex h-12 flex-1 items-center justify-center border border-white/15 text-xs font-bold tracking-[0.16em]"
+              >
                 TR / EN
               </Link>
               <Link
@@ -150,6 +208,14 @@ export function SiteHeader({ overlay = false, language = 'tr' }: { overlay?: boo
                 {language === 'en' ? 'Join Us' : 'Bize Katıl'}
               </Link>
             </div>
+            <Link
+              href="/admin/panel"
+              onClick={() => setMobileOpen(false)}
+              className="mt-3 flex h-12 items-center justify-center gap-2 border border-white/15 text-xs font-bold uppercase tracking-[0.12em] text-white/80"
+            >
+              <LogIn className="size-4" aria-hidden="true" />
+              {language === 'en' ? 'Member Login' : 'Üye Girişi'}
+            </Link>
           </nav>
         </div>
       ) : null}

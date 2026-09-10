@@ -112,6 +112,7 @@ export function SiteFooter({ language = 'tr' }: { language?: Language }) {
         <div className="flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/65 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} SAUFormula. {isEnglish ? 'All rights reserved.' : 'Tüm hakları saklıdır.'}</p>
           <div className="flex gap-5">
+            <Link href="/admin/panel">{isEnglish ? 'Member Login' : 'Üye Girişi'}</Link>
             <Link href={localizedPath('/gizlilik', language)}>{isEnglish ? 'Privacy Policy' : 'Gizlilik Politikası'}</Link>
             <Link href={localizedPath('/iletisim', language)}>{isEnglish ? 'Contact' : 'İletişim'}</Link>
           </div>

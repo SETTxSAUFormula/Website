@@ -1,0 +1,14 @@
+# Non-secret identifier for the shared team calendar.
+GOOGLE_CALENDAR_ID=c_d90b1f75a976b1aaee38ca1e4aa138bb4870f42fcf4be61fa3e83da011814e1e@group.calendar.google.com
+
+# Keep real OAuth values out of Git. Supply them through a secure local session
+# or as encrypted Cloudflare Worker secrets.
+GOOGLE_OAUTH_CLIENT_ID=replace-with-google-oauth-client-id
+GOOGLE_OAUTH_CLIENT_SECRET=replace-with-google-oauth-client-secret
+GOOGLE_OAUTH_REFRESH_TOKEN=replace-with-google-oauth-refresh-token
+
+# Cloudflare Access verifies the e-mail code session before panel access.
+# These values are identifiers, not passwords; production values belong in
+# encrypted Worker configuration together with the existing panel secrets.
+CF_ACCESS_TEAM_DOMAIN=your-team.cloudflareaccess.com
+CF_ACCESS_AUD=replace-with-access-application-audience-tag

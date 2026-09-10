@@ -13,7 +13,8 @@
     "preview:cloudflare": "wrangler versions upload --config dist/server/wrangler.json",
     "lint": "oxlint",
     "format": "oxfmt",
-    "test:application": "node --experimental-vm-modules --test tests/application-flow.test.mjs"
+    "test:application": "node --experimental-vm-modules --test tests/application-flow.test.mjs",
+    "test:panel": "node --experimental-strip-types --test tests/panel-authorization.test.mjs"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",

@@ -1,0 +1,1 @@
+ALTER TABLE `panel_purchase_requests` ADD `product_url` text DEFAULT '' NOT NULL;

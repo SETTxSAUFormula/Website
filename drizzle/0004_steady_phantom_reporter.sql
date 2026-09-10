@@ -1,0 +1,1 @@
+ALTER TABLE `panel_sponsors` ADD `department` text DEFAULT 'team' NOT NULL;
