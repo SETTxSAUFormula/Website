@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
+  ArrowLeft,
   Check,
   FileSpreadsheet,
   LoaderCircle,
@@ -10,6 +11,7 @@ import {
   Trash2,
 } from 'lucide-react';
 
+import Link from '@/components/site-link';
 import type {
   ApplicationRecord,
   ApplicationStatus,
@@ -382,6 +384,13 @@ export function ApplicationAdmin() {
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
+            <Link
+              href="/admin/panel"
+              className="inline-flex h-11 items-center justify-center gap-2 border border-border px-4 text-sm font-bold uppercase tracking-wider transition-colors hover:border-racing-green hover:text-racing-green"
+            >
+              <ArrowLeft className="size-4" aria-hidden="true" />
+              Üye paneline dön
+            </Link>
             {/* oxlint-disable-next-line next(no-html-link-for-pages) -- A native link preserves the file download response. */}
             <a
               href="/api/admin/applications/export"
