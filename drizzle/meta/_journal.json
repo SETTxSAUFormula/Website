@@ -57,6 +57,13 @@
       "when": 1789016402135,
       "tag": "0007_optimal_tarot",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1789212842017,
+      "tag": "0008_foamy_darkstar",
+      "breakpoints": true
     }
   ]
 }

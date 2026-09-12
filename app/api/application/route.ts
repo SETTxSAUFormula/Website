@@ -57,6 +57,7 @@ type ApplicationPayload = {
   portfolio?: unknown;
   primaryTeam?: unknown;
   secondaryTeam?: unknown;
+  departmentMotivation?: unknown;
   programs?: unknown;
   weeklyHours?: unknown;
   summerParticipation?: unknown;
@@ -171,6 +172,7 @@ export async function POST(request: Request) {
   const portfolio = readText(payload.portfolio);
   const primaryTeam = readText(payload.primaryTeam);
   const secondaryTeam = readText(payload.secondaryTeam);
+  const departmentMotivation = readText(payload.departmentMotivation);
   const programs = readText(payload.programs);
   const weeklyHours = readText(payload.weeklyHours);
   const summerParticipation = readText(payload.summerParticipation);
@@ -199,6 +201,7 @@ export async function POST(request: Request) {
     secondaryTeam:
       (!secondaryTeam || isKeyOf(secondaryTeam, teamLabels)) &&
       secondaryTeam !== primaryTeam,
+    departmentMotivation: departmentMotivation.length <= 2000,
     programs: programs.length <= 1500,
     weeklyHours: isKeyOf(weeklyHours, weeklyHoursLabels),
     summerParticipation: isKeyOf(summerParticipation, availabilityLabels),
@@ -281,6 +284,7 @@ export async function POST(request: Request) {
       portfolio,
       primaryTeam,
       secondaryTeam,
+      departmentMotivation,
       programs,
       weeklyHours,
       summerParticipation,

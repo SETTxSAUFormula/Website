@@ -17,6 +17,8 @@ const validPayload = {
   classLevel: '2',
   primaryTeam: 'powertrain',
   secondaryTeam: '',
+  departmentMotivation:
+    'Güç aktarımı tasarımı ve test süreçlerinde sorumluluk almak istiyorum.',
   weeklyHours: '5-8',
   summerParticipation: 'yes',
   busyPeriods: 'yes',
@@ -39,6 +41,9 @@ async function harness(options = {}) {
       path.join(root, 'drizzle/0000_thin_doctor_faustus.sql'),
       'utf8',
     ),
+  );
+  sqlite.exec(
+    readFileSync(path.join(root, 'drizzle/0008_foamy_darkstar.sql'), 'utf8'),
   );
   const calls = [];
   const database = {
@@ -178,6 +183,77 @@ function adminDeleteRequest(ids) {
   });
 }
 
+test('additive department motivation migration preserves historical applications', () => {
+  const sqlite = new DatabaseSync(':memory:');
+  try {
+    sqlite.exec(
+      readFileSync(
+        path.join(root, 'drizzle/0000_thin_doctor_faustus.sql'),
+        'utf8',
+      ),
+    );
+    sqlite
+      .prepare(`
+        INSERT INTO applications (
+          id, submitted_at, updated_at, name, email, phone, university,
+          academic_department, class_level, primary_team, programs,
+          weekly_hours, summer_participation, busy_periods,
+          community_experience, projects, motivation,
+          responsibility_scenario, motivation_factor
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `)
+      .run(
+        'historical-application',
+        1,
+        1,
+        'Mevcut Başvuru',
+        'existing@example.com',
+        '05000000000',
+        'sau',
+        'Makine Mühendisliği',
+        '2',
+        'powertrain',
+        '',
+        '5-8',
+        'yes',
+        'yes',
+        'no',
+        '',
+        'Mevcut motivasyon metni değişmemeli.',
+        'Mevcut sorumluluk cevabı değişmemeli.',
+        'Takım çalışması',
+      );
+    const before = sqlite
+      .prepare(
+        'SELECT id, name, email, motivation, status FROM applications WHERE id = ?',
+      )
+      .get('historical-application');
+
+    sqlite.exec(
+      readFileSync(
+        path.join(root, 'drizzle/0008_foamy_darkstar.sql'),
+        'utf8',
+      ),
+    );
+
+    const after = sqlite
+      .prepare(
+        'SELECT id, name, email, motivation, status, department_motivation FROM applications WHERE id = ?',
+      )
+      .get('historical-application');
+    for (const field of ['id', 'name', 'email', 'motivation', 'status']) {
+      assert.equal(after[field], before[field]);
+    }
+    assert.equal(after.department_motivation, '');
+    assert.equal(
+      sqlite.prepare('SELECT COUNT(*) AS count FROM applications').get().count,
+      1,
+    );
+  } finally {
+    sqlite.close();
+  }
+});
+
 test('Turnstile -> D1 -> admin works without any Resend key or request', async (t) => {
   const h = await harness();
   t.after(() => h.sqlite.close());
@@ -193,6 +269,10 @@ test('Turnstile -> D1 -> admin works without any Resend key or request', async (
   const record = applications[0];
   assert.equal(record.name, validPayload.name);
   assert.equal(record.primaryTeam, 'powertrain');
+  assert.equal(
+    record.departmentMotivation,
+    validPayload.departmentMotivation,
+  );
   assert.equal(record.programs, '');
   assert.equal(record.projects, '');
   assert.equal(record.status, 'new');
@@ -339,6 +419,7 @@ test('reports invalid fields and rejects malformed requests before external work
       ...validPayload,
       email: 'bad',
       motivation: 'short',
+      departmentMotivation: 'x'.repeat(2001),
       secondaryTeam: 'powertrain',
       university: '__proto__',
     }),
@@ -347,6 +428,7 @@ test('reports invalid fields and rejects malformed requests before external work
   const result = await response.json();
   assert.equal(result.code, 'validation_failed');
   assert.deepEqual(result.fields.sort(), [
+    'departmentMotivation',
     'email',
     'motivation',
     'secondaryTeam',
@@ -399,6 +481,16 @@ test('historical email status remains readable alongside new panel-only records'
     ),
   );
   assert.ok(rows.some((row) => row.emailDeliveryStatus === 'not_required'));
+});
+
+test('department motivation is optional and legacy-style applications stay empty', async (t) => {
+  const h = await harness();
+  t.after(() => h.sqlite.close());
+  const { departmentMotivation: _omitted, ...legacyStylePayload } = validPayload;
+  const response = await h.route.POST(request(legacyStylePayload));
+  assert.equal(response.status, 200);
+  const [record] = await h.db.listApplications(h.database, {});
+  assert.equal(record.departmentMotivation, '');
 });
 
 test('contact form continues to verify Turnstile and send through Resend', async (t) => {

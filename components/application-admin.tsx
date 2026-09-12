@@ -599,6 +599,14 @@ export function ApplicationAdmin() {
                         selected.secondaryTeam
                       }
                     />
+                    {selected.departmentMotivation ? (
+                      <div className="md:col-span-2">
+                        <Detail
+                          label="Tercih ettiği departmana katılma nedeni"
+                          value={selected.departmentMotivation}
+                        />
+                      </div>
+                    ) : null}
                     <Detail
                       label="Haftalık süre"
                       value={`${selected.weeklyHours} saat`}

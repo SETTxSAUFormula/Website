@@ -69,6 +69,8 @@ const copy = {
     portfolio: 'Portföy / GitHub / proje bağlantısı (varsa)',
     primaryTeam: 'Katılmak istediğiniz departman',
     secondaryTeam: 'İkinci departman tercihiniz (isteğe bağlı)',
+    departmentMotivation:
+      'Bu departmana neden katılmak istiyorsunuz? (isteğe bağlı)',
     weeklyHours: 'Takıma haftada ortalama kaç saat ayırabilirsiniz?',
     summer: 'Yaz dönemindeki atölye çalışmalarına katılabilir misiniz?',
     busy: 'Yarış ve üretim gibi yoğun dönemlerde aktif rol alabilir misiniz?',
@@ -117,6 +119,8 @@ const copy = {
     portfolio: 'Portfolio / GitHub / project link (if available)',
     primaryTeam: 'Department you would like to join',
     secondaryTeam: 'Second department preference (optional)',
+    departmentMotivation:
+      'Why would you like to join this department? (optional)',
     weeklyHours:
       'How many hours can you dedicate to the team each week on average?',
     summer: 'Can you attend workshop activities during the summer?',
@@ -193,6 +197,7 @@ const applicationFieldIds: Record<string, string> = {
   portfolio: 'application-portfolio',
   primaryTeam: 'application-primary-team',
   secondaryTeam: 'application-secondary-team',
+  departmentMotivation: 'application-department-motivation',
   weeklyHours: 'application-weekly-hours',
   summerParticipation: 'application-summer',
   busyPeriods: 'application-busy',
@@ -251,6 +256,7 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
     portfolio: content.portfolio as string,
     primaryTeam: content.primaryTeam as string,
     secondaryTeam: content.secondaryTeam as string,
+    departmentMotivation: content.departmentMotivation as string,
     weeklyHours: content.weeklyHours as string,
     summerParticipation: content.summer as string,
     busyPeriods: content.busy as string,
@@ -376,6 +382,7 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
           portfolio: getText('portfolio'),
           primaryTeam: getText('primaryTeam'),
           secondaryTeam: getText('secondaryTeam'),
+          departmentMotivation: getText('departmentMotivation'),
           weeklyHours: getText('weeklyHours'),
           summerParticipation: getText('summerParticipation'),
           busyPeriods: getText('busyPeriods'),
@@ -780,6 +787,36 @@ export function ApplicationForm({ language = 'tr' }: { language?: Language }) {
                 ))}
               </NativeSelect>
             </ApplicationField>
+            <div className="sm:col-span-2">
+              <ApplicationField
+                name="departmentMotivation"
+                error={fieldErrors.departmentMotivation}
+              >
+                <FieldLabel
+                  htmlFor="application-department-motivation"
+                  className={labelClass}
+                >
+                  {content.departmentMotivation}
+                </FieldLabel>
+                <Textarea
+                  id="application-department-motivation"
+                  name="departmentMotivation"
+                  aria-invalid={Boolean(fieldErrors.departmentMotivation)}
+                  aria-describedby={
+                    fieldErrors.departmentMotivation
+                      ? 'application-error-departmentMotivation'
+                      : undefined
+                  }
+                  maxLength={2000}
+                  placeholder={
+                    language === 'tr'
+                      ? 'İlgilendiğiniz çalışma alanlarını, bu departmanı seçme nedeninizi veya katkı sağlamak istediğiniz konuları anlatabilirsiniz.'
+                      : 'You can describe the areas that interest you, why you chose this department, or how you would like to contribute.'
+                  }
+                  className={textareaClass}
+                />
+              </ApplicationField>
+            </div>
             <ApplicationField
               name="weeklyHours"
               error={fieldErrors.weeklyHours}

@@ -31,6 +31,7 @@ export const applications = sqliteTable(
     portfolio: text('portfolio').notNull().default(''),
     primaryTeam: text('primary_team').notNull(),
     secondaryTeam: text('secondary_team').notNull().default(''),
+    departmentMotivation: text('department_motivation').notNull().default(''),
     programs: text('programs').notNull(),
     weeklyHours: text('weekly_hours').notNull(),
     summerParticipation: text('summer_participation').notNull(),

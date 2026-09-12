@@ -1,0 +1,1 @@
+ALTER TABLE `applications` ADD `department_motivation` text DEFAULT '' NOT NULL;

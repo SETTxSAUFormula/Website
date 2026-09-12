@@ -21,6 +21,7 @@ export type NewApplicationRecord = {
   portfolio: string;
   primaryTeam: string;
   secondaryTeam: string;
+  departmentMotivation: string;
   programs: string;
   weeklyHours: string;
   summerParticipation: string;
@@ -67,6 +68,7 @@ type ApplicationRow = {
   portfolio: string;
   primary_team: string;
   secondary_team: string;
+  department_motivation: string;
   programs: string;
   weekly_hours: string;
   summer_participation: string;
@@ -103,6 +105,7 @@ function mapApplication(row: ApplicationRow): ApplicationRecord {
     portfolio: row.portfolio,
     primaryTeam: row.primary_team,
     secondaryTeam: row.secondary_team,
+    departmentMotivation: row.department_motivation,
     programs: row.programs,
     weeklyHours: row.weekly_hours,
     summerParticipation: row.summer_participation,
@@ -127,14 +130,15 @@ export async function insertApplication(
       INSERT INTO applications (
         id, submitted_at, updated_at, status, email_delivery_status,
         name, email, phone, university, academic_department, class_level,
-        linkedin, portfolio, primary_team, secondary_team, programs,
+        linkedin, portfolio, primary_team, secondary_team, department_motivation,
+        programs,
         weekly_hours, summer_participation, busy_periods, community_experience,
         community_details, projects, motivation, responsibility_scenario,
         motivation_factor, additional_notes, language
       ) VALUES (
         ?, ?, ?, 'new', 'not_required',
         ?, ?, ?, ?, ?, ?,
-        ?, ?, ?, ?, ?,
+        ?, ?, ?, ?, ?, ?,
         ?, ?, ?, ?,
         ?, ?, ?, ?,
         ?, ?, ?
@@ -154,6 +158,7 @@ export async function insertApplication(
       record.portfolio,
       record.primaryTeam,
       record.secondaryTeam,
+      record.departmentMotivation,
       record.programs,
       record.weeklyHours,
       record.summerParticipation,
