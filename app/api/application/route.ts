@@ -1,9 +1,18 @@
 import { env } from 'cloudflare:workers';
 
-import { insertApplication } from '@/lib/applications-db';
+import {
+  insertApplication,
+  setApplicationEmailStatus,
+} from '@/lib/applications-db';
 
 const TURNSTILE_VERIFY_URL =
   'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+const RESEND_EMAIL_URL = 'https://api.resend.com/emails';
+const APPLICATION_NOTIFICATION_RECIPIENT =
+  'kaanfurkankaya.sett@gmail.com';
+const APPLICATION_NOTIFICATION_SENDER =
+  'SAUFormula Website <website@forms.sauformula.org>';
+const APPLICATION_ADMIN_URL = 'https://sauformula.org/admin/basvurular';
 const ALLOWED_HOSTNAMES = new Set(['sauformula.org', 'www.sauformula.org']);
 
 const universityLabels = {
@@ -76,6 +85,7 @@ type ApplicationPayload = {
 
 type RuntimeEnv = {
   APPLICATIONS_DB?: D1Database;
+  RESEND_API_KEY?: string;
   TURNSTILE_SECRET_KEY?: string;
   TURNSTILE_SITE_KEY?: string;
 };
@@ -100,6 +110,102 @@ function json(data: Record<string, unknown>, status = 200) {
 
 function readText(value: unknown) {
   return typeof value === 'string' ? value.trim() : '';
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+async function recordNotificationStatus(
+  database: D1Database,
+  applicationId: string,
+  status: 'sent' | 'failed',
+  resendEmailId = '',
+) {
+  try {
+    await setApplicationEmailStatus(
+      database,
+      applicationId,
+      status,
+      resendEmailId,
+    );
+  } catch {
+    console.error('Application notification status could not be recorded', {
+      applicationId,
+      status,
+    });
+  }
+}
+
+async function sendApplicationNotification(
+  database: D1Database,
+  application: {
+    id: string;
+    name: string;
+    email: string;
+    primaryTeam: keyof typeof teamLabels;
+    submittedAt: number;
+  },
+) {
+  const resendApiKey = runtimeEnv.RESEND_API_KEY;
+  if (!resendApiKey) return;
+
+  const department = teamLabels[application.primaryTeam];
+  const submittedAt = new Date(application.submittedAt).toLocaleString(
+    'tr-TR',
+    {
+      timeZone: 'Europe/Istanbul',
+      dateStyle: 'long',
+      timeStyle: 'short',
+    },
+  );
+  try {
+    const response = await fetch(RESEND_EMAIL_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${resendApiKey}`,
+        'Content-Type': 'application/json',
+        'Idempotency-Key': `application-notification-${application.id}`,
+      },
+      body: JSON.stringify({
+        from: APPLICATION_NOTIFICATION_SENDER,
+        to: [APPLICATION_NOTIFICATION_RECIPIENT],
+        reply_to: application.email,
+        subject: `[SAUFormula] Yeni başvuru: ${application.name}`,
+        text: `Yeni bir takım başvurusu alındı.\n\nAd Soyad: ${application.name}\nE-posta: ${application.email}\nDepartman tercihi: ${department}\nBaşvuru tarihi: ${submittedAt}\n\nBaşvuruyu incele: ${APPLICATION_ADMIN_URL}`,
+        html: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#10281e"><div style="display:inline-block;background:#00e27b;color:#03110d;padding:6px 10px;font-weight:700;font-size:12px">YENİ BAŞVURU</div><h2 style="margin:18px 0 12px">Yeni takım başvurusu alındı</h2><p><strong>Ad Soyad:</strong> ${escapeHtml(application.name)}<br><strong>E-posta:</strong> <a href="mailto:${escapeHtml(application.email)}">${escapeHtml(application.email)}</a><br><strong>Departman tercihi:</strong> ${escapeHtml(department)}<br><strong>Başvuru tarihi:</strong> ${escapeHtml(submittedAt)}</p><p style="margin-top:24px"><a href="${APPLICATION_ADMIN_URL}" style="display:inline-block;background:#03110d;color:#ffffff;padding:10px 16px;text-decoration:none;font-weight:700">Başvuruyu incele</a></p></div>`,
+        tags: [{ name: 'source', value: 'application-form' }],
+      }),
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!response.ok) {
+      await recordNotificationStatus(database, application.id, 'failed');
+      return;
+    }
+    let resendEmailId = '';
+    try {
+      const result = (await response.json()) as { id?: unknown };
+      if (typeof result.id === 'string') resendEmailId = result.id;
+    } catch {
+      // A successful Resend response is enough even if its optional body is absent.
+    }
+    await recordNotificationStatus(
+      database,
+      application.id,
+      'sent',
+      resendEmailId,
+    );
+  } catch {
+    console.error('Application notification email failed', {
+      applicationId: application.id,
+    });
+    await recordNotificationStatus(database, application.id, 'failed');
+  }
 }
 
 function isEmail(value: string) {
@@ -305,6 +411,14 @@ export async function POST(request: Request) {
     console.error('Application persistence failed', { applicationId });
     return json({ ok: false, code: 'storage_failed' }, 503);
   }
+
+  await sendApplicationNotification(database, {
+    id: applicationId,
+    name,
+    email,
+    primaryTeam: primaryTeam as keyof typeof teamLabels,
+    submittedAt,
+  });
 
   return json({ ok: true, stored: true });
 }

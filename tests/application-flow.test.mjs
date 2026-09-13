@@ -72,7 +72,7 @@ async function harness(options = {}) {
     APPLICATIONS_DB: options.noDatabase ? undefined : database,
     TURNSTILE_SECRET_KEY: options.noSecret ? undefined : 'test-secret',
     TURNSTILE_SITE_KEY: 'test-site-key',
-    ...(options.contact ? { RESEND_API_KEY: 'test-contact-key' } : {}),
+    ...(options.noResend ? {} : { RESEND_API_KEY: 'test-resend-key' }),
   };
   const context = vm.createContext({
     Request,
@@ -101,10 +101,33 @@ async function harness(options = {}) {
           },
         );
       }
-      assert.ok(options.contact, 'Application flow must never send email');
       assert.equal(url, 'https://api.resend.com/emails');
-      assert.equal(init.headers.Authorization, 'Bearer test-contact-key');
-      return Response.json({ id: 'test-contact-email' });
+      assert.equal(init.headers.Authorization, 'Bearer test-resend-key');
+      const email = JSON.parse(init.body);
+      if (options.contact) {
+        assert.deepEqual(email.to, ['info@sauformula.org']);
+        return Response.json({ id: 'test-contact-email' });
+      }
+      assert.deepEqual(email.to, ['kaanfurkankaya.sett@gmail.com']);
+      assert.equal(email.cc, undefined);
+      assert.equal(email.bcc, undefined);
+      assert.ok(!JSON.stringify(email.to).includes('admin@sauformula.org'));
+      assert.match(
+        init.headers['Idempotency-Key'],
+        /^application-notification-[0-9a-f-]+$/,
+      );
+      assert.equal(
+        email.from,
+        'SAUFormula Website <website@forms.sauformula.org>',
+      );
+      assert.equal(email.reply_to, validPayload.email);
+      assert.match(email.html, /\/admin\/basvurular/);
+      if (options.notificationError) throw new Error('Resend unavailable');
+      if (options.notificationStatus)
+        return new Response('unavailable', {
+          status: options.notificationStatus,
+        });
+      return Response.json({ id: 'test-application-email' });
     },
   });
   const cache = new Map();
@@ -254,7 +277,7 @@ test('additive department motivation migration preserves historical applications
   }
 });
 
-test('Turnstile -> D1 -> admin works without any Resend key or request', async (t) => {
+test('Turnstile -> D1 -> single-recipient notification -> admin works', async (t) => {
   const h = await harness();
   t.after(() => h.sqlite.close());
   const response = await h.route.POST(request());
@@ -262,6 +285,8 @@ test('Turnstile -> D1 -> admin works without any Resend key or request', async (
   assert.deepEqual(await response.json(), { ok: true, stored: true });
   assert.deepEqual(h.calls, [
     'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+    'database',
+    'https://api.resend.com/emails',
     'database',
   ]);
   const applications = await h.db.listApplications(h.database, {});
@@ -276,8 +301,8 @@ test('Turnstile -> D1 -> admin works without any Resend key or request', async (
   assert.equal(record.programs, '');
   assert.equal(record.projects, '');
   assert.equal(record.status, 'new');
-  assert.equal(record.emailDeliveryStatus, 'not_required');
-  assert.equal(record.resendEmailId, '');
+  assert.equal(record.emailDeliveryStatus, 'sent');
+  assert.equal(record.resendEmailId, 'test-application-email');
   await h.db.updateApplicationReview(h.database, {
     id: record.id,
     status: 'accepted',
@@ -305,6 +330,35 @@ test('Turnstile -> D1 -> admin works without any Resend key or request', async (
   );
   assert.equal((await h.db.listApplications(h.database, {})).length, 0);
 });
+
+test('application remains stored when notification email is not configured', async (t) => {
+  const h = await harness({ noResend: true });
+  t.after(() => h.sqlite.close());
+  const response = await h.route.POST(request());
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), { ok: true, stored: true });
+  assert.deepEqual(h.calls, [
+    'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+    'database',
+  ]);
+  const [record] = await h.db.listApplications(h.database, {});
+  assert.equal(record.emailDeliveryStatus, 'not_required');
+});
+
+for (const options of [
+  { notificationError: true },
+  { notificationStatus: 503 },
+]) {
+  test(`application remains stored when notification fails: ${JSON.stringify(options)}`, async (t) => {
+    const h = await harness(options);
+    t.after(() => h.sqlite.close());
+    const response = await h.route.POST(request());
+    assert.equal(response.status, 200);
+    assert.deepEqual(await response.json(), { ok: true, stored: true });
+    const [record] = await h.db.listApplications(h.database, {});
+    assert.equal(record.emailDeliveryStatus, 'failed');
+  });
+}
 
 test('admin delete removes one or multiple selected applications', async (t) => {
   const h = await harness({ admin: true });
@@ -464,7 +518,7 @@ test('reports invalid fields and rejects malformed requests before external work
   assert.deepEqual(h.calls, []);
 });
 
-test('historical email status remains readable alongside new panel-only records', async (t) => {
+test('historical email status remains readable alongside new notification records', async (t) => {
   const h = await harness();
   t.after(() => h.sqlite.close());
   await h.route.POST(request());
@@ -480,7 +534,7 @@ test('historical email status remains readable alongside new panel-only records'
         row.emailDeliveryStatus === 'sent' && row.resendEmailId === 'old-email',
     ),
   );
-  assert.ok(rows.some((row) => row.emailDeliveryStatus === 'not_required'));
+  assert.ok(rows.some((row) => row.emailDeliveryStatus === 'sent'));
 });
 
 test('department motivation is optional and legacy-style applications stay empty', async (t) => {
