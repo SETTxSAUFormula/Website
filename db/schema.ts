@@ -101,6 +101,45 @@ export const panelMemberAudit = sqliteTable(
   ],
 );
 
+export const panelSessions = sqliteTable(
+  'panel_sessions',
+  {
+    tokenHash: text('token_hash').primaryKey(),
+    memberEmail: text('member_email').notNull(),
+    googleSubject: text('google_subject').notNull(),
+    createdAt: integer('created_at').notNull(),
+    expiresAt: integer('expires_at').notNull(),
+    lastSeenAt: integer('last_seen_at').notNull(),
+    revokedAt: integer('revoked_at'),
+  },
+  (table) => [
+    index('idx_panel_sessions_member_expires').on(
+      table.memberEmail,
+      table.expiresAt,
+    ),
+    index('idx_panel_sessions_expires').on(table.expiresAt),
+  ],
+);
+
+export const panelAuthEvents = sqliteTable(
+  'panel_auth_events',
+  {
+    id: text('id').primaryKey(),
+    memberEmail: text('member_email').notNull().default(''),
+    googleSubject: text('google_subject').notNull().default(''),
+    action: text('action').notNull(),
+    detail: text('detail').notNull().default(''),
+    createdAt: integer('created_at').notNull(),
+  },
+  (table) => [
+    index('idx_panel_auth_events_member_created').on(
+      table.memberEmail,
+      table.createdAt,
+    ),
+    index('idx_panel_auth_events_created').on(table.createdAt),
+  ],
+);
+
 export const panelDepartmentSettings = sqliteTable(
   'panel_department_settings',
   {

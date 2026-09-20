@@ -314,6 +314,15 @@ export async function PATCH(request: Request) {
         subjectId: email,
         detail: state.name,
       }),
+      ...(action === 'deactivated'
+        ? [
+            database
+              .prepare(
+                'UPDATE panel_sessions SET revoked_at = ? WHERE member_email = ? AND revoked_at IS NULL',
+              )
+              .bind(now, email),
+          ]
+        : []),
     ]);
     return json({ ok: true, email });
   } catch (error) {

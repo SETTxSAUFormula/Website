@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+
 import { MemberPanelPage } from '@/components/panel/member-panel-page';
 
 export const dynamic = 'force-dynamic';
@@ -9,6 +10,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false, nocache: true },
 };
 
-export default function AdminMemberPanelPage() {
-  return <MemberPanelPage authentication="access" />;
+export default function PanelPage() {
+  return <MemberPanelPage authentication="session" />;
 }

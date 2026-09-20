@@ -65,6 +65,7 @@ import {
 } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
+import { panelApiPath } from '@/lib/panel-client-routes';
 import { panelDepartmentCatalogue } from '@/lib/panel-operations';
 import type {
   PanelSponsorRecord,
@@ -181,7 +182,7 @@ function formatMoney(value: number, currency: PanelSponsorRecord['currency']) {
 }
 
 async function fetchSponsorSnapshot() {
-  const response = await fetch('/api/admin/panel/sponsors', {
+  const response = await fetch(panelApiPath('sponsors'), {
     cache: 'no-store',
     headers: { 'X-Requested-With': 'XMLHttpRequest' },
   });
@@ -245,7 +246,7 @@ function useSponsors() {
     async (method: 'POST' | 'PATCH', body: Record<string, unknown>) => {
       setSaving(true);
       try {
-        const response = await fetch('/api/admin/panel/sponsors', {
+        const response = await fetch(panelApiPath('sponsors'), {
           method,
           headers: {
             'Content-Type': 'application/json',

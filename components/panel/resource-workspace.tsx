@@ -64,6 +64,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
+import { panelApiPath } from '@/lib/panel-client-routes';
 import { panelDepartmentCatalogue } from '@/lib/panel-operations';
 import type {
   InventoryCondition,
@@ -168,7 +169,7 @@ function parseDateInput(value: string) {
 }
 
 async function fetchResourceSnapshot() {
-  const response = await fetch('/api/admin/panel/resources', {
+  const response = await fetch(panelApiPath('resources'), {
     cache: 'no-store',
     headers: { 'X-Requested-With': 'XMLHttpRequest' },
   });
@@ -232,7 +233,7 @@ function useResources() {
     async (method: 'POST' | 'PATCH', body: Record<string, unknown>) => {
       setSaving(true);
       try {
-        const response = await fetch('/api/admin/panel/resources', {
+        const response = await fetch(panelApiPath('resources'), {
           method,
           headers: {
             'Content-Type': 'application/json',

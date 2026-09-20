@@ -138,7 +138,7 @@ export function SiteHeader({
               </span>
             </Link>
             <Link
-              href="/admin/panel"
+              href="/panel/giris"
               className="hidden size-11 items-center justify-center border border-white/15 text-white/70 transition-colors hover:border-racing-green hover:text-racing-green lg:inline-flex 2xl:h-11 2xl:w-auto 2xl:gap-2 2xl:px-4"
               aria-label={language === 'en' ? 'Member login' : 'Üye girişi'}
             >
@@ -209,7 +209,7 @@ export function SiteHeader({
               </Link>
             </div>
             <Link
-              href="/admin/panel"
+              href="/panel/giris"
               onClick={() => setMobileOpen(false)}
               className="mt-3 flex h-12 items-center justify-center gap-2 border border-white/15 text-xs font-bold uppercase tracking-[0.12em] text-white/80"
             >

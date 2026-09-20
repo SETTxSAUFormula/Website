@@ -71,6 +71,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { panelApiPath } from '@/lib/panel-client-routes';
 import type {
   PanelMemberAuditRecord,
   PanelMemberDirectoryRecord,
@@ -149,7 +150,7 @@ function useMemberDirectory() {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch('/api/admin/panel/members', {
+      const response = await fetch(panelApiPath('members'), {
         credentials: 'same-origin',
         cache: 'no-store',
         headers: { 'X-Requested-With': 'XMLHttpRequest' },
@@ -183,7 +184,7 @@ function useMemberDirectory() {
       setSaving(true);
       setError('');
       try {
-        const response = await fetch('/api/admin/panel/members', {
+        const response = await fetch(panelApiPath('members'), {
           method,
           credentials: 'same-origin',
           headers: {

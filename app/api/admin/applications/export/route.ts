@@ -2,19 +2,17 @@ import { env } from 'cloudflare:workers';
 
 import { listAcceptedApplications } from '@/lib/applications-db';
 import { buildAcceptedApplicationsWorkbook } from '@/lib/applications-export';
-import { requireCloudflareAccess } from '@/lib/cloudflare-access';
+import { authorizePanelRequest, type PanelAccessEnv } from '@/lib/panel-access';
+import { hasPanelPermission } from '@/lib/panel-authorization';
 
-type RuntimeEnv = {
-  APPLICATIONS_DB?: D1Database;
-  CF_ACCESS_TEAM_DOMAIN?: string;
-  CF_ACCESS_AUD?: string;
-};
+type RuntimeEnv = PanelAccessEnv;
 
 const runtimeEnv = env as unknown as RuntimeEnv;
 
 export async function GET(request: Request) {
-  const identity = await requireCloudflareAccess(request, runtimeEnv);
-  if (!identity) return Response.json({ ok: false }, { status: 401 });
+  const user = await authorizePanelRequest(request, runtimeEnv);
+  if (!user || !hasPanelPermission(user, 'applications.manage'))
+    return Response.json({ ok: false }, { status: 403 });
   if (!runtimeEnv.APPLICATIONS_DB)
     return Response.json({ ok: false }, { status: 503 });
 

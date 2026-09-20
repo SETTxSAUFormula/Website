@@ -12,3 +12,10 @@ GOOGLE_OAUTH_REFRESH_TOKEN=replace-with-google-oauth-refresh-token
 # encrypted Worker configuration together with the existing panel secrets.
 CF_ACCESS_TEAM_DOMAIN=your-team.cloudflareaccess.com
 CF_ACCESS_AUD=replace-with-access-application-audience-tag
+
+# Google OpenID Connect credentials for member sign-in. Create a separate Web
+# application client and register this exact callback URI locally:
+# http://localhost:3000/api/auth/google/callback
+PANEL_GOOGLE_CLIENT_ID=replace-with-panel-google-client-id
+PANEL_GOOGLE_CLIENT_SECRET=replace-with-panel-google-client-secret
+PANEL_AUTH_ORIGIN=http://localhost:3000

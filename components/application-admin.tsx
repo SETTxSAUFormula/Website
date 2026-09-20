@@ -85,6 +85,7 @@ function ReviewPanel({
   onDelete,
   deleting,
   onError,
+  apiBase,
 }: {
   application: ApplicationRecord;
   viewer: string;
@@ -92,6 +93,7 @@ function ReviewPanel({
   onDelete: (application: ApplicationRecord) => void;
   deleting: boolean;
   onError: (message: string) => void;
+  apiBase: string;
 }) {
   const [reviewStatus, setReviewStatus] = useState<ApplicationStatus>(
     application.status,
@@ -108,7 +110,7 @@ function ReviewPanel({
     setSaved(false);
     onError('');
     try {
-      const response = await fetch('/api/admin/applications', {
+      const response = await fetch(apiBase, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -232,7 +234,16 @@ function ReviewPanel({
   );
 }
 
-export function ApplicationAdmin() {
+export function ApplicationAdmin({
+  authentication,
+}: {
+  authentication: 'access' | 'session';
+}) {
+  const apiBase =
+    authentication === 'access'
+      ? '/api/admin/applications'
+      : '/api/panel/applications';
+  const panelHref = authentication === 'access' ? '/admin/panel' : '/panel';
   const [applications, setApplications] = useState<ApplicationRecord[]>([]);
   const [selectedId, setSelectedId] = useState('');
   const [checkedIds, setCheckedIds] = useState<string[]>([]);
@@ -281,7 +292,7 @@ export function ApplicationAdmin() {
     setNotice('');
 
     try {
-      const response = await fetch('/api/admin/applications', {
+      const response = await fetch(apiBase, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ids: uniqueIds }),
@@ -327,7 +338,7 @@ export function ApplicationAdmin() {
 
     try {
       const response = await fetch(
-        `/api/admin/applications?${params.toString()}`,
+        `${apiBase}?${params.toString()}`,
         {
           cache: 'no-store',
         },
@@ -362,7 +373,7 @@ export function ApplicationAdmin() {
     } finally {
       setLoading(false);
     }
-  }, [query, statusFilter, teamFilter]);
+  }, [apiBase, query, statusFilter, teamFilter]);
 
   useEffect(() => {
     queueMicrotask(() => void load());
@@ -385,7 +396,7 @@ export function ApplicationAdmin() {
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
             <Link
-              href="/admin/panel"
+              href={panelHref}
               className="inline-flex h-11 items-center justify-center gap-2 border border-border px-4 text-sm font-bold uppercase tracking-wider transition-colors hover:border-racing-green hover:text-racing-green"
             >
               <ArrowLeft className="size-4" aria-hidden="true" />
@@ -393,7 +404,7 @@ export function ApplicationAdmin() {
             </Link>
             {/* oxlint-disable-next-line next(no-html-link-for-pages) -- A native link preserves the file download response. */}
             <a
-              href="/api/admin/applications/export"
+              href={`${apiBase}/export`}
               download
               className="inline-flex h-11 items-center justify-center gap-2 bg-racing-green px-4 text-sm font-black uppercase tracking-wider text-ink hover:bg-racing-green/85"
             >
@@ -670,6 +681,7 @@ export function ApplicationAdmin() {
                   application={selected}
                   viewer={viewer}
                   deleting={deleting}
+                  apiBase={apiBase}
                   onError={setError}
                   onDelete={(application) =>
                     void removeApplications([application.id])

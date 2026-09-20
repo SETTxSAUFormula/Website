@@ -7,13 +7,10 @@ import {
   updateApplicationReview,
   type ApplicationStatus,
 } from '@/lib/applications-db';
-import { requireCloudflareAccess } from '@/lib/cloudflare-access';
+import { authorizePanelRequest, type PanelAccessEnv } from '@/lib/panel-access';
+import { hasPanelPermission } from '@/lib/panel-authorization';
 
-type RuntimeEnv = {
-  APPLICATIONS_DB?: D1Database;
-  CF_ACCESS_TEAM_DOMAIN?: string;
-  CF_ACCESS_AUD?: string;
-};
+type RuntimeEnv = PanelAccessEnv;
 
 const runtimeEnv = env as unknown as RuntimeEnv;
 
@@ -28,8 +25,9 @@ function json(data: Record<string, unknown>, status = 200) {
 }
 
 export async function GET(request: Request) {
-  const identity = await requireCloudflareAccess(request, runtimeEnv);
-  if (!identity) return json({ ok: false }, 401);
+  const user = await authorizePanelRequest(request, runtimeEnv);
+  if (!user || !hasPanelPermission(user, 'applications.manage'))
+    return json({ ok: false }, 403);
   if (!runtimeEnv.APPLICATIONS_DB) return json({ ok: false }, 503);
 
   const url = new URL(request.url);
@@ -40,15 +38,16 @@ export async function GET(request: Request) {
       search: url.searchParams.get('search') ?? '',
       limit: Number(url.searchParams.get('limit') ?? 100),
     });
-    return json({ ok: true, applications, viewer: identity.email });
+    return json({ ok: true, applications, viewer: user.email });
   } catch {
     return json({ ok: false }, 500);
   }
 }
 
 export async function PATCH(request: Request) {
-  const identity = await requireCloudflareAccess(request, runtimeEnv);
-  if (!identity) return json({ ok: false }, 401);
+  const user = await authorizePanelRequest(request, runtimeEnv);
+  if (!user || !hasPanelPermission(user, 'applications.manage'))
+    return json({ ok: false }, 403);
   if (!runtimeEnv.APPLICATIONS_DB) return json({ ok: false }, 503);
 
   let payload: {
@@ -83,7 +82,7 @@ export async function PATCH(request: Request) {
       status: status as ApplicationStatus | undefined,
       assignedDepartment,
       reviewerNote,
-      reviewedBy: identity.email,
+      reviewedBy: user.email,
     });
     return json({ ok: updated }, updated ? 200 : 404);
   } catch {
@@ -92,8 +91,9 @@ export async function PATCH(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const identity = await requireCloudflareAccess(request, runtimeEnv);
-  if (!identity) return json({ ok: false }, 401);
+  const user = await authorizePanelRequest(request, runtimeEnv);
+  if (!user || !hasPanelPermission(user, 'applications.manage'))
+    return json({ ok: false }, 403);
   if (!runtimeEnv.APPLICATIONS_DB) return json({ ok: false }, 503);
 
   let payload: unknown;

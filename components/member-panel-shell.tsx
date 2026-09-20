@@ -93,6 +93,7 @@ import {
   type FormulaStudentCompetition,
 } from '@/lib/formula-student-competitions';
 import type { TeamCalendarEvent } from '@/lib/google-calendar';
+import { panelApiPath } from '@/lib/panel-client-routes';
 import type { PanelPermission } from '@/lib/panel-authorization';
 
 type PanelView =
@@ -776,7 +777,7 @@ function CalendarModule({
     try {
       const range = getCalendarRange(getMonthGrid(visibleMonth));
       const query = new URLSearchParams(range);
-      const response = await fetch(`/api/admin/panel/calendar?${query}`, {
+      const response = await fetch(`${panelApiPath('calendar')}?${query}`, {
         credentials: 'same-origin',
         cache: 'no-store',
         headers: { 'X-Requested-With': 'XMLHttpRequest' },
@@ -802,7 +803,7 @@ function CalendarModule({
   const loadUpcomingEvents = useCallback(async () => {
     if (!configured) return;
     const query = new URLSearchParams(getUpcomingIstanbulCalendarRange());
-    const response = await fetch(`/api/admin/panel/calendar?${query}`, {
+    const response = await fetch(`${panelApiPath('calendar')}?${query}`, {
       credentials: 'same-origin',
       cache: 'no-store',
       headers: { 'X-Requested-With': 'XMLHttpRequest' },
@@ -922,7 +923,7 @@ function CalendarModule({
     }
 
     try {
-      const response = await fetch('/api/admin/panel/calendar', {
+      const response = await fetch(panelApiPath('calendar'), {
         method: editingEvent ? 'PATCH' : 'POST',
         credentials: 'same-origin',
         headers: {
@@ -972,7 +973,7 @@ function CalendarModule({
     setDeleting(true);
     setError('');
     try {
-      const response = await fetch('/api/admin/panel/calendar', {
+      const response = await fetch(panelApiPath('calendar'), {
         method: 'DELETE',
         credentials: 'same-origin',
         headers: {
@@ -1673,6 +1674,7 @@ export function MemberPanelShell({
   initialCalendarEvents,
   initialCalendarLoaded,
   initialUpcomingEvents,
+  authentication,
 }: {
   viewerEmail: string;
   viewerRole: string;
@@ -1681,6 +1683,7 @@ export function MemberPanelShell({
   initialCalendarEvents: TeamCalendarEvent[];
   initialCalendarLoaded: boolean;
   initialUpcomingEvents: TeamCalendarEvent[];
+  authentication: 'access' | 'session';
 }) {
   const [activeView, setActiveView] = useState<PanelView>('home');
   const permissionSet = new Set(permissions);
@@ -1729,7 +1732,16 @@ export function MemberPanelShell({
                         data-panel-view={item.key}
                         render={
                           item.href ? (
-                            <a href={item.href} aria-label={item.label} />
+                            <a
+                              href={
+                                item.key === 'applications'
+                                  ? authentication === 'access'
+                                    ? '/admin/basvurular'
+                                    : '/panel/basvurular'
+                                  : item.href
+                              }
+                              aria-label={item.label}
+                            />
                           ) : undefined
                         }
                         isActive={!item.href && activeView === item.key}
@@ -1766,16 +1778,31 @@ export function MemberPanelShell({
                 </p>
               </div>
             </div>
-            <Link
-              href="/cdn-cgi/access/logout"
-              className="flex h-9 items-center gap-2 border border-white/15 px-3 text-xs font-bold text-white/65 transition-colors hover:bg-white/10 hover:text-white group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
-              aria-label="Üye panelinden çıkış yap"
-            >
-              <LogOut className="size-4 shrink-0" aria-hidden="true" />
-              <span className="group-data-[collapsible=icon]:hidden">
-                Çıkış yap
-              </span>
-            </Link>
+            {authentication === 'access' ? (
+              <Link
+                href="/cdn-cgi/access/logout"
+                className="flex h-9 items-center gap-2 border border-white/15 px-3 text-xs font-bold text-white/65 transition-colors hover:bg-white/10 hover:text-white group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+                aria-label="Üye panelinden çıkış yap"
+              >
+                <LogOut className="size-4 shrink-0" aria-hidden="true" />
+                <span className="group-data-[collapsible=icon]:hidden">
+                  Çıkış yap
+                </span>
+              </Link>
+            ) : (
+              <form action="/api/auth/logout" method="post">
+                <button
+                  type="submit"
+                  className="flex h-9 w-full items-center gap-2 border border-white/15 px-3 text-xs font-bold text-white/65 transition-colors hover:bg-white/10 hover:text-white group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+                  aria-label="Üye panelinden çıkış yap"
+                >
+                  <LogOut className="size-4 shrink-0" aria-hidden="true" />
+                  <span className="group-data-[collapsible=icon]:hidden">
+                    Çıkış yap
+                  </span>
+                </button>
+              </form>
+            )}
           </div>
         </SidebarFooter>
       </Sidebar>

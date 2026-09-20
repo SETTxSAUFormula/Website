@@ -66,6 +66,7 @@ import {
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
+import { panelApiPath } from '@/lib/panel-client-routes';
 import type {
   PanelAnnouncementLevel,
   PanelDepartmentRecord,
@@ -238,7 +239,7 @@ function useOperations() {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch('/api/admin/panel/operations', {
+      const response = await fetch(panelApiPath('operations'), {
         credentials: 'same-origin',
         cache: 'no-store',
         headers: { 'X-Requested-With': 'XMLHttpRequest' },
@@ -277,8 +278,8 @@ function useOperations() {
       try {
         const response = await fetch(
           body.type === 'member'
-            ? '/api/admin/panel/members'
-            : '/api/admin/panel/operations',
+            ? panelApiPath('members')
+            : panelApiPath('operations'),
           {
             method,
             credentials: 'same-origin',

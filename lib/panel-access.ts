@@ -1,13 +1,18 @@
 import { requireCloudflareAccess } from '@/lib/cloudflare-access';
 import { getPanelMemberProfile } from '@/lib/panel-operations';
 import {
+  getPanelSessionIdentity,
+  hasPanelSessionCookie,
+  hasTrustedMutationOrigin,
+  type PanelSessionEnv,
+} from '@/lib/panel-session';
+import {
   resolvePanelUser,
   systemAdminEmails,
   type PanelUser,
 } from '@/lib/panel-authorization';
 
-export type PanelAccessEnv = {
-  APPLICATIONS_DB?: D1Database;
+export type PanelAccessEnv = PanelSessionEnv & {
   CF_ACCESS_TEAM_DOMAIN?: string;
   CF_ACCESS_AUD?: string;
 };
@@ -47,11 +52,23 @@ export async function authorizePanelRequest(
   request: Request,
   runtimeEnv: PanelAccessEnv,
 ) {
-  const identity = await requireCloudflareAccess(request, runtimeEnv);
-  const hostname = new URL(request.url).hostname;
-  const email =
-    identity?.email ??
-    (isLocalPanelHostname(hostname) ? 'admin@sauformula.org' : '');
+  if (!hasTrustedMutationOrigin(request)) return null;
 
-  return email ? resolveActivePanelUser(email, runtimeEnv) : null;
+  const accessIdentity = await requireCloudflareAccess(request, runtimeEnv);
+  if (accessIdentity)
+    return resolveActivePanelUser(accessIdentity.email, runtimeEnv);
+
+  const hostname = new URL(request.url).hostname;
+  if (isLocalPanelHostname(hostname) && !hasPanelSessionCookie(request))
+    return resolveActivePanelUser('admin@sauformula.org', runtimeEnv);
+
+  if (!runtimeEnv.APPLICATIONS_DB) return null;
+  const identity = await getPanelSessionIdentity(
+    request,
+    runtimeEnv.APPLICATIONS_DB,
+  );
+
+  return identity
+    ? resolveActivePanelUser(identity.email, runtimeEnv)
+    : null;
 }

@@ -28,6 +28,9 @@ export default defineConfig(async ({ command }) => {
       'GOOGLE_OAUTH_CLIENT_ID',
       'GOOGLE_OAUTH_CLIENT_SECRET',
       'GOOGLE_OAUTH_REFRESH_TOKEN',
+      'PANEL_GOOGLE_CLIENT_ID',
+      'PANEL_GOOGLE_CLIENT_SECRET',
+      'PANEL_AUTH_ORIGIN',
     ].flatMap((name) => {
       const value = process.env[name]?.trim();
       return value ? [[name, value]] : [];
@@ -48,6 +51,7 @@ export default defineConfig(async ({ command }) => {
             binding: d1,
             database_name: 'sauformula-applications',
             database_id: APPLICATIONS_DATABASE_ID,
+            migrations_dir: 'drizzle',
           },
         ]
       : [],
