@@ -19,6 +19,8 @@ export type PanelSpecialRole = 'sponsorship_delegate';
 export type PanelPermission =
   | 'calendar.read'
   | 'calendar.manage'
+  | 'attendance.read'
+  | 'attendance.manage'
   | 'departments.read'
   | 'departments.manage'
   | 'tasks.read'
@@ -82,6 +84,7 @@ export function hasPanelPermission(
 ) {
   if (
     permission === 'calendar.read' ||
+    permission === 'attendance.read' ||
     permission === 'departments.read' ||
     permission === 'tasks.read'
   )
@@ -113,6 +116,8 @@ export function getPanelPermissions(user: PanelUser): PanelPermission[] {
   const permissions: PanelPermission[] = [
     'calendar.read',
     'calendar.manage',
+    'attendance.read',
+    'attendance.manage',
     'departments.read',
     'departments.manage',
     'tasks.read',

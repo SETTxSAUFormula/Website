@@ -91,6 +91,8 @@ const roleLabels: Record<PanelRole, string> = {
 const permissionLabels: Record<PanelPermission, string> = {
   'calendar.read': 'Takvimi görüntüleme',
   'calendar.manage': 'Takvim etkinliklerini yönetme',
+  'attendance.read': 'Devamsızlık kayıtlarını görüntüleme',
+  'attendance.manage': 'QR yoklama etkinliklerini yönetme',
   'departments.read': 'Departman alanını görüntüleme',
   'departments.manage': 'Departman içeriğini yönetme',
   'tasks.read': 'Görevleri görüntüleme',

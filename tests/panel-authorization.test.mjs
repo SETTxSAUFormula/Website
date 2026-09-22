@@ -10,6 +10,8 @@ import {
 test('all authenticated members can read the calendar, but ordinary members cannot edit it', () => {
   const member = resolvePanelUser('member@sauformula.org');
   assert.equal(hasPanelPermission(member, 'calendar.read'), true);
+  assert.equal(hasPanelPermission(member, 'attendance.read'), true);
+  assert.equal(hasPanelPermission(member, 'attendance.manage'), false);
   assert.equal(hasPanelPermission(member, 'departments.read'), true);
   assert.equal(hasPanelPermission(member, 'tasks.read'), true);
   assert.equal(hasPanelPermission(member, 'calendar.manage'), false);
@@ -20,6 +22,7 @@ test('all authenticated members can read the calendar, but ordinary members cann
 test('chiefs can manage operational modules but cannot change permissions', () => {
   const chief = resolvePanelUser('chief@sauformula.org', { role: 'chief' });
   assert.equal(hasPanelPermission(chief, 'calendar.manage'), true);
+  assert.equal(hasPanelPermission(chief, 'attendance.manage'), true);
   assert.equal(hasPanelPermission(chief, 'departments.manage'), true);
   assert.equal(hasPanelPermission(chief, 'tasks.manage'), true);
   assert.equal(hasPanelPermission(chief, 'applications.manage'), true);

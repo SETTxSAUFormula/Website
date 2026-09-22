@@ -140,6 +140,61 @@ export const panelAuthEvents = sqliteTable(
   ],
 );
 
+export const panelAttendanceEvents = sqliteTable(
+  'panel_attendance_events',
+  {
+    id: text('id').primaryKey(),
+    title: text('title').notNull(),
+    description: text('description').notNull().default(''),
+    location: text('location').notNull().default(''),
+    startsAt: integer('starts_at').notNull(),
+    endsAt: integer('ends_at').notNull(),
+    lateAfterMinutes: integer('late_after_minutes').notNull().default(10),
+    status: text('status').notNull().default('scheduled'),
+    qrSecret: text('qr_secret').notNull().default(''),
+    checkinOpenedAt: integer('checkin_opened_at'),
+    checkinClosedAt: integer('checkin_closed_at'),
+    createdAt: integer('created_at').notNull(),
+    createdBy: text('created_by').notNull(),
+    updatedAt: integer('updated_at').notNull(),
+    updatedBy: text('updated_by').notNull(),
+  },
+  (table) => [
+    index('idx_panel_attendance_events_status_starts').on(
+      table.status,
+      table.startsAt,
+    ),
+    index('idx_panel_attendance_events_starts').on(table.startsAt),
+  ],
+);
+
+export const panelAttendanceRecords = sqliteTable(
+  'panel_attendance_records',
+  {
+    id: text('id').primaryKey(),
+    eventId: text('event_id').notNull(),
+    memberEmail: text('member_email').notNull(),
+    status: text('status').notNull().default('present'),
+    checkedInAt: integer('checked_in_at').notNull(),
+    qrSlot: integer('qr_slot').notNull(),
+    userAgent: text('user_agent').notNull().default(''),
+  },
+  (table) => [
+    uniqueIndex('idx_panel_attendance_records_event_member').on(
+      table.eventId,
+      table.memberEmail,
+    ),
+    index('idx_panel_attendance_records_member_checked').on(
+      table.memberEmail,
+      table.checkedInAt,
+    ),
+    index('idx_panel_attendance_records_event_checked').on(
+      table.eventId,
+      table.checkedInAt,
+    ),
+  ],
+);
+
 export const panelDepartmentSettings = sqliteTable(
   'panel_department_settings',
   {

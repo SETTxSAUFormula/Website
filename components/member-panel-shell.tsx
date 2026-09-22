@@ -25,11 +25,13 @@ import {
   Trash2,
   TriangleAlert,
   Trophy,
+  UserCheck,
   Users,
 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
 import { OperationsWorkspace } from '@/components/panel/operations-workspace';
+import { AttendanceWorkspace } from '@/components/panel/attendance-workspace';
 import { MemberWorkspace } from '@/components/panel/member-workspace';
 import { ResourceWorkspace } from '@/components/panel/resource-workspace';
 import { SponsorWorkspace } from '@/components/panel/sponsor-workspace';
@@ -101,6 +103,7 @@ type PanelView =
   | 'departments'
   | 'tasks'
   | 'calendar'
+  | 'attendance'
   | 'sponsors'
   | 'inventory'
   | 'purchases'
@@ -125,6 +128,12 @@ const menuGroups: Array<{ label: string; items: MenuEntry[] }> = [
         label: 'Takvim',
         icon: CalendarDays,
         permission: 'calendar.read',
+      },
+      {
+        key: 'attendance',
+        label: 'Devamsızlık',
+        icon: UserCheck,
+        permission: 'attendance.read',
       },
     ],
   },
@@ -223,6 +232,16 @@ const moduleDetails: Record<
       'Takım takvimi',
       'Departman takvimleri',
       'Yaklaşan son tarih uyarıları',
+    ],
+  },
+  attendance: {
+    title: 'Devamsızlık',
+    description:
+      'Etkinlik katılımını kısa ömürlü dinamik QR kodlarıyla kaydeden çalışma alanı.',
+    points: [
+      'Şef ve üzeri etkinlik yönetimi',
+      'Yalnızca QR ile katılım',
+      'Kişisel katılım geçmişi ve oranı',
     ],
   },
   sponsors: {
@@ -1848,6 +1867,10 @@ export function MemberPanelShell({
               initialEvents={initialCalendarEvents}
               initialLoaded={initialCalendarLoaded}
               initialUpcomingEvents={initialUpcomingEvents}
+            />
+          ) : activeView === 'attendance' ? (
+            <AttendanceWorkspace
+              canManage={permissionSet.has('attendance.manage')}
             />
           ) : (
             <EmptyModule view={activeView} />
