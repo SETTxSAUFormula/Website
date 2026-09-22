@@ -11,6 +11,7 @@ import {
   RefreshCw,
   ShieldCheck,
   TimerOff,
+  Trash2,
   TriangleAlert,
   UserCheck,
 } from 'lucide-react';
@@ -18,6 +19,16 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import {
   Card,
   CardContent,
@@ -152,6 +163,8 @@ export function AttendanceWorkspace({ canManage }: { canManage: boolean }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [createOpen, setCreateOpen] = useState(false);
+  const [deleteCandidate, setDeleteCandidate] =
+    useState<AttendanceEventView | null>(null);
   const [form, setForm] = useState<EventForm>(emptyForm);
   const [qrEventId, setQrEventId] = useState<string | null>(null);
   const [qrDataUrl, setQrDataUrl] = useState('');
@@ -291,6 +304,27 @@ export function AttendanceWorkspace({ canManage }: { canManage: boolean }) {
         nextError instanceof Error
           ? nextError.message
           : 'Yoklama kapatılamadı.',
+      );
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const deleteEvent = async () => {
+    if (!deleteCandidate) return;
+    const eventId = deleteCandidate.id;
+    setBusy(true);
+    try {
+      await attendanceMutation({ type: 'delete', eventId });
+      if (qrEventId === eventId) {
+        setQrEventId(null);
+        setQrDataUrl('');
+      }
+      setDeleteCandidate(null);
+      await refresh();
+    } catch (nextError) {
+      setError(
+        nextError instanceof Error ? nextError.message : 'Etkinlik silinemedi.',
       );
     } finally {
       setBusy(false);
@@ -493,6 +527,15 @@ export function AttendanceWorkspace({ canManage }: { canManage: boolean }) {
                                 : 'QR yoklamayı aç'}
                             </Button>
                           ) : null}
+                          <Button
+                            variant="outline"
+                            onClick={() => setDeleteCandidate(event)}
+                            disabled={busy}
+                            className="h-10 rounded-none border-[#d9a8a3] px-4 font-bold text-[#a3322b] hover:bg-[#fff0ee] hover:text-[#8d2923]"
+                          >
+                            <Trash2 className="size-4" aria-hidden="true" />
+                            Etkinliği sil
+                          </Button>
                         </div>
                       ) : null}
                     </div>
@@ -555,6 +598,48 @@ export function AttendanceWorkspace({ canManage }: { canManage: boolean }) {
           )}
         </CardContent>
       </Card>
+
+      <AlertDialog
+        open={Boolean(deleteCandidate)}
+        onOpenChange={(open) => {
+          if (!open && !busy) setDeleteCandidate(null);
+        }}
+      >
+        <AlertDialogContent className="panel-light-theme rounded-none bg-white text-[#071a13] ring-[#d9a8a3]">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="font-heading text-xl font-extrabold">
+              Etkinlik silinsin mi?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="leading-6 text-[#617169]">
+              <strong className="text-[#263b32]">
+                {deleteCandidate?.title}
+              </strong>{' '}
+              etkinliği ve bu etkinliğe ait tüm katılım kayıtları kalıcı olarak
+              silinecek.
+              {deleteCandidate?.status === 'open'
+                ? ' Açık QR kodu da hemen geçersiz olacak.'
+                : ''}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="rounded-none bg-[#f7faf8]">
+            <AlertDialogCancel disabled={busy} className="rounded-none">
+              Vazgeç
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => void deleteEvent()}
+              disabled={busy}
+              className="rounded-none bg-[#d13b39] font-bold text-white hover:bg-[#b52f2d]"
+            >
+              {busy ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <Trash2 className="size-4" aria-hidden="true" />
+              )}
+              Kalıcı olarak sil
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent className="panel-light-theme rounded-none border-[#cbd9d2] bg-white text-[#071a13] sm:max-w-xl">

@@ -327,6 +327,23 @@ export async function POST(request: Request) {
       return json({ ok: true, eventId: event.id });
     }
 
+    if (type === 'delete') {
+      await database.batch([
+        database
+          .prepare('DELETE FROM panel_attendance_records WHERE event_id = ?')
+          .bind(event.id),
+        database
+          .prepare('DELETE FROM panel_attendance_events WHERE id = ?')
+          .bind(event.id),
+        activityStatement(database, user, {
+          action: 'Yoklama etkinliğini sildi',
+          subjectId: event.id,
+          detail: event.title,
+        }),
+      ]);
+      return json({ ok: true, eventId: event.id });
+    }
+
     if (type === 'qr_token') {
       if (event.status !== 'open' || !event.qr_secret)
         return json({ ok: false, error: 'Yoklama açık değil.' }, 409);
