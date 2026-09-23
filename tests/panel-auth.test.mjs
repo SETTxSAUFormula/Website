@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import { validGoogleIdentityClaims } from '../lib/panel-auth-validation.ts';
 import {
+  SESSION_DURATION_SECONDS,
   clearSessionCookie,
   hasTrustedMutationOrigin,
   parseCookies,
@@ -53,6 +54,8 @@ test('session cookies are HTTP-only, same-site, and secure on HTTPS', () => {
   const cookie = sessionCookie('secret', 'https://panel.sauformula.org/panel');
   assert.match(cookie, /HttpOnly/);
   assert.match(cookie, /SameSite=Lax/);
+  assert.match(cookie, new RegExp(`Max-Age=${SESSION_DURATION_SECONDS}`));
+  assert.equal(SESSION_DURATION_SECONDS, 60 * 60 * 24 * 180);
   assert.match(cookie, /; Secure/);
   assert.match(cookie, /^__Host-sauformula_panel_session=/);
   assert.match(

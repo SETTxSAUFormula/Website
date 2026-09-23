@@ -3,6 +3,7 @@ import { headers } from 'next/headers';
 import type { ReactNode } from 'react';
 
 import { MemberPanelShell } from '@/components/member-panel-shell';
+import { SessionKeepAlive } from '@/components/panel/session-keep-alive';
 import Link from '@/components/site-link';
 import {
   eventOverlapsRange,
@@ -139,15 +140,18 @@ export async function MemberPanelPage({
   }
 
   return (
-    <MemberPanelShell
-      viewerEmail={viewer.email}
-      viewerRole={getPanelRoleLabel(viewer.role)}
-      permissions={getPanelPermissions(viewer)}
-      calendarConfigured={calendarConfigured}
-      initialCalendarEvents={initialCalendarEvents}
-      initialCalendarLoaded={initialCalendarLoaded}
-      initialUpcomingEvents={initialUpcomingEvents}
-      authentication={authentication}
-    />
+    <>
+      {authentication === 'session' ? <SessionKeepAlive /> : null}
+      <MemberPanelShell
+        viewerEmail={viewer.email}
+        viewerRole={getPanelRoleLabel(viewer.role)}
+        permissions={getPanelPermissions(viewer)}
+        calendarConfigured={calendarConfigured}
+        initialCalendarEvents={initialCalendarEvents}
+        initialCalendarLoaded={initialCalendarLoaded}
+        initialUpcomingEvents={initialUpcomingEvents}
+        authentication={authentication}
+      />
+    </>
   );
 }

@@ -1,5 +1,5 @@
 const SESSION_COOKIE = 'sauformula_panel_session';
-const SESSION_DURATION_SECONDS = 60 * 60 * 24 * 7;
+export const SESSION_DURATION_SECONDS = 60 * 60 * 24 * 180;
 
 export type PanelSessionEnv = {
   APPLICATIONS_DB?: D1Database;
@@ -200,6 +200,29 @@ export async function getPanelSessionIdentity(
     googleSubject: row.google_subject,
     tokenHash,
   };
+}
+
+export async function refreshPanelSession(
+  request: Request,
+  database: D1Database,
+) {
+  const cookies = parseCookies(request.headers.get('cookie'));
+  const token =
+    cookies.get(cookieName(SESSION_COOKIE, request.url))?.trim() ?? '';
+  if (!token) return null;
+
+  const tokenHash = await sha256Hex(token);
+  const now = Date.now();
+  const expiresAt = now + SESSION_DURATION_SECONDS * 1000;
+  const update = await database
+    .prepare(
+      `UPDATE panel_sessions
+       SET expires_at = ?, last_seen_at = ?
+       WHERE token_hash = ? AND revoked_at IS NULL AND expires_at > ?`,
+    )
+    .bind(expiresAt, now, tokenHash, now)
+    .run();
+  return update.meta.changes > 0 ? { token, expiresAt } : null;
 }
 
 export async function revokePanelSession(
